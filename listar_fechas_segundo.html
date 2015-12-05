@@ -1,0 +1,55 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+
+<script type="text/javascript">
+
+function setfocus()
+{ 
+document.<?php echo $var['focus']; ?>.focus()
+}
+
+function confirma()
+{
+var envio = confirm("Desea eliminar el item seleccionado?")
+if (envio == true)
+ {
+  document.forms[0].submit();
+ }
+}
+
+</script>
+
+</head>
+<body class="ppal" onload = "setfocus()">
+
+
+<div class="altas">
+<fieldset>
+ <legend><?php echo $var['transac']; ?> entre fechas</legend>
+   <?php echo $var['mensaje']; ?>
+<form action="form_listar_fechas_tercero.php" method="post" target="_self" name="listar_fechas">
+  <input type="hidden" value="listar_fechas_segundo" size="10" name="formname" id="formname"> 
+  <input type="hidden" value="<?php echo $var['transac']; ?>" size="10" name="transac" id="transac"> 
+  <input type="hidden" value="<?php echo $var['tipo']; ?>" size="10" name="tipo" id="tipo"> 
+
+<br />
+<?php echo $var['codigo']; ?> 
+<br /><br>
+
+<?php echo $var['condicion']; ?> <?php echo $var['opciones']; ?>
+
+<br />
+<br />
+ <center>
+ <button type="submit" name="enviar" value="enviar" >Listar</button>
+
+</form>
+ </center>
+</fieldset>
+</div>
+
+
+</body>
+</html>  

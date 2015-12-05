@@ -1,0 +1,64 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+
+<script type="text/javascript">
+
+function setfocus()
+{ 
+document.forms[0].proveedor.focus()
+}
+
+function show_detail(ID_CATEGORIA)
+{
+ var url="producto_detalle.php?id_categoria=" + ID_CATEGORIA;
+ window.open(url,"producto_detalle","toolbar=no, location=no, directories=no, status=yes, menubar=no, scrollbars=yes, resizable=yes, width=600, height=300");
+}
+
+function submitForm()
+{
+	document.getElementById('backForm').submit();	
+}
+
+</script>
+
+</head>
+<body class="ppal">
+
+<form id="backForm" action="form_listar_fechas.php" method="post" target="_self">
+	<div>
+		<input type="hidden" value="<?php echo $var['transac']; ?>" size="10" name="transac" id="transac">
+		<input type="hidden" value="<?php echo $var['tipo']; ?>" size="10" name="tipo" id="tipo">
+		<input type="hidden" value="<?php echo $var['tipo_rango']; ?>" size="10" name="tipo_rango" id="tipo_rango">
+		<input type="hidden" value="<?php echo $var['opcion']; ?>" size="10" name="opcion" id="opcion">
+		<input type="hidden" value="<?php echo $var['dia_ini']; ?>" size="10" name="dia_ini" id="dia_ini">
+		<input type="hidden" value="<?php echo $var['mes_ini']; ?>" size="10" name="mes_ini" id="mes_ini">
+		<input type="hidden" value="<?php echo $var['ano_ini']; ?>" size="10" name="ano_ini" id="ano_ini">
+		<input type="hidden" value="<?php echo $var['dia_fin']; ?>" size="10" name="dia_fin" id="dia_fin">
+		<input type="hidden" value="<?php echo $var['mes_fin']; ?>" size="10" name="mes_fin" id="mes_fin">
+		<input type="hidden" value="<?php echo $var['ano_fin']; ?>" size="10" name="ano_fin" id="ano_fin">
+		<input type="hidden" value="<?php echo $var['rango_periodo']; ?>" size="10" name="rango_periodo" id="rango_periodo">
+		<input type="hidden" value="<?php echo $var['tipo_periodo']; ?>" size="10" name="tipo_periodo" id="tipo_periodo">
+	</div>
+	<div>
+		<div class="volver"><a class="volver" onclick="submitForm();">Volver</a></div>
+		<?php echo $var['imprimir']; ?>	
+	</div>
+</form>
+
+<center class="fechas_center">
+<em class="titulo"><?php echo $var['titulo']; ?></em>
+<br />
+<br />
+</center>
+
+<table width="100%">
+<tr class="provlisthead">
+<th>Item</th><th>Fecha</th><th>Cantidad</th><th>Unidad</th>
+</tr>
+   <?php echo $var['listado']; ?>
+</table>
+
+</body>
+</html>  

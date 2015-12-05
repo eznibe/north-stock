@@ -1,0 +1,23 @@
+<html>
+<head>
+<script type="text/javascript">
+
+function redirect(uri) {
+	document.location = uri;
+}
+
+</script>
+
+<style type="text/css">
+body {
+	background-color: #003366;
+}
+</style>
+
+</head>
+<body onLoad="redirect('<?php echo $var['redirect']; ?>')">
+
+<?php echo $var['mensaje']; ?>
+
+</body>
+</html>

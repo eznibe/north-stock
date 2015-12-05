@@ -1,0 +1,59 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+
+<script type="text/javascript">
+
+function setfocus()
+{ 
+document.<?php echo $var['focus']; ?>.focus()
+}
+
+function confirma()
+{
+var envio = confirm("Desea eliminar el proveedor seleccionado?")
+if (envio == true)
+ {
+  document.forms[0].submit();
+ }
+}
+
+</script>
+
+</head>
+<body class="ppal" onload = "setfocus()">
+
+
+<div class="altas">
+<fieldset>
+ <legend>Baja de proveedor</legend>
+   <?php echo $var['mensaje']; ?>
+<table>
+<form action="form_proveedor_baja.php" method="post" target="_self" name="proveedor_baja">
+  <input type="hidden" value="proveedor_baja" size="10" name="formname" id="formname"> 
+
+<tr>
+<td>
+ <label for="id_proveedor">Seleccionar el proveedor:</label>
+</td>
+<td>
+  <select name="id_proveedor" id="id_proveedor" class="obligatorio">
+   <option value="0">seleccionar</option>
+   <?php echo $var['proveedor']; ?>
+  </select> *
+</td>
+</tr>
+</table>
+ <center>
+ <br />Los casilleros marcados con * son obligatorios.<br />
+ <button type="button" name="enviar" value="enviar" onclick="confirma();">Eliminar</button>
+
+</form>
+ </center>
+</fieldset>
+</div>
+
+
+</body>
+</html>  

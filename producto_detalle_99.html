@@ -1,0 +1,43 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+
+<script type="text/javascript">
+
+function setfocus()
+{ 
+window.focus()
+}
+
+function add_comprar(ID_ITEM)
+{
+// var url="producto_addcomprar.php?id_item=" + ID_ITEM;
+// window.open(url,"producto_detalle","toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=600, height=300");
+}
+
+
+</script>
+
+</head>
+<body class="ppal" onload="setfocus()";>
+<center>
+Seleccione el proveedor para ingresar el subproducto a la lista de compras.
+</center>
+
+<table>
+<tr class="provlisthead">
+<th>Producto</th><th>Stock</th><th>Stock minimo</th><th>Delta fisico</th><th>En transito</th><th>Delta total</th><th>Unidad</th>
+</tr>
+   <?php echo $var['header']; ?>
+</table>
+
+<table>
+<tr class="provlisthead">
+<th>Proveedor</th><th>Codigo <br />proveedor</th><th>Stock</th><th>En transito</th><th>Precio FOB</th><th>Precio nac</th><th>Precio ref</th>
+</tr>
+   <?php echo $var['rows']; ?>
+</table>
+
+</body>
+</html>  

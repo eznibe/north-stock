@@ -1,0 +1,99 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+  <script language="JavaScript" src="javascript/jsGral.js"?<?php echo date("m.d.y"); ?>"></script>
+
+<script type="text/javascript">
+
+function setfocus()
+{
+document.forms[0].proveedor.focus()
+}
+
+function show_detail(ID_CATEGORIA)
+{
+ var url="producto_detalle.php?id_categoria=" + ID_CATEGORIA;
+ window.open(url,"producto_detalle","toolbar=no, location=no, directories=no, status=yes, menubar=no, scrollbars=yes, resizable=yes, width=750, height=300");
+}
+
+</script>
+
+</head>
+<body class="ppal">
+
+<?php if($var['action']=='producto_bajo_minimo.php'){ ?>
+<div>
+	<div style="float:left;">
+		<form action="producto_bajo_minimo.php" method="get" target="_self">
+			<span>Ordenar por grupo: </span><input type="checkbox" name="orderbygrupo"></input><br>
+			<span>Filtrar por grupo: </span><select name="id_grupo" style="width:200px;"><?php echo $var['grupos']; ?></select>
+			<span><input type="submit" value="Listar" style="margin-left: 15px;"></input></span>
+		</form>
+	</div>
+	<?php echo $var['imprimir']; ?>
+</div>
+<?php
+}
+else {
+	echo $var['imprimir'];
+};
+?>
+
+<!-- Search form -->
+<!--<form action="grupo_listar.php" method="get" target="_self" name="grupo_search">-->
+
+<?php if($var['action']=='grupo_listar.php'){ ?>
+
+<form action="<?php echo $var['action']; ?>" method="get" target="_self" name="grupo_search">
+<!--	<input type="hidden" id="id_grupo" name="id_grupo" value="<?php echo $var['id_grupo']; ?>">-->
+<!--	<input type="hidden" id="id_prod" name="id_prod" value="<?php echo $var['tipo_producto']; ?>">-->
+
+	<?php
+		$id_grupo = $var['id_grupo'];
+		$tipo_producto = $var['tipo_producto'];
+
+		echo "<input type='hidden' id='id_grupo' name='id_grupo' value='$id_grupo'/>";
+		echo "<input type='hidden' id='id_prod' name='id_prod' value='$tipo_producto'/>";
+	?>
+
+	<div onclick="mostrar_filtro();" class="filtro">
+		<span>+ <i><b>Buscar&nbsp;</b></i></span>
+	</div>
+
+	<div id="filtro" class="form_filtro">
+	<table>
+		<tr>
+			<td>Productos:&nbsp;</td>
+			<td>
+			<select id="tipo_producto" name="tipo_producto">
+				<option value="1" <?php if($var['tipo_producto']==1){ echo "selected='selected'";} ?>>Todos</option>
+				<option value="2" <?php if($var['tipo_producto']==2){ echo "selected='selected'";} ?>>Importados</option>
+				<option value="3" <?php if($var['tipo_producto']==3){ echo "selected='selected'";} ?>>Nacionales</option>
+			</select>
+			</td>
+			<td align="right"><button type="submit" name="enviar" value="enviar">Listar</button></td>
+		</tr>
+	</table>
+	</div>
+</form>
+<?php }; ?>
+
+<center style="clear:both;">
+<em class="titulo"><?php echo $var['titulo']; ?></em>
+<br />
+Seleccione el producto para mas informacion.
+</center>
+
+<table style="clear:both;">
+<tr class="provlisthead">
+<th colspan="4"></th><th colspan="6">En transito</th><th colspan="3"></th>
+</tr>
+<tr class="provlisthead">
+<th>Producto</th><th>Stock</th><th title='Stock minimo'>Stock min</th><th>Delta fisico</th><th>Nac.</th><th>Courier</th><th>Aer.1</th><th>Aer.2</th><th>Mar.</th><th><div style="width:30px;">?</div></th><th>Reservado</th><th>Delta total</th><th>Unidad</th>
+</tr>
+   <?php echo $var['rows']; ?>
+</table>
+<br>
+</body>
+</html>

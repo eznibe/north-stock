@@ -1,0 +1,35 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+
+<script type="text/javascript">
+  function resaltar(BOTON)
+  {
+    document.getElementById('pais_abm').style.background="#000099";
+    document.getElementById('proveedor_abm').style.background="#000099";
+    document.getElementById('proveedor_listar').style.background="#000099";
+    document.getElementById(BOTON).style.background="#6699ff";
+
+  }
+</script>
+
+
+</head>
+<body class="menu" background="imagenes/fondo.bmp">
+
+<div class="conectado">
+ <p class="normal">Usuario conectado:<br />
+ <?php echo $var['username']; ?> </p>
+ <center><a class="link" href="index.php" target="_top">Desconectar</a></center>
+</div>
+
+<div class="menu">
+ <center>
+  <a name="pais_abm" id="pais_abm" href="pais_abm.php" onclick="resaltar('pais_abm');" target="ppal" class="menu_link">ABM de pais</a><br /><br />
+  <a name="proveedor_abm" id="proveedor_abm" href="proveedor_abm.php" onclick="resaltar('proveedor_abm');" target="ppal" class="menu_link">ABM de proveedor</a><br /><br />
+  <a name="proveedor_listar" id="proveedor_listar" href="proveedor_listar.php" onclick="resaltar('proveedor_listar');" target="ppal" class="menu_link">Listar proveedores</a>
+ </center>
+</div>
+</body>
+</html>

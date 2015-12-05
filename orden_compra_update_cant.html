@@ -1,0 +1,67 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />  
+
+<script type="text/javascript">
+
+function setfocus()
+{ 
+document.<?php echo $var['focus']; ?>.focus()
+}
+
+function update()
+{ 
+ document.forms[0].submit();
+ window.close(self);
+}
+
+</script>
+
+</head>
+<body class="ppal" onload = "setfocus()">
+
+
+<table>
+<tr>
+<td>
+Producto: 
+</td>
+<td>
+<?php echo $var['categoria']; ?>
+</td>
+</tr>
+
+<tr>
+<td>
+Proveedor: 
+</td>
+<td>
+<?php echo $var['proveedor']; ?>
+</td>
+</tr>
+
+<form action="orden_compra_proveedor.php" method="post" target="ppal" name="orden_comprar_update_cant" onsubmit="update();">
+<input type="hidden" value="orden_comprar_update_cant" size="10" name="formname" id="formname">
+<input type="hidden" value="<?php echo $var['id_itemcomprar']; ?>" size="10" name="id_itemcomprar" id="id_itemcomprar">
+<input type="hidden" value="<?php echo $var['id_proveedor']; ?>" size="10" name="id_proveedor" id="id_proveedor">
+
+<tr>
+<td>
+<label for="cantidad">Cantidad a comprar:</label> 
+</td>
+<td>
+<input type="text" value="<?php echo $var['cantidad']; ?>" size="10" name="cantidad" id="cantidad" class="obligatorio" > (<?php echo $var['unidad']; ?>)*
+</td>
+</tr>
+</table>
+ <center>
+ <br />Los casilleros marcados con * son obligatorios.<br />
+ <button type="submit" name="enviar" value="enviar" >Actualizar</button>
+</form>
+ </center>
+
+
+
+</body>
+</html>  

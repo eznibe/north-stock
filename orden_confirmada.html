@@ -1,0 +1,34 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+
+<script type="text/javascript">
+
+function setfocus()
+{ 
+document.forms[0].<?php echo $var['focus']; ?>.focus()
+}
+</script>
+
+</head>
+<body class="ppal" onload = "setfocus()">
+
+<form action="form_orden_nacional.php" method="post" target="_self" name="orden_nacional">
+
+<div class="altas">
+<fieldset>
+ <legend>Compra nacional</legend>
+   <?php echo $var['mensaje']; ?>
+ <center>
+ <br />
+<!-- <button type="submit" name="enviar" value="enviar">Ingresar</button>
+-->
+ </center>
+</fieldset>
+</div>
+
+</form>
+
+</body>
+</html>  

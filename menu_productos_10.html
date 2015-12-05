@@ -1,0 +1,36 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+
+<script type="text/javascript">
+  function resaltar(BOTON)
+  {
+    document.getElementById('producto_salida').style.background="#000099";
+    document.getElementById('grupo_ver').style.background="#000099";
+    document.getElementById(BOTON).style.background="#6699ff";
+
+  }
+</script>
+
+</head>
+<body class="menu" background="imagenes/fondo.bmp">
+
+<div class="conectado">
+ <p class="normal">Usuario conectado:<br />
+ <?php echo $var['username']; ?> </p>
+ <center><a class="link" href="desconectar.php" target="_top">Desconectar</a></center>
+</div>
+
+<div class="menu">
+ <center>
+  <a name="producto_salida" id="producto_salida" onclick="resaltar('producto_salida');" href="producto_salida.php" target="ppal" class="menu_link">Egreso de existencias</a><br /><br />
+  <a name="grupo_ver" id="grupo_ver" href="grupo_ver.php" onclick="resaltar('grupo_ver');" href="grupo_ver.php" target="ppal" class="menu_link">Ver grupos</a><br /><br />
+<!-- <a href="categoria_buscar.php" target="ppal" class="menu_link">Buscar productos</a><br /><br />
+  <a href="producto_buscar.php" target="ppal" class="menu_link">Buscar subproductos</a>
+  <a href="producto_existentes.php" target="ppal" class="menu_link">Listar productos con existencias</a><br /><br />
+-->
+ </center>
+</div>
+</body>
+</html>

@@ -1,0 +1,433 @@
+.filtro
+{
+	cursor: pointer;
+}
+
+.filtro span
+{
+	color: blue;
+	background-color: #DDDDDD;
+}
+
+.form_filtro
+{
+	display: none;
+}
+
+
+/*------------------------------*/
+
+body
+{
+background-color: black;
+color: white;
+}
+
+body.menu
+{
+margin-top: 10px;
+background-image: url("imagenes/fondo.bmp");
+color: white;
+}
+
+body.ppal
+{
+margin-top: 10px;
+background-color: #003366;
+color: white;
+}
+
+body.barras
+{
+background-color: white;
+color: black;
+}
+
+div.horiz
+{
+padding: 0px;
+background-color: #336699;
+/*
+border-style: none;
+border-width: 0px;
+width: 780px;
+*/
+width: 100%;
+height: 20px;
+overflow: hidden;
+position: absolute;
+top: 0px;
+left: 0px;
+}
+
+a.button
+{
+padding: 1px;
+width: 110px;
+border-color: black;
+border-style: solid;
+border-width: 1;
+color: white;
+font: caption;
+font-weight: bold;
+background-color: #000099;
+}
+
+a.button-des
+{
+padding: 1px;
+width: 130px;
+border-color: black;
+border-style: solid;
+border-width: 1;
+color: #999999;
+font: caption;
+font-weight: bold;
+background-color: #000099;
+}
+
+a.button2
+{
+padding: 1px;
+width: 140px;
+border-color: white;
+border-style: solid;
+border-width: 1;
+color: white;
+font: caption;
+font-weight: bold;
+/*background-color: #000000;
+*/
+}
+
+a
+{
+cursor: pointer;
+cursor: hand;
+}
+
+a.list
+{
+color: blue;
+font: caption;
+font-weight: bold;
+}
+
+td.list
+{
+color: black;
+font: caption;
+font-weight: bold;
+}
+
+td.list2
+{
+color: white;
+font: caption;
+font-weight: bold;
+}
+
+a.link
+{
+color: white;
+font: caption;
+font-weight: bold;
+}
+
+a.menu_link
+{
+color: white;
+font: caption;
+font-weight: bold;
+padding: 1px;
+width: 120px;
+border-color: #000099;
+border-style: solid;
+border-width: 1;
+background-color: #000099;
+}
+
+a.link_des
+{
+color: #999999;
+font: caption;
+font-weight: bold;
+}
+
+a.imprimir, a.volver
+{
+text-align: right;
+color: white;
+font: caption;
+font-weight: bold;
+text-decoration: none;
+}
+
+div.imprimir {
+	float: right;
+}
+
+div.volver {
+	float: left;
+}
+
+div.selectfecha {
+	float: left;
+}
+
+center.fechas_center {
+	clear:both;
+}
+
+p.imprimir, span.imprimir
+{
+text-align: right;
+color: white;
+font: caption;
+font-weight: bold;
+}
+
+iframe.menu
+{
+border-style: none;
+border-width: 0px;
+width: 150px;
+height: 100%;
+/*height: 400px;
+*/
+overflow: hidden;
+position: absolute;
+top: 20px;
+left: 0px;
+}
+
+iframe.ppal
+{
+border-style: none;
+border-width: 0px;
+width: 81%;
+height: 100%;
+/*width: 630px;
+height: 400px;
+*/
+overflow: hidden;
+position: absolute;
+top: 20px;
+left: 150px;
+}
+
+
+span.b-up
+{
+border-style: outset;
+border-width: 1;
+/*
+width:780px;
+height:50px;
+*/
+color: white;
+font: caption;
+background-color: #3333cc;
+/*
+position: absolute;
+top: 30px;
+left: 100px;
+*/
+}
+
+div.conectado
+{
+padding: 5px;
+border-color: white;
+border-style: solid;
+border-width: 1;
+background-color: #000099;
+width: 130px;
+height: auto;
+overflow: hidden;
+position: absolute;
+top: 10px;
+left: 5px;
+}
+
+p.normal
+{
+font-family: Helvetica;
+font-size: 12px;
+font-style: normal;
+font-weight: normal;
+color: white;
+}
+
+div.menu
+{
+padding: 5px;
+border-color: white;
+border-style: solid;
+border-width: 1;
+background-color: #000099;
+width: 130px;
+height: auto;
+overflow: hidden;
+position: absolute;
+top: 100px;
+left: 5px;
+}
+
+div.auth
+{
+padding: 5px;
+border-color: white;
+border-style: none;
+border-width: 0;
+background-color: #ccffff;
+width: 200;
+height: auto;
+overflow: hidden;
+position: absolute;
+top: 100px;
+left: 200px;
+color: black;
+}
+
+div.proveedor_alta
+{
+padding: 5px;
+border-color: white;
+border-style: none;
+border-width: 0;
+width: auto;
+height: auto;
+overflow: hidden;
+/*position: absolute;
+top: 100px;
+left: 200px;
+background-color: #ccffff;
+color: black;
+*/
+}
+
+fieldset
+{
+padding: 5px;
+}
+
+button
+{
+padding-left: 8px;
+padding-right: 8px;
+padding-top: 2px;
+padding-bottom: 2px;
+}
+
+input.obligatorio
+{
+background-color: #ffffff;
+}
+
+input.opcional
+{
+background-color: #cccccc;
+}
+
+select.obligatorio
+{
+background-color: #ffffff;
+}
+
+select.opcional
+{
+background-color: #cccccc;
+}
+
+em.error
+{
+color: #ff0000;
+}
+
+em.titulo
+{
+color: white;
+font-weight: bold;
+}
+
+em
+{
+color: #ff0000;
+font-weight: bold;
+}
+
+tr.provlisthead
+{
+background-color: #aaaaaa;
+color: #000000;
+}
+
+tr.provlistrow
+{
+background-color: #dddddd;
+color: #000000;
+}
+
+td.centrado
+{
+text-align: center;
+}
+
+td.borde
+{
+border-width: 1;
+border-style: solid;
+}
+
+td.barras
+{
+border-width: 1;
+border-style: solid;
+padding: 5px;
+text-align: center;
+}
+
+#phpdump {
+	color: red;
+}
+
+.accion_1 {
+	color: green;
+}
+
+.accion_2 {
+	color: red;
+}
+
+.toggleDescripcion {
+	text-decoration: underline;	
+}
+
+.linkGuardarDescripcion {
+	color: black;
+	font-weight: bold;
+	margin-right: 10px;
+	text-decoration: underline;
+}
+
+.headerDescripcion {
+	background-color: #AAAAAA;
+}
+
+.tituloDescripcion {
+	margin-left: 5px;
+	color: black;
+}
+
+.guardarDescripcion {
+	float: right;
+}
+
+#modifiedDescripcion {
+	color: black;
+}
+
+#buscar_orden {
+	margin-top: 5px;
+}

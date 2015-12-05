@@ -1,0 +1,27 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+
+<script type="text/javascript">
+
+function setfocus()
+{ 
+document.forms[0].<?php echo $var['focus']; ?>.focus()
+}
+
+function show_items(ID_PROVEEDOR)
+{
+ var url="producto_ItemComprar.php?id_proveedor=" + ID_PROVEEDOR;
+ window.open(url,"producto_detalle","toolbar=no, location=no, directories=no, status=yes, menubar=no, scrollbars=yes, resizable=yes, width=600, height=300");
+}
+
+</script>
+
+</head>
+<body class="ppal" >
+
+<?php echo $var['proveedor']; ?>  
+
+</body>
+</html>  

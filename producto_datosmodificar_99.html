@@ -1,0 +1,174 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+
+<script type="text/javascript">
+
+function setfocus()
+{
+document.<?php echo $var['focus']; ?>.focus()
+}
+
+function confirma()
+{
+	// para que este tipo de user role pueda modificar el item (validaciones precio):
+	//   - precio antiguo igual precio actual o
+	//   - precio antiguo igual precio oculto
+	
+	var old_precio_fob = document.getElementById('old_precio_fob').value;
+	var old_precio_nac = document.getElementById('old_precio_nac').value;
+	var oculto_fob = document.getElementById('oculto_fob').value;
+	var oculto_nac = document.getElementById('oculto_nac').value;
+
+	var precio_fob = (document.getElementById('precio_fob')==null || document.getElementById('precio_fob') == 'undefined') 
+						? old_precio_fob : document.getElementById('precio_fob').value;
+	var precio_nac = (document.getElementById('precio_nac')==null || document.getElementById('precio_nac') == 'undefined') 
+						? old_precio_nac : document.getElementById('precio_nac').value;
+	
+
+	var cond_a = (precio_fob == old_precio_fob && precio_nac == old_precio_nac);
+	var cond_b = (old_precio_fob == oculto_fob && old_precio_nac == oculto_nac);
+	  
+	if(cond_a || cond_b)
+		return true;
+
+	alert("No es posible modificar el precio de este item. Por favor para realizar este cambio comunicarse con el administrador.");
+	
+	return false;
+}
+</script>
+
+</head>
+<body class="ppal" onload = "setfocus()">
+
+
+<div class="altas">
+<fieldset>
+ <legend>Modificacion de item</legend>
+   <?php echo $var['mensaje']; ?>
+<table>
+<form action="form_producto_modificacion_99.php" method="post" target="_self" name="scategoria" onsubmit="return confirma();">
+  <input type="hidden" value="item_datosmodificar" size="10" name="formname" id="formname">
+  <input type="hidden" value="<?php echo $var['id_subproducto']; ?>" size="10" name="id_subproducto" id="id_subproducto"/>
+  <input type="hidden" value="<?php echo $var['old_precio_fob']; ?>" size="10" name="old_precio_fob" id="old_precio_fob"/>
+  <input type="hidden" value="<?php echo $var['old_precio_nac']; ?>" size="10" name="old_precio_nac" id="old_precio_nac"/>
+  <input type="hidden" value="<?php echo $var['oculto_fob']; ?>" size="10" name="oculto_fob" id="oculto_fob"/>
+  <input type="hidden" value="<?php echo $var['oculto_nac']; ?>" size="10" name="oculto_nac" id="oculto_nac"/>
+<tr>
+<td>
+Producto:
+</td>
+<td>
+<?php echo $var['catname']; ?>
+</td>
+</tr>
+<tr>
+<td>
+Proveedor:
+</td>
+<td>
+<select name="proveedor" id="proveedor" class="obligatorio">
+   <option value="<?php echo $var['id_prov']; ?>" selected="true"><?php echo $var['provname']; ?></option>
+   <?php echo $var['opcionesprov']; ?>
+</select>
+</td>
+</tr>
+
+<tr>
+<td>
+ <label for="agrupacion_dd">Agrupacion contable:</label>
+</td>
+<td>
+  <select name="agrupacion_dd" id="agrupacion_dd" class="obligatorio">
+  <?php
+   for ($i = 0; $i <= 9; $i++) {
+		echo (($i==$var['agrupacion']) ? "<option value='".$i."' selected>" : "<option value='".$i."'>"). $i ."</option>";
+	}
+   ?>
+   </select>
+</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>
+ <label for="codigo_proveedor">Codigo del proveedor:</label>
+</td>
+<td>
+  <input type="text" value="<?php echo $var['codigo_proveedor']; ?>" size="20" name="codigo_proveedor" id="codigo_proveedor" class="opcional">
+</td>
+</tr>
+
+<tr>
+<td>
+ <label for="codigo_barras">Codigo de barras:</label>
+</td>
+<td>
+  <input type="text" value="<?php echo $var['codigo_barras']; ?>" size="20" name="codigo_barras" id="codigo_barras" class="<?php echo $var['barras_class']; ?>">
+<?php echo $var['barras_sign']; ?>
+</td>
+</tr>
+
+<tr>
+<td>
+ <label for="stock_disponible">Stock disponible:</label>
+</td>
+<td>
+  <input type="text" value="<?php echo $var['stock_disponible']; ?>" size="10" name="stock_disponible" id="stock_disponible" class="opcional">
+</td>
+</tr>
+
+<tr>
+<td>
+ <label for="stock_transito">Stock transito:</label>
+</td>
+<td>
+  <input type="text" value="<?php echo $var['stock_transito']; ?>" size="10" name="stock_transito" id="stock_transito" class="opcional">
+</td>
+</tr>
+
+<tr>
+<tr>
+<td>
+ <label for="precio_fob">Precio FOB (US$):</label>
+</td>
+<td>
+<!--   <input type="text" value="<?php echo $var['precio_fob']; ?>" size="10" name="precio_fob" id="precio_fob" class="opcional">-->
+	<?php echo $var['precio_fob']; ?>
+</td>
+</tr>
+
+<tr>
+<td>
+ <label for="precio_nac">Precio nacionalizado (US$):</label>
+</td>
+<td>
+  <!--  <input type="text" value="<?php echo $var['precio_nac']; ?>" size="10" name="precio_nac" id="precio_nac" class="opcional">-->
+  <?php echo $var['precio_nac']; ?>
+</td>
+</tr>
+
+<tr>
+<td>
+ <label for="precio_ref">Precio de referencia en AR$:</label>
+</td>
+<td>
+ <!--  <input type="text" value="<?php echo $var['precio_ref']; ?>" size="10" name="precio_ref" id="precio_ref" class="opcional"> -->
+ <?php echo $var['precio_ref']; ?>
+
+</td>
+</tr>
+
+</table>
+ <center>
+ <br />Los casilleros marcados con * son obligatorios.<br />
+ <button type="submit" name="enviar" value="enviar">Modificar</button>
+</form>
+ </center>
+</fieldset>
+</div>
+
+
+</body>
+</html>

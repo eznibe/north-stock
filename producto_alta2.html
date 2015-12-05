@@ -1,0 +1,102 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+
+<script type="text/javascript">
+
+function setfocus()
+{ 
+document.forms[0].<?php echo $var['focus']; ?>.focus()
+}
+</script>
+
+</head>
+<body class="ppal" onload = "setfocus()">
+
+<form action="form_producto_alta.php" method="post" target="_self" name="producto_alta">
+
+<div class="altas">
+<fieldset>
+ <legend>Alta de producto</legend>
+   <?php echo $var['mensaje']; ?>
+<table>
+<tr>
+<td>
+ <label for="producto">Nombre del producto:</label>
+</td>
+<td>
+  <input type="text" value="<?php echo $var['producto']; ?>" size="20" name="producto" id="producto" class="obligatorio"> *
+</td>
+</tr>
+<tr>
+<td>
+ <label for="proveedor">Proveedor:</label>
+</td>
+<td>
+  <select name="proveedor" id="proveedor" class="obligatorio">
+   <option value="0">seleccionar</option>
+   <?php echo $var['proveedores']; ?>
+  </select> *
+  <?php echo $var['hits_prov_mensaje']; ?>
+</td>
+</tr>
+<tr>
+<td>
+ <label for="scan">Scan obligatorio:</label>
+</td>
+<td>
+  <input type="radio" name="scan" id="scan" value="si" class="obligatorio">Si 
+  <input type="radio" name="scan" id="scan" value="no" class="obligatorio">No *
+</td>
+</tr>
+<tr>
+<td>
+ <label for="stock_minimo">Stock minimo:</label>
+</td>
+<td>
+  <input type="text" value="<?php echo $var['stock_minimo']; ?>" size="10" name="stock_minimo" id="stock_minimo" class="obligatorio"> *
+</td>
+</tr>
+<tr>
+<td>
+ <label for="codigo_proveedor">Codigo del proveedor:</label>
+</td>
+<td>
+  <input type="text" value="<?php echo $var['codigo_proveedor']; ?>" size="20" name="codigo_proveedor" id="codigo_proveedor" class="opcional">
+</td>
+</tr>
+<tr>
+<td>
+ <label for="codigo_barras">Codigo de barras:</label>
+</td>
+<td>
+  <input type="text" value="<?php echo $var['codigo_barras']; ?>" size="20" name="codigo_barras" id="codigo_barras" class="obligatorio"> *
+(Depende de scan obligatorio.)
+</td>
+</tr>
+</table>
+ <center>
+ <br />Los casilleros marcados con * son obligatorios.<br />
+ <button type="submit" name="enviar" value="enviar">Ingresar</button>
+ </center>
+</fieldset>
+</div>
+
+</form>
+
+<script type="text/javascript">
+if ("<?php echo $var['scan']; ?>" == "si")
+{
+ document.producto_alta.scan[0].checked=1;
+ document.producto_alta.scan[1].checked=0;
+}
+else
+{
+ document.producto_alta.scan[0].checked=0;
+ document.producto_alta.scan[1].checked=1;
+}
+</script>
+
+</body>
+</html>  

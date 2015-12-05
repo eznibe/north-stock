@@ -1,0 +1,46 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+
+<script type="text/javascript">
+
+function setfocus()
+{ 
+document.forms[0].username.focus();
+window.name="auth";
+}
+
+function abrir_ventana()
+{
+ window.open("index.php","_self","resizable=1");
+ var w = window.open("","main_win","resizable=1");
+}
+
+</script>
+
+</head>
+<body class="ppal" onload = "setfocus()">
+
+<form action="form_login.php" method="post" target="main_win" onsubmit="abrir_ventana()" name="auth">
+
+<div class="auth">
+<fieldset>
+ <legend>Registraci&oacute;n</legend>
+ <label for="username">Nombre de Usuario:</label><br />
+  <input type="text" name="username" id="username"><br />
+ <label for="password">Contrase&ntilde;a:</label><br />
+  <input type="password" name="password" id="password"><br />
+ <center>
+ <button type="submit" name="enviar" value="enviar">Ingresar</button>
+ </center>
+</fieldset>
+</div>
+
+</form>
+
+<script type="text/javascript">
+ window.focus('main_win');
+</script>
+</body>
+</html>  

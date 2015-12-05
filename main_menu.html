@@ -1,0 +1,45 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+
+  <link rel="shortcut icon" href="imagenes/barco.png">
+
+
+<script type="text/javascript">
+  function refresh_ppal(BOTON)
+  {
+    var w=window.open("","_self");
+    w.ppal.location.href="ppal.html";
+    document.getElementById('proveedores').style.background="#000099";
+    document.getElementById('productos').style.background="#000099";
+    document.getElementById('ordenes').style.background="#000099";
+    document.getElementById('listados').style.background="#000099";
+    document.getElementById('sistema').style.background="#000099";
+    document.getElementById(BOTON).style.background="#6699ff";
+
+  }
+</script>
+
+
+</head>
+<body>
+
+<div class="horiz">
+ <span>
+    &nbsp;<em class="titulo">Gesti&oacute;n de Stock</em>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;<a name="proveedores" id="proveedores" href="menu_proveedores.php" class="button" target="menu" onclick="refresh_ppal('proveedores');">&nbsp; : : Proveedor &nbsp;</a>
+    &nbsp;<a name="productos" id="productos" href="menu_productos.php" class="button" target="menu" onclick="refresh_ppal('productos');">&nbsp; : : Productos &nbsp;</a>
+    &nbsp;<a name="ordenes" id="ordenes" href="menu_ordenes.php" class="button" target="menu" onclick="refresh_ppal('ordenes');">&nbsp; : : Ordenes &nbsp;</a>
+    &nbsp;<a name="listados" id="listados" href="menu_listados.php" class="button" target="menu" onclick="refresh_ppal('listados');">&nbsp; : : Listados &nbsp;</a>
+    &nbsp;<a name="sistema" id="sistema" href="menu_sistema.php" class="button" target="menu" onclick="refresh_ppal('sistema');">&nbsp; : : Sistema &nbsp;</a>
+
+ </span>
+</div>
+<iframe class="menu" name="menu" src="col_menu.php" frameborder="0" scrolling="auto" overflow="yes">Your browser does not support frames. </iframe>
+
+<iframe class="ppal" name="ppal" src="ppal.html" frameborder="0" scrolling="auto" overflow="yes">Your browser does not support frames. </iframe>
+
+</body>
+</html>  

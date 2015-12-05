@@ -1,0 +1,9 @@
+<html>
+<head><title>AskPass</title>
+</head>
+<body>
+<?php
+  phpinfo();
+?>
+</body>
+</html>

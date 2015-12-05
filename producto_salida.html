@@ -1,0 +1,112 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+
+<script type="text/javascript">
+
+function setfocus()
+{ 
+document.<?php echo $var['focus']; ?>.focus()
+}
+</script>
+
+</head>
+<body class="ppal" onload = "setfocus()">
+
+
+<div class="altas">
+<fieldset>
+ <legend>Egreso de existencias</legend>
+	<?php echo $var['mensaje']; ?>
+
+	<form action="form_producto_salida.php" method="post" target="_self" name="busca_producto">
+ 	<input type="hidden" value="busca_producto" name="formname" id="formname"> 
+	<table>
+		<tr>
+			<td>
+			<label for="pproducto">Patron de busqueda de producto:</label>
+			</td>
+			<td>
+			  <input type="text" value="" size="20" name="pproducto" id="pproducto" class="obligatorio"> * (Presione ENTER para buscar)
+			</td>
+		</tr>
+	</table>
+	</form>
+	<form action="form_producto_salida.php" method="post" target="_self" name="select_producto">
+		<input type="hidden" value="select_producto" name="formname" id="formname"> 
+	
+		<table style="width:100%;">
+			<tr>
+				<td>
+				 <label for="sproducto">Seleccionar el producto:</label>
+				</td>
+				<td>
+				&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+				  <select name="sproducto" id="sproducto" class="obligatorio" onblur="submit();">
+				   <option value="0">seleccionar</option>
+				   <?php echo $var['items']; ?>
+				  </select>
+				<br /><?php echo $var['hits_mensaje']; ?><hr />
+				</td>
+			</tr>
+		</table>
+	</form>
+	<form action="form_producto_salida.php" method="post" target="_self" name="producto_salida">
+		<input type="hidden" value="producto_salida" name="formname" id="formname"> 
+		<input type="hidden" value="<?php echo $var['item']; ?>" name="item" id="item"> 
+		<input type="hidden" value="<?php echo $var['stock_disponible']; ?>" name="stock_disponible" id="stock_disponible"> 
+		<input type="hidden" value="<?php echo $var['producto']; ?>" name="producto" id="producto"> 
+		<input type="hidden" value="<?php echo $var['unidad']; ?>" name="unidad" id="unidad"> 
+		
+		<table>
+			<tr>
+				<td>
+				Producto: 
+				</td>
+				<td>
+				<?php echo $var['producto']; ?> 
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+				Stock disponible: 
+				</td>
+				<td>
+				<em><?php echo $var['stock_disponible']; ?></em> <?php echo $var['unidad']; ?>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+				Cantidad a retirar: 
+				</td>
+				<td>
+				<input type="text" size="10" name="cantidad" id="cantidad" class="obligatorio" > <?php echo $var['unidad']; ?> *
+				</td>
+			</tr>
+			
+			<tr>
+				<td>
+				Fecha de egreso: 
+				</td>
+				<td>
+				<?php echo $var['fecha']; ?>
+				</td>
+			</tr>
+			</table>		
+			<center>
+				<br />Los casilleros marcados con * son obligatorios.<br />
+				<button type="submit" name="enviar" value="enviar">Ingresar</button>
+			</center>
+	</form>
+</fieldset>
+</div>
+
+</body>
+</html>  

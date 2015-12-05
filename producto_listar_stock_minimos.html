@@ -1,0 +1,58 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+
+<script type="text/javascript">
+
+function setfocus()
+{
+document.forms[0].proveedor.focus()
+}
+
+function show_detail(ID_CATEGORIA)
+{
+ var url="producto_detalle.php?id_categoria=" + ID_CATEGORIA;
+ window.open(url,"producto_detalle","toolbar=no, location=no, directories=no, status=yes, menubar=no, scrollbars=yes, resizable=yes, width=750, height=300");
+}
+
+function add_comprar(ID_ITEM)
+{
+ var url="producto_addcomprar.php?id_item=" + ID_ITEM;
+ window.open(url,"producto_detalle","toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=750, height=300");
+}
+
+</script>
+
+</head>
+<body class="ppal">
+
+<div>
+	<div style="float:left;">
+		<form action="grupo_listar_stock_minimos.php" method="get" target="_self">
+			<input type="hidden" id="id_grupo" name="id_grupo" value="<?php echo $var['id_grupo']; ?>">
+
+			<span>Periodo en meses: </span><input name="periodo" style="width:50px;"></select>
+			<span><input type="submit" value="Listar" style="margin-left: 15px;"></input></span>
+		</form>
+	</div>
+	<?php echo $var['imprimir']; ?>	
+</div>
+
+
+<center style="clear:both;">
+<em class="titulo"><?php echo $var['titulo']; ?></em>
+<br />
+Seleccione el producto para realizar orden de compra.
+</center>
+
+<table style="clear:both;">
+<tr class="provlisthead">
+<th>Item</th><th>Stock</th><th>Stock min.<br>producto</th><th style="width:65px;">St. min. promedio<br>x trimestre</th><th style="width:65px;">St. promedio consum.<br>mensual</th><th>Min. <br>consum.<br>en periodo</th> <th>Max. consum.<br>en periodo</th> <th>Precio<br>ref</th> <th>Unidad</th><th>Proveedor</th><th>Codigo<br>proveedor</th>
+<!--<th>Item</th><th>Stock</th><th>Stock min.<br>producto</th><th style="width:65px;">Stock minimo<br>mensual</th> <th>Precio<br>ref</th> <th>Unidad</th><th>Proveedor</th><th>Codigo<br>proveedor</th>-->
+</tr>
+   <?php echo $var['rows']; ?>
+</table>
+<br>
+</body>
+</html>

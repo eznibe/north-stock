@@ -1,0 +1,95 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+
+<script type="text/javascript">
+
+function setfocus()
+{ 
+document.forms[0].proveedor.focus()
+}
+</script>
+
+</head>
+<body class="ppal" onload = "setfocus()">
+
+<form action="form_proveedor_modificacion.php" method="post" target="_self" name="proveedor_modificacion">
+ <input type="hidden" value="proveedor_datosmodificar" size="10" name="formname" id="formname">
+ <input type="hidden" value="<?php echo $var['id_proveedor']; ?>" size="10" name="id_proveedor" id="id_proveedor">
+<div class="altas">
+<fieldset>
+ <legend>Modificacion de proveedor</legend>
+   <?php echo $var['mensaje']; ?>
+<table>
+<tr>
+<td>
+ <label for="proveedor">Nombre del proveedor:</label>
+</td>
+<td>
+  <input type="text" value="<?php echo $var['proveedor']; ?>" name="proveedor" id="proveedor" class="obligatorio"> *
+</td>
+</tr>
+<tr>
+<td>
+ <label for="direccion">Direccion:</label>
+</td>
+<td>
+  <input type="text" value="<?php echo $var['direccion']; ?>" size="50" name="direccion" id="direccion" class="opcional">
+</td>
+</tr>
+<tr>
+<td>
+ <label for="pais">Pais:</label>
+</td>
+<td>
+  <select name="pais" id="pais" class="obligatorio">
+   <option value="0">seleccionar</option>
+   <?php echo $var['select-pais']; ?>
+  </select> *
+</td>
+</tr>
+<tr>
+<td>
+ <label for="telefono">Telefono:</label>
+</td>
+<td>
+  <input type="text" size="20" value="<?php echo $var['telefono']; ?>" name="telefono" id="telefono" class="opcional">
+</td>
+</tr>
+<tr>
+<td>
+ <label for="fax">Fax:</label>
+</td>
+<td>
+  <input type="text" size="20" value="<?php echo $var['fax']; ?>" name="fax" id="fax" class="opcional">
+</td>
+</tr>
+<tr>
+<td>
+ <label for="contacto">Persona de contacto:</label>
+</td>
+<td>
+  <input type="text" value="<?php echo $var['contacto']; ?>" size="50" name="contacto" id="contacto" class="opcional">
+</td>
+</tr>
+<tr>
+<td>
+ <label for="mail">Direccion de e-mail:</label>
+</td>
+<td>
+  <input type="text" value="<?php echo $var['mail']; ?>" size="50" name="mail" id="mail" class="opcional">
+</td>
+</tr>
+</table>
+ <center>
+ <br />Los casilleros marcados con * son obligatorios.<br />
+ <button type="submit" name="enviar" value="enviar">Modificar</button>
+ </center>
+</fieldset>
+</div>
+
+</form>
+
+</body>
+</html>  

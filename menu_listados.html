@@ -1,0 +1,46 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+
+<script type="text/javascript">
+  function resaltar(BOTON)
+  {
+    document.getElementById('producto_disponible').style.background="#000099";
+    document.getElementById('item_disponible').style.background="#000099";
+    document.getElementById('producto_bajo_minimo').style.background="#000099";
+    document.getElementById('producto_listar').style.background="#000099";
+    document.getElementById('listar_fechas').style.background="#000099";
+    document.getElementById('listar_todos_items').style.background="#000099";
+    document.getElementById('listar_stock_minimos').style.background="#000099";
+    document.getElementById('listar_stock_valorizado').style.background="#000099";
+    document.getElementById(BOTON).style.background="#6699ff";
+
+  }
+</script>
+
+</head>
+<body class="menu" background="imagenes/fondo.bmp">
+
+<div class="conectado">
+ <p class="normal">Usuario conectado:<br />
+ <?php echo $var['username']; ?> </p>
+ <center><a class="link" href="index.php" target="_top">Desconectar</a></center>
+</div>
+
+<div class="menu">
+ <center>
+  <a name="producto_disponible" id="producto_disponible" onclick="resaltar('producto_disponible');" href="producto_disponible.php" target="ppal" class="menu_link">Listar Productos disponibles</a><br /><br />
+  <a name="item_disponible" id="item_disponible" onclick="resaltar('item_disponible');" href="item_disponible.php" target="ppal" class="menu_link">Listar Items disponibles</a><br /><br />
+  <a name="producto_bajo_minimo" id="producto_bajo_minimo" onclick="resaltar('producto_bajo_minimo');" href="producto_bajo_minimo.php" target="ppal" class="menu_link">Listar existencias bajo minimo</a><br /><br />
+  <a name="producto_listar" id="producto_listar" onclick="resaltar('producto_listar');" href="producto_listar.php" target="ppal" class="menu_link">Listar productos</a><br /><br />
+  <a name="listar_fechas" id="listar_fechas" onclick="resaltar('listar_fechas');" href="listar_fechas.php" target="ppal" class="menu_link">Listados entre fechas</a><br /><br />
+
+<!--Agregado para mostrar listado con todos los items-->
+  <a name="listar_todos_items" id="listar_todos_items" onclick="resaltar('listar_todos_items');" href="grupo_ver_todos_items.php" target="ppal" class="menu_link">Listar todos los items</a><br /><br />
+  <a name="listar_stock_minimos" id="listar_stock_minimos" onclick="resaltar('listar_stock_minimos');" href="grupo_ver_stock_minimos.php" target="ppal" class="menu_link">Listar stock minimos por periodo</a><br /><br />
+
+  <a name="listar_stock_valorizado" id="listar_stock_valorizado" onclick="resaltar('listar_stock_valorizado');" href="item_disponible_valorizado.php" target="ppal" class="menu_link">Listar stock valorizado</a><br /><br />
+
+</body>
+</html>

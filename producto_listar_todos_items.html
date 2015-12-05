@@ -1,0 +1,44 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+
+<script type="text/javascript">
+
+function setfocus()
+{
+document.forms[0].proveedor.focus()
+}
+
+function show_detail(ID_CATEGORIA)
+{
+ var url="producto_detalle.php?id_categoria=" + ID_CATEGORIA;
+ window.open(url,"producto_detalle","toolbar=no, location=no, directories=no, status=yes, menubar=no, scrollbars=yes, resizable=yes, width=750, height=300");
+}
+
+function add_comprar(ID_ITEM)
+{
+ var url="producto_addcomprar.php?id_item=" + ID_ITEM;
+ window.open(url,"producto_detalle","toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=750, height=300");
+}
+
+</script>
+
+</head>
+<body class="ppal">
+
+<?php echo $var['imprimir']; ?>
+<center>
+<em class="titulo"><?php echo $var['titulo']; ?></em>
+<br />
+Seleccione el producto para realizar orden de compra.
+</center>
+<table>
+<tr class="provlisthead">
+<th>Item</th><th>Stock</th><th>Stock min.<br>producto</th><th>Delta<br>fisico</th><th>En<br>transito</th><th>Delta<br>total</th> <th>Precio<br>FOB</th><th>Precio<br>nac</th><th>Precio<br>ref</th> <th>Unidad</th><th>Proveedor</th><th>Codigo proveedor</th>
+</tr>
+   <?php echo $var['rows']; ?>
+</table>
+<br>
+</body>
+</html>

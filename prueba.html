@@ -1,0 +1,33 @@
+<html>
+<head>
+<script type="text/javascript">
+  function escribir()
+  {
+    var w=window.open("","pi");
+    w.ppal.document.open();
+    w.ppal.document.write("ppppp");
+    w.ppal.document.close();
+  }
+</script>
+
+</head>
+<body>
+<script type="text/javascript">
+window.name = "miwin";
+//window.toolbar = 0;
+//window.scrollbars = 0;
+
+var ww = window.open("","miwin", "toolbar=0,scrollbar=0,fullscreen=1");
+
+window.open("print_barcode.php","pi","toolbar=0,scrollbar=1,resizable=1,width=10,height=10");
+window.open("","po","width=10,height=10");
+
+</script>
+
+<a onclick="escribir()">Click aca</a>
+
+<?php echo $var['orden_table']; ?>
+
+</body>
+</html>
+

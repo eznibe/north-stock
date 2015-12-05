@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Header</title>
+
+<STYLE type="text/css">
+
+A.button {
+padding: 1px;
+width: 135px;
+border-color: black;
+border-style: solid;
+border-width: 1;
+color: white;
+font: caption;
+font-weight: bold;
+background-color: #000099;
+}
+
+EM.titulo
+{
+color: white;
+font-weight: bold;
+}
+
+div.horiz
+{
+padding: 0px;
+background-image: "imagenes/fondo.bmp";
+
+overflow: hidden;
+position: absolute;
+top: 0px;
+left: 0px;
+}
+</STYLE>
+
+<script type="text/javascript">
+  function refresh_ppal(BOTON)
+  {
+    document.getElementById('proveedores').style.background="#000099";
+    document.getElementById('productos').style.background="#000099";
+    document.getElementById('ordenes').style.background="#000099";
+    document.getElementById('listados').style.background="#000099";
+    document.getElementById('sistema').style.background="#000099";
+    document.getElementById(BOTON).style.background="#6699ff";
+
+    var w=window.open("","_self");
+    parent.ppal.location.href="ppal.html";
+  }
+</script>
+</head>
+
+<body background="imagenes/fondo.bmp">
+<div class="horiz">
+ <span>
+    &nbsp;<em class="titulo">Gesti&oacute;n de Stock</em>
+    &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;<a name="proveedores" id="proveedores" href="menu_proveedores.php" class="button" target="menu" onclick="refresh_ppal('proveedores');">&nbsp; : : Proveedores &nbsp;</a>
+    &nbsp;<a name="productos" id="productos" href="menu_productos.php" class="button" target="menu" onclick="refresh_ppal('productos');">&nbsp; : : Productos &nbsp;</a>
+    &nbsp;<a name="ordenes" id="ordenes" href="menu_ordenes.php" class="button" target="menu" onclick="refresh_ppal('ordenes');">&nbsp; : : Ordenes &nbsp;</a>
+    &nbsp;<a name="listados" id="listados" href="menu_listados.php" class="button" target="menu" onclick="refresh_ppal('listados');">&nbsp; : : Listados &nbsp;</a>
+    &nbsp;<a name="sistema" id="sistema" href="menu_sistema.php" class="button" target="menu" onclick="refresh_ppal('sistema');">&nbsp; : : Sistema &nbsp;</a>
+
+ </span>
+</div>
+</body>
+</html>

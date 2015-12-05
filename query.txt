@@ -1,0 +1,36 @@
+select Categoria.categoria, Proveedor.proveedor, ItemComprar.cantidad, Unidad.unidad from Categoria, Proveedor, ItemComprar, Item, Unidad WHERE ((ItemComprar.id_item = Item.id_item) AND (Item.id_proveedor = Proveedor.id_proveedor) AND (Categoria.id_categoria = Item.id_categoria) AND (Unidad.id_unidad = Categoria.id_unidad_visual) );
+
++-------------------------+---------------------+----------+--------+
+| categoria               | proveedor           | cantidad | unidad |
++-------------------------+---------------------+----------+--------+
+| MOSQUETON #2488 WICHARD | CIA. ARG. CONTROLES |       33 | unidad |
+| MOSQUETON #2488 WICHARD | CIA. ARG. CONTROLES |       44 | unidad |
+| LEWMAR MOLINETE 24A     | CIA. ARG. CONTROLES |        2 | unidad |
+| CABO SPECTRA 10 MM      | TEXTIL LUJAN        |      100 | metro  |
+| CABO SPECTRA 10 MM      | BAIN                |      500 | metro  |
++-------------------------+---------------------+----------+--------+
+5 rows in set (0.01 sec)
+
+-------------
+De Todos los paises
+mysql> select DISTINCT Proveedor.id_proveedor, Proveedor.proveedor from Categoria, Proveedor, ItemComprar, Item, Unidad WHERE ((ItemComprar.id_item = Item.id_item) AND (Item.id_proveedor = Proveedor.id_proveedor) AND (Categoria.id_categoria = Item.id_categoria) AND (Unidad.id_unidad = Categoria.id_unidad_visual) );
++--------------+---------------------+
+| id_proveedor | proveedor           |
++--------------+---------------------+
+|            7 | CIA. ARG. CONTROLES |
+|           31 | TEXTIL LUJAN        |
+|            1 | BAIN                |
++--------------+---------------------+
+3 rows in set (0.00 sec)
+----------------------------
+Solo Argentinos:
+mysql> select DISTINCT Proveedor.id_proveedor, Proveedor.proveedor from Categoria, Proveedor, ItemComprar, Item, Unidad WHERE ((ItemComprar.id_item = Item.id_item) AND (Item.id_proveedor = Proveedor.id_proveedor) AND (Categoria.id_categoria = Item.id_categoria) AND (Unidad.id_unidad = Categoria.id_unidad_visual) AND (Proveedor.id_pais = 1) );
++--------------+---------------------+
+| id_proveedor | proveedor           |
++--------------+---------------------+
+|            7 | CIA. ARG. CONTROLES |
+|           31 | TEXTIL LUJAN        |
++--------------+---------------------+
+2 rows in set (0.00 sec)
+
+

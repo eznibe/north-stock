@@ -1,0 +1,76 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+
+<script type="text/javascript">
+
+function setfocus()
+{ 
+document.<?php echo $var['focus']; ?>.focus()
+}
+</script>
+
+</head>
+<body class="ppal" onload = "setfocus()">
+
+
+<div class="altas">
+<fieldset>
+ <legend>Alta de usuario</legend>
+   <?php echo $var['mensaje']; ?>
+<table>
+<form action="form_usuario_alta.php" method="post" target="_self" name="usuario_alta">
+  <input type="hidden" value="usuario_alta" size="10" name="formname" id="formname"> 
+
+<tr>
+<td>
+ <label for="id_tipo">Tipo de usuario:</label>
+</td>
+<td>
+  <select name="id_tipo" id="id_tipo" class="obligatorio">
+   <option value="0">seleccionar</option>
+   <?php echo $var['tipo']; ?>
+  </select> *
+</td>
+</tr>
+
+<tr>
+<td>
+ <label for="nombre">Nombre completo:</label>
+</td>
+<td>
+  <input type="text" value="<?php echo $var['nombre']; ?>" size="50" name="nombre" id="pais" class="obligatorio"> *
+</td>
+</tr>
+
+<tr>
+<td>
+ <label for="username">Nombre de usuario:</label>
+</td>
+<td>
+  <input type="text" value="<?php echo $var['username']; ?>" size="10" name="username" id="username" class="obligatorio"> *
+</td>
+</tr>
+
+<tr>
+<td>
+ <label for="clave">Clave:</label>
+</td>
+<td>
+  <input type="password" value="" size="10" name="clave" id="clave" class="obligatorio"> *
+</td>
+</tr>
+
+</table>
+ <center>
+ <br />Los casilleros marcados con * son obligatorios.<br />
+ <button type="submit" name="enviar" value="enviar">Ingresar</button>
+</form>
+ </center>
+</fieldset>
+</div>
+
+
+</body>
+</html>  

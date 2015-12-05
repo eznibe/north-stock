@@ -1,0 +1,817 @@
+<?php
+
+/*  This program is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU General Public License
+ *  as published by the Free Software Foundation; either version 2
+ *  of the License, or (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  See http://www.gnu.org/licenses/gpl.txt
+ */
+
+/**
+ *  This class can be used to create barcode-images in the following formats:
+ *  UPC-A     /^[0-9]{12}$/
+ *  UPC-E     /^[01][0-9]{7}$/
+ *  EAN-13    /^[0-9]{13}$/
+ *  EAN-8     /^[0-9]{8}$/
+ *  Code 39   /^\*[0-9A-Z\-\.\$\/+% ]{1,48}\*$/
+ *  Codabar   /^([ABCD])[0-9\-\$:\/\.\+]{1,48}\\1$/i
+ *  128C      /^(\d\d)+$/
+ *  Also, UPC- and EAN-codes can be suffixed with additional 2- or 5-digit
+ *  supplemental code.
+ *  Additional info: when printing, 38 pixels take up 1 cm of space.
+ *
+ *  Copyright (c) 2002 Nieko Maatjes (nieko.net)
+ *  Changed from a script to a class by Stefano Locati 2003 (dev.obliquid.com)
+ *
+ *  How to use the class, a short Example:
+ *
+ *  $barcode =& new barcode();
+ *  $barcode->create("*ERBO00148*", "Code 39", $filename);
+ *  @version $Id: barcode.php,v 1.6 2004/03/08 18:59:33 slocati Exp $
+ *  @package general
+ */
+
+/** Barcode class 
+ *  @package general
+ */
+class barcode {
+         
+    //data for encoding digits/letters to bars (=1) and spaces (=0)
+    var $a = array('0001101', //0
+        '0011001', //1
+        '0010011', //2
+        '0111101', //3
+        '0100011', //4
+        '0110001', //5
+        '0101111', //6
+        '0111011', //7
+        '0110111', //8
+        '0001011'); //9
+
+    var $b = array('0100111', //0
+        '0110011', //1
+        '0011011', //2
+        '0100001', //3
+        '0011101', //4
+        '0111011', //5
+        '0000101', //6
+        '0010001', //7
+        '0001001', //8
+        '0010111'); //9
+
+    var $right = array('1110010', //0
+        '1100110', //1
+        '1101100', //2
+        '1000010', //3
+        '1011100', //4
+        '1001110', //5
+        '1010000', //6
+        '1000100', //7
+        '1001000', //8
+        '1110100'); //9
+
+    var $AB = array('aaaaaa', //0
+        'aababb', //1
+        'aabbab', //2
+        'aabbba', //3
+        'abaabb', //4
+        'abbaab', //5
+        'abbbaa', //6
+        'ababab', //7
+        'ababba', //8
+        'abbaba'); //9
+
+    var $UPCE = array('bbbaaa', //0
+        'bbabaa', //1
+        'bbaaba', //2
+        'bbaaab', //3
+        'babbaa', //4
+        'baabba', //5
+        'baaabb', //6
+        'bababa', //7
+        'babaab', //8
+        'baabab'); //9
+
+    var $code39 = array('0' => '101001101101',
+            '1' => '110100101011',
+            '2' => '101100101011',
+            '3' => '110110010101',
+            '4' => '101001101011',
+            '5' => '110100110101',
+            '6' => '101100110101',
+            '7' => '101001011011',
+            '8' => '110100101101',
+            '9' => '101100101101',
+            'A' => '110101001011',
+            'B' => '101101001011',
+            'C' => '110110100101',
+            'D' => '101011001011',
+            'E' => '110101100101',
+            'F' => '101101100101',
+            'G' => '101010011011',
+            'H' => '110101001101',
+            'I' => '101101001101',
+            'J' => '101011001101',
+            'K' => '110101010011',
+            'L' => '101101010011',
+            'M' => '110110101001',
+            'N' => '101011010011',
+            'O' => '110101101001',
+            'P' => '101101101001',
+            'Q' => '101010110011',
+            'R' => '110101011001',
+            'S' => '101101011001',
+            'T' => '101011011001',
+            'U' => '110010101011',
+            'V' => '100110101011',
+            'W' => '110011010101',
+            'X' => '100101101011',
+            'Y' => '110010110101',
+            'Z' => '100110110101',
+            '-' => '100101011011',
+            '.' => '110010101101',
+            ' ' => '100110101101',
+            '$' => '100100100101',
+            '/' => '100100101001',
+            '+' => '100101001001',
+            '%' => '101001001001',
+            '*' => '100101101101');
+
+    var $codabar = array('0' => '101010011',
+            '1' => '101011001',
+            '2' => '101001011',
+            '3' => '110010101',
+            '4' => '101101001',
+            '5' => '110101001',
+            '6' => '100101011',
+            '7' => '100101101',
+            '8' => '100110101',
+            '9' => '110100101',
+            '-' => '101001101',
+            '$' => '101100101',
+            ':' => '1101011011',
+            '/' => '1101101011',
+            '.' => '1101101101',
+            '+' => '1011011011',
+            'A' => '1011001001', //A=a, B=b, C=c, D=d
+            'B' => '1010010011',
+            'C' => '1001001011',
+            'D' => '1010011001',
+            'a' => '1011001001',
+            'b' => '1010010011',
+            'c' => '1001001011',
+            'd' => '1010011001');
+
+      var $kix = array('0' => 'mmww', //t=top, b=bottom, m=middle, w=whole
+            '1' => 'mbtw',
+            '2' => 'mbwt',
+            '3' => 'bmtw',
+            '4' => 'bmwt',
+            '5' => 'bbtt',
+            '6' => 'mtbw',
+            '7' => 'mwmw',
+            '8' => 'mwbt',
+            '9' => 'btmw',
+            'A' => 'btbt',
+            'B' => 'bwmt',
+            'C' => 'mtwb',
+            'D' => 'mwtb',
+            'E' => 'mwwm',
+            'F' => 'bttb',
+            'G' => 'btwm',
+            'H' => 'bwtm',
+            'I' => 'tmbw',
+            'J' => 'tbmw',
+            'K' => 'tbbt',
+            'L' => 'wmmw',
+            'M' => 'wmbt',
+            'N' => 'wbmt',
+            'O' => 'tmwb',
+            'P' => 'tbtb',
+            'Q' => 'tbwm',
+            'R' => 'wmtb',
+            'S' => 'wmwm',
+            'T' => 'wbtm',
+            'U' => 'ttbb',
+            'V' => 'twmb',
+            'W' => 'twbm',
+            'X' => 'wtmb',
+            'Y' => 'wtmb',
+            'Z' => 'wwmm');
+
+        //128C
+        //                        BWBWBW
+        var $bar128c = array('00' => '212222',
+            '01' => '222122',
+            '02' => '222221',
+            '03' => '121223',
+            '04' => '121322',
+            '05' => '131222',
+            '06' => '122213',
+            '07' => '122312',
+            '08' => '132212',
+            '09' => '221213',
+            '10' => '221312',
+            '11' => '231212',
+            '12' => '112232',
+            '13' => '122132',
+            '14' => '122231',
+            '15' => '113222',
+            '16' => '123122',
+            '17' => '123221',
+            '18' => '223211',
+            '19' => '221132',
+            '20' => '221231',
+            '21' => '213212',
+            '22' => '223112',
+            '23' => '312131',
+            '24' => '311222',
+            '25' => '321122',
+            '26' => '321221',
+            '27' => '312212',
+            '28' => '322112',
+            '29' => '322211',
+            '30' => '212123',
+            '31' => '212321',
+            '32' => '232121',
+            '33' => '111323',
+            '34' => '131123',
+            '35' => '131321',
+            '36' => '112313',
+            '37' => '132113',
+            '38' => '132311',
+            '39' => '211313',
+            '40' => '231113',
+            '41' => '231311',
+            '42' => '112133',
+            '43' => '112331',
+            '44' => '132131',
+            '45' => '113123',
+            '46' => '113321',
+            '47' => '133121',
+            '48' => '313121',
+            '49' => '211331',
+            '50' => '231131',
+            '51' => '213113',
+            '52' => '213311',
+            '53' => '213131',
+            '54' => '311123',
+            '55' => '311321',
+            '56' => '331121',
+            '57' => '312113',
+            '58' => '312311',
+            '59' => '332111',
+            '60' => '314111',
+            '61' => '221411',
+            '62' => '431111',
+            '63' => '111224',
+            '64' => '111422',
+            '65' => '121124',
+            '66' => '121421',
+            '67' => '141122',
+            '68' => '141221',
+            '69' => '112214',
+            '70' => '112412',
+            '71' => '122114',
+            '72' => '122411',
+            '73' => '142112',
+            '74' => '142211',
+            '75' => '241211',
+            '76' => '221114',
+            '77' => '413111',
+            '78' => '241112',
+            '79' => '134111',
+            '80' => '111242',
+            '81' => '121142',
+            '82' => '121241',
+            '83' => '114212',
+            '84' => '124112',
+            '85' => '124211',
+            '86' => '411212',
+            '87' => '421112',
+            '88' => '421211',
+            '89' => '212141',
+            '90' => '214121',
+            '91' => '412121',
+            '92' => '111143',
+            '93' => '111341',
+            '94' => '131141',
+            '95' => '114113',
+            '96' => '114311',
+            '97' => '411113',
+            '98' => '411311',
+            '99' => '113141',
+            'ST' => '211232', //START
+            'OP' => '2331112'); //STOP
+         
+       /** Creates barcode image
+        *  @param text $barcode the string to be encoded
+        *  @param text $coding  the format, one of "DWIM" (Do what I mean), "UPC-A" (US/Canada),
+        *    "UPC-E" (US/Canada), EAN-13 (Europe/Japan), "EAN-8" (Europe/Japan),
+        *    "Code 39" (Text), "Codabar", "KIX", "128C"
+        *  @param text $filename an optional filename where the generated PNG image is
+        *    saved. If no filename is given, the image will be sent to standard output
+        *  @param boolean $dispcod show or not the coding format on the top of the codebar
+        *    The code string is always shown, this shows or not the coding name
+        *  @return list($success, $message) result is boolean and message an error message
+        */
+        function create($barcode, $coding, $filename="", $dispcod=false) {
+            //$override="1";
+            if ($dispcode) $this->dispcod = 15; 
+            else $this->dispcod = 0;
+            //15 is number of pixels image should be moved downwards
+            //if UPC-code, change to EAN-code with no extra coding
+            if (preg_match("/^[0-9]{12}(,[0-9]{2,5})?$/", $barcode)) {
+                $barcode = '0'.$barcode;
+                //make UPC and EAN-codes both 13 characters long
+            }
+
+            //process barcode
+            //if correct UPC-A / EAN-13-code
+            if (preg_match("/^[0-9]{13}(,[0-9]{2,5})?$/", $barcode) && ($coding == 'DWIM' 
+              || $coding == 'UPC-A' || $coding == 'EAN-13')) {
+                $gobackn = ($barcode[0] == '0' ? 10 : 0);
+                //$gobackn is used to make the image smaller when working with UPC-A
+                if (strlen($barcode) == 13) {
+                    CreateImage(105 - $gobackn, 62 + $this->dispcod);
+                } elseif (strlen($barcode) == 16) {
+                    CreateImage(132 - $gobackn, 62 + $this->dispcod);
+                } elseif (strlen($barcode) == 19) {
+                    CreateImage(168 - $gobackn, 62 + $this->dispcod);
+                }
+
+                //draw numbers
+                if ($barcode[0] != '0') {
+                    ImageString($this->image, 3, 2, 50 + $this->dispcod, $barcode[0], 
+                      $this->black);
+                }
+                //draw preceeding EAN-number
+                if ($this->dispcod && $barcode[0] != '0') {
+                    ImageString($this->image, 3, 36, 0, 'EAN-13', $this->black);
+                } elseif ($this->dispcod) { //UPC-A
+                    ImageString($this->image, 3, 31, 0, 'UPC-A', $this->black);
+                }
+                ImageString($this->image, 3, 14 - $gobackn, 50 + $this->dispcod, 
+		  substr($barcode, 1, 6), $this->black);
+                ImageString($this->image, 3, 60 - $gobackn, 50 + $this->dispcod, 
+		  substr($barcode, 7, 6), $this->black);
+
+                //draw guard bars
+                ImageLine($this->image, 10 - $gobackn, $this->dispcod, 10 - $gobackn, 
+		  62 + $this->dispcod, $this->black);
+                ImageLine($this->image, 12 - $gobackn, $this->dispcod, 12 - $gobackn, 
+		  62 + $this->dispcod, $this->black);
+                ImageLine($this->image, 56 - $gobackn, $this->dispcod, 56 - $gobackn, 
+		  62 + $this->dispcod, $this->black);
+                ImageLine($this->image, 58 - $gobackn, $this->dispcod, 58 - $gobackn, 
+		  62 + $this->dispcod, $this->black);
+                ImageLine($this->image, 102 - $gobackn, $this->dispcod, 102 - $gobackn, 
+		  62 + $this->dispcod, $this->black);
+                ImageLine($this->image, 104 - $gobackn, $this->dispcod, 104 - $gobackn, 
+		  62 + $this->dispcod, $this->black);
+
+                $position = 13;
+                //start drawing bars at x = 13;
+
+                //first digit should be skipped, is either 0 (UPC) or encoded in next six (EAN) 
+                for ($digit = 1; $digit <= 6; $digit++) {
+                    for ($offset = 0; $offset < 7; $offset++) {
+                        $color = $this->AB[$barcode[0]];
+                        //$barcode[0] is first digit that is coded into first 42 (6*7) bars
+                        $color = substr($color, $digit - 1, 1);
+                        $color = $ { $color };
+                        $color = substr($color[$barcode[$digit]], $offset, 1);
+                        $color = ($color == '1' ? $this->black : $this->white);
+                        ImageLine($this->image, $position - $gobackn, $this->dispcod, 
+			  $position - $gobackn, 50 + $this->dispcod, $color);
+                        $position++;
+                    }
+                }
+                $position += 5;
+                for ($digit = 7; $digit <= 12; $digit++) {
+                    for ($offset = 0; $offset < 7; $offset++) {
+                        $color = substr($this->right[$barcode[$digit]], $offset, 1);
+                        $color = ($color == '1' ? $this->black : $this->white);
+                        ImageLine($this->image, $position - $gobackn, $this->dispcod, 
+			  $position - $gobackn, 50 + $this->dispcod, $color);
+                        $position++;
+                    }
+                }
+
+                if (preg_match("/,[0-9]{2,5}$/", $barcode)) {
+                    $position -= $gobackn;
+                    $this->suffix($position, preg_replace("/^[0-9]{13},([0-9]{2,5})$/", "\\1", $barcode));
+                }
+
+                if ($filename) ImagePNG($this->image, $filename);
+                else {
+                    header('Content-type: image/png');
+                    ImagePNG($this->image);
+                }
+                ImageDestroy($this->image);
+            } elseif (preg_match("/^[0-9]{8}(,[0-9]{2,5})?$/", $barcode) && ($coding == 'DWIM' || $coding == 'EAN-8')) {
+                //if correct EAN-8-code
+                if (strlen($barcode) == 8) {
+                    CreateImage(67, 62 + $this->dispcod);
+                } elseif (strlen($barcode) == 11) {
+                    CreateImage(94, 62 + $this->dispcod);
+                } elseif (strlen($barcode) == 14) {
+                    CreateImage(130, 62 + $this->dispcod);
+                }
+
+                //draw numbers
+                ImageString($this->image, 3, 4, 50 + $this->dispcod, substr($barcode, 0, 4), $this->black);
+                ImageString($this->image, 3, 36, 50 + $this->dispcod, substr($barcode, 4, 4), $this->black);
+                if ($this->dispcod) {
+                    ImageString($this->image, 3, 17, 0, 'EAN-8', $this->black);
+                }
+
+
+                //draw guard bars
+                ImageLine($this->image, 0, $this->dispcod, 0, 62 + $this->dispcod, $this->black);
+                ImageLine($this->image, 2, $this->dispcod, 2, 62 + $this->dispcod, $this->black);
+                ImageLine($this->image, 32, $this->dispcod, 32, 62 + $this->dispcod, $this->black);
+                ImageLine($this->image, 34, $this->dispcod, 34, 62 + $this->dispcod, $this->black);
+                ImageLine($this->image, 64, $this->dispcod, 64, 62 + $this->dispcod, $this->black);
+                ImageLine($this->image, 66, $this->dispcod, 66, 62 + $this->dispcod, $this->black);
+
+                $position = 3;
+                //start drawing bars at x = 3;
+
+                for ($digit = 0; $digit <= 3; $digit++) {
+                    for ($offset = 0; $offset < 7; $offset++) {
+                        $color = substr($this->a[$barcode[$digit]], $offset, 1);
+                        //$this->a contains left-A spaces/bars
+                        $color = ($color == '1' ? $this->black : $this->white);
+                        ImageLine($this->image, $position, $this->dispcod, $position, 
+			  50 + $this->dispcod, $color);
+                        $position++;
+                    }
+                }
+                $position += 5;
+                for ($digit = 4; $digit <= 7; $digit++) {
+                    for ($offset = 0; $offset < 7; $offset++) {
+                        $color = substr($this->right[$barcode[$digit]], $offset, 1);
+                        $color = ($color == '1' ? $this->black : $this->white);
+                        ImageLine($this->image, $position, $this->dispcod, $position, 
+			  50 + $this->dispcod, $color);
+                        $position++;
+                    }
+                }
+
+                if (preg_match("/,[0-9]{2,5}$/", $barcode)) {
+                    $this->suffix($position, preg_replace("/^[0-9]{8},([0-9]{2,5})$/", "\\1", $barcode));
+                }
+
+                if ($filename) ImagePNG($this->image, $filename);
+                else {
+                    header('Content-type: image/png');
+                    ImagePNG($this->image);
+                }
+                ImageDestroy($this->image);
+            } elseif (preg_match("/^[01][0-9]{7}(,[0-9]{2,5})?$/", $barcode) && ($coding == 'UPC-E')) {
+                //if correct UPC-E-code (DWIM not included => EAN-8) 
+                if (strlen($barcode) == 8) {
+                    CreateImage(69, 62 + $this->dispcod);
+                } elseif (strlen($barcode) == 11) {
+                    CreateImage(95, 62 + $this->dispcod);
+                } elseif (strlen($barcode) == 14) {
+                    CreateImage(131, 62 + $this->dispcod);
+                }
+
+                //draw numbers
+                ImageString($this->image, 3, 2, 30 + $this->dispcod, substr($barcode, 0, 1), $this->black);
+                ImageString($this->image, 3, 14, 50 + $this->dispcod, substr($barcode, 1, 6), $this->black);
+                if ($this->dispcod) {
+                    ImageString($this->image, 3, 18, 0, 'UPC-E', $this->black);
+                }
+                ImageString($this->image, 3, 63, 30 + $this->dispcod, substr($barcode, 7, 1), $this->black);
+
+                //draw guard bars
+                ImageLine($this->image, 10, $this->dispcod, 10, 62 + $this->dispcod, $this->black);
+                ImageLine($this->image, 12, $this->dispcod, 12, 62 + $this->dispcod, $this->black);
+                ImageLine($this->image, 56, $this->dispcod, 56, 62 + $this->dispcod, $this->black);
+                ImageLine($this->image, 58, $this->dispcod, 58, 62 + $this->dispcod, $this->black);
+                ImageLine($this->image, 60, $this->dispcod, 60, 62 + $this->dispcod, $this->black);
+
+                $position = 13;
+                //start drawing bars at x = 3;
+                if ($barcode[0] == '0' || $barcode[0] == '1') //UPC-E can only start with 0 or 1
+                {
+                    for ($digit = 1; $digit <= 6; $digit++) //first digit is encoded in next six
+                    {
+                        $color = $this->UPCE[$barcode[7]];
+                        $color = substr($color, $digit - 1, 1);
+                        if ($barcode[0] == '1') //aaabbb => bbbaaa, see docs.txt
+                        {
+                            $color = ($color == 'a' ? 'b' : 'a');
+                        }
+                        $color = $ {
+                            $color };
+                        $color = $color[$barcode[$digit]];
+                        for ($offset = 0; $offset < 7; $offset++) {
+                            ImageLine($this->image, $position, $this->dispcod, $position, 
+			      50 + $this->dispcod, (substr($color, $offset, 1) == '1' ? $this->black : $this->white));
+                            $position++;
+                        }
+                    }
+                }
+
+                if (preg_match("/,[0-9]{2,5}$/", $barcode)) {
+                    $position += 10;
+                    $this->suffix($position, preg_replace("/^[0-9]{8},([0-9]{2,5})$/", "\\1", $barcode));
+                }
+
+                if ($filename) ImagePNG($this->image, $filename);
+                else {
+                    header('Content-type: image/png');
+                    ImagePNG($this->image);
+                }
+                ImageDestroy($this->image);
+            } elseif ((($override && preg_match("/^[0-9A-Z\-\.\$\/+% ]{1,48}$/i", $barcode)) || preg_match("/^\*[0-9A-Z\-\.\$\/+% ]{1,48}\*$/i", $barcode)) && ($coding == 'DWIM' || $coding == 'Code 39')) {
+                $barcode = strtoupper($barcode);
+                //can only use capital letters
+                $this->createImage(13 * strlen($barcode), 62 + $this->dispcod);
+
+                //draw numbers
+                if ($this->dispcod && strlen($barcode) > 3) {
+                    //otherwise, 'Code 39' would be too large to fit in the image
+                    ImageString($this->image, 3, 6.5 * strlen($barcode) - 25, 0, 'Code 39', $this->black);
+                }
+
+                $position = 0;
+                //start drawing bars at x = 0;
+
+                for ($digit = 0; $digit <= strlen($barcode) - 1; $digit++) {
+                    //draw number/letter
+                    ImageString($this->image, 3, $position + 3, 50 + $this->dispcod, $barcode[$digit], $this->black);
+
+                    for ($offset = 0; $offset < 12; $offset++) {
+                        $color = substr($this->code39[$barcode[$digit]], $offset, 1);
+                        $color = ($color == '1' ? $this->black : $this->white);
+                        ImageLine($this->image, $position, $this->dispcod, $position, 
+			  50 + $this->dispcod, $color);
+                        $position++;
+                    }
+                    ImageLine($this->image, $position, $this->dispcod, $position, 50 + $this->dispcod, $this->white);
+                    //every letter ends with a space
+                    $position++;
+                }
+                //Code 39
+                if ($filename) ImagePNG($this->image, $filename);
+                else {
+                   header('Content-type: image/png');
+                   ImagePNG($this->image);
+                }
+                ImageDestroy($this->image);
+            } else if (preg_match("/^([ABCD])[0-9\-\$:\/\.\+]{1,48}\\1$/i", $barcode) && ($coding == 'DWIM' || $coding == 'Codabar')) {
+                $length = -1;
+                //final whitespace should be left out
+                for ($digit = 0; $digit < strlen($barcode); $digit++) {
+                    $length += strlen($this->codabar[$barcode[$digit]]);
+                    $length += 1;
+                    //extra space after every digit
+                }
+
+                CreateImage($length, 62 + $this->dispcod);
+
+                //draw coding
+                if ($this->dispcod && $length > 47) //otherwise, 'Codabar' would be to large to fit in the image
+                {
+                    ImageString($this->image, 3, $length / 2 - 22, 0, 'Codabar', $this->black);
+                }
+
+                $position = 0;
+                //start drawing bars at x = 0;
+
+                for ($digit = 0; $digit < strlen($barcode); $digit++) {
+                    //draw number/letter
+                    ImageString($this->image, 3, $position + 3, 50 + $this->dispcod, $barcode[$digit], $this->black);
+
+                    for ($offset = 0; $offset < strlen($this->codabar[$barcode[$digit]]); $offset++) {
+                        $color = substr($this->codabar[$barcode[$digit]], $offset, 1);
+                        $color = ($color == '1' ? $this->black : $this->white);
+                        ImageLine($this->image, $position, $this->dispcod, $position, 50 + $this->dispcod, $color);
+                        $position++;
+                    }
+                    ImageLine($this->image, $position, $this->dispcod, $position, 50 + $this->dispcod, $this->white);
+                    //every letter ends with a space
+                    $position++;
+                }
+                if ($filename) ImagePNG($this->image, $filename);
+                else {
+                    header('Content-type: image/png');
+                    ImagePNG($this->image);
+                }
+                ImageDestroy($this->image);
+            } elseif ((($override && preg_match("/^[a-z0-9]{1,50}$/i", $barcode)) || preg_match("/^[0-9]{4}[a-z]{2}[0-9]{0,5}($|X[a-z0-9]{0,6}|[0-9]{1,5})$/i", $barcode)) && ($coding == 'DWIM' || $coding == 'KIX')) {
+                #breedte streepje: 2 pixels, breedte witruimte: 2 pixels
+                #hoogte synchronisatiestreep 5 pixels
+                #hoogte rest streepje 7 pixels
+                $barcode = strtoupper($barcode);
+                //$kix only contains the uppercase alphabet
+                CreateImage(strlen($barcode) * 16, 19 + $this->dispcod);
+
+                //draw numbers
+                if ($this->dispcod && strlen($barcode) > 0) //otherwise, 'KIX' would be to large to fit in the image
+                {
+                    ImageString($this->image, 3, strlen($barcode) * 16 / 2 - 11, 0, 'KIX', $this->black);
+                }
+
+                $position = 0;
+
+                for($digit = 0; $digit < strlen($barcode); $digit++) {
+                    for ($offset = 0; $offset < 4; $offset++) {
+                        switch($this->kix[$barcode[$digit]][$offset]) {
+                            case 'm':
+                            ImageLine($this->image, $position, 7 + $this->dispcod, $position, 
+			      11 + $this->dispcod, $this->black);
+                            ImageLine($this->image, $position + 1, 7 + $this->dispcod, $position + 1, 
+			      11 + $this->dispcod, $this->black);
+                            break;
+                            case 'b':
+                            ImageLine($this->image, $position, 7 + $this->dispcod, $position, 
+			      18 + $this->dispcod, $this->black);
+                            ImageLine($this->image, $position + 1, 7 + $this->dispcod, 
+			      $position + 1, 18 + $this->dispcod, $this->black);
+                            break;
+                            case 't':
+                            ImageLine($this->image, $position, $this->dispcod, $position, 
+			      11 + $this->dispcod, $this->black);
+                            ImageLine($this->image, $position + 1, $this->dispcod, $position + 1, 
+			      11 + $this->dispcod, $this->black);
+                            break;
+                            case 'w':
+                            ImageLine($this->image, $position, $this->dispcod, $position, 
+			      18 + $this->dispcod, $this->black);
+                            ImageLine($this->image, $position + 1, $this->dispcod, $position + 1, 
+			      18 + $this->dispcod, $this->black);
+                            break;
+                        }
+                        $position += 4;
+                    }
+                }
+
+                if ($filename) ImagePNG($this->image, $filename);
+                else {
+                    header('Content-type: image/png');
+                    ImagePNG($this->image);
+                }
+                ImageDestroy($this->image);
+            } elseif (preg_match("/^(\d\d)+$/", $_GET['barcode']) && ($coding == 'DWIM' || $coding == '128C')) {
+                $barcode = 'ST'.$_GET['barcode'].'OP'; //include START and STOP-bars
+                CreateImage(strlen($barcode) * 11 / 2 + 2, 42 + $this->dispcod);
+                //11 pixels per 2 digits, except for the last one, which has 13 (11 + 2)
+
+                if ($this->dispcod) {
+                    ImageString($this->image, 3, strlen($barcode) * 11 / 4 - 11, 0, '128C', $this->black);
+                }
+
+                $pos = 0;
+
+                //draw bars (including START and STOP)
+                for ($digit = 0; $digit < strlen($barcode); $digit += 2) {
+                    $bars = $this->bar128c[substr($barcode, $digit, 2)];
+                    //something like '113141' (BWBWBW)
+                    for ($bar = 0; $bar < strlen($bars); $bar++) {
+                        for ($counter = 0; $counter < substr($bars, $bar, 1); $counter++) {
+                            ImageLine($this->image, $pos, $this->dispcod, $pos++, 42 + $this->dispcod, 
+			      ($bar % 2 ? $this->white : $this->black));
+                        }
+                    }
+                }
+                if ($filename) ImagePNG($this->image, $filename);
+                else {
+                    header('Content-type: image/png');
+                    ImagePNG($this->image);
+                }
+                ImageDestroy($this->image);
+            } else {
+                if ($coding == 'DWIM') {
+                    $message="Sorry, the barcode was not recognized!";
+                } elseif ($coding == 'UPC-A') {
+                    $message="Sorry, the barcode was not recognized as UPC-A! UPC-A consists of 12 digits.";
+                } elseif ($coding == 'UPC-E') {
+                    $message="Sorry, the barcode was not recognized as UPC-E! UPC-E consists of 8 digits, from which the first is either a 0 or a 1.";
+                } elseif ($coding == 'EAN-13') {
+                    $message="Sorry, the barcode was not recognized as EAN-13! EAN-13 consists of 13 digits.";
+                } elseif ($coding == 'EAN-8') {
+                    $message="Sorry, the barcode was not recognized as EAN-8! EAN-8 consists of 8 digits.";
+                } elseif ($coding == 'Code 39') {
+                    $message="Sorry, the barcode was not recognized as Code 39! Code 39 starts and ends with an asterisk (*), and can only contain numbers, capitals and -. \$/+%";
+                } elseif ($coding == 'Codabar') {
+                    $message="Sorry, the barcode was not recognized as Codabar! Codabar starts and ends with an A, B, C or D, and can only contain mubers and -\$:/.+";
+                } elseif ($coding == 'KIX') {
+                    $message="Sorry, the barcode was not recognized as KIX! For information on KIX, please visit www.tpgpostbusiness.nl/kix/";
+                } elseif ($coding == '128C') {
+                    $message="Sorry, the barcode was not recognized as 128C! 128C-barcodes consist of an even number of digits.";
+                }
+            }
+
+        }
+
+        function createImage($x, $y) {
+            $this->image = ImageCreate($x, $y);
+            //create image
+            $this->white = ImageColorAllocate($this->image, 255, 255, 255);
+            //define colors
+            $this->black = ImageColorAllocate($this->image, 0, 0, 0);
+        }
+
+        function suffix(&$position, $value) //draw supplemental barcodes
+        {
+            if (strlen($value) == 2) //suffix can only be 2 or 5 digits wide
+            {
+                $position += 10;
+                //leave a gap 7 bars wide, and skip 3 guard bars => 10
+                ImageLine($this->image, $position, 12 + $this->dispcod, $position,
+		  62 + $this->dispcod, $this->black);
+                ImageLine($this->image, $position + 2, 12 + $this->dispcod, $position + 2, 
+		  62 + $this->dispcod, $this->black);
+                ImageLine($this->image, $position + 3, 12 + $this->dispcod, $position + 3, 
+		  62 + $this->dispcod, $this->black);
+                ImageString($this->image, 3, $position + 5, $this->dispcod, $value, $this->black);
+                 
+                $position += 4;
+                switch (((int)$value) % 4) {
+                    case 0:
+                    $parity = 'aa';
+                     break;
+                    case 1:
+                    $parity = 'ab';
+                     break;
+                    case 2:
+                    $parity = 'ba';
+                     break;
+                    case 3:
+                    $parity = 'bb';
+                     break;
+                }
+                 
+                for ($digit = 0; $digit <= 1; $digit++) {
+                    for ($offset = 0; $offset < 7; $offset++) {
+                        $color = substr($parity, $digit, 1);
+                        $color = $ { $color };
+                        $color = $color[substr($value, $digit, 1)];
+                        $color = substr($color, $offset, 1);
+                        $color = ($color == '1' ? $this->black : $this->white);
+                        ImageLine($this->image, $position, 12 + $this->dispcod, $position, 
+			  62 + $this->dispcod, $color);
+                        $position++;
+                    }
+                    if ($digit == 0) //draw guardbar '01'
+                    {
+                        $position++;
+                        ImageLine($this->image, $position, 12 + $this->dispcod, $position, 
+			  62 + $this->dispcod, $this->black);
+                        $position++;
+                    }
+                }
+            } elseif (strlen($value) == 5) {
+                $position += 10;
+                //leave a gap 7 bars wide, and skip 3 guard bars => 10
+                ImageLine($this->image, $position, 12 + $this->dispcod, $position, 
+		  62 + $this->dispcod, $this->black);
+                ImageLine($this->image, $position + 2, 12 + $this->dispcod, $position + 2, 
+		  62 + $this->dispcod, $this->black);
+                ImageLine($this->image, $position + 3, 12 + $this->dispcod, $position + 3, 
+		  62 + $this->dispcod, $this->black);
+                ImageString($this->image, 3, $position + 12, $this->dispcod, $value, $this->black);
+                 
+                $position += 4;
+                $parity = ((int)substr($value, 0, 1) + (int)substr($value, 2, 1) + (int)substr($value, 4, 1)) * 3;
+                $parity += ((int)substr($value, 1, 1) + (int)substr($value, 3, 1)) * 9;
+                $parity = $parity % 10;
+                $parity = $this->UPCE[$parity];
+                 
+                for ($digit = 0; $digit <= 5; $digit++) {
+                    for ($offset = 0; $offset < 7; $offset++) {
+                        $color = substr($parity, $digit, 1);
+                        $color = $ {
+                            $color };
+                        $color = $color[substr($value, $digit, 1)];
+                        $color = substr($color, $offset, 1);
+                        $color = ($color == '1' ? $this->black : $this->white);
+                        ImageLine($this->image, $position, 12 + $this->dispcod, $position, 
+			  62 + $this->dispcod, $color);
+                        $position++;
+                    }
+                    if ($digit < 5) //draw guardbar '01'
+                    {
+                        $position++;
+                        ImageLine($this->image, $position, 12 + $this->dispcod, $position, 
+			  62 + $this->dispcod, $this->black);
+                        $position++;
+                    }
+                }
+            }
+        }
+         
+}
+ 

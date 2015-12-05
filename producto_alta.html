@@ -1,0 +1,190 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+
+<script type="text/javascript">
+
+function setfocus()
+{
+document.<?php echo $var['focus']; ?>.focus()
+}
+</script>
+
+</head>
+<body class="ppal" onload = "setfocus()">
+
+
+<div class="altas">
+<fieldset>
+ <legend>Alta de item</legend>
+   <?php echo $var['mensaje']; ?>
+<table>
+<tr>
+<td>
+<form action="form_producto_alta.php" method="post" target="_self" name="scategoria">
+  <input type="hidden" value="scategoria" size="10" name="formname" id="formname">
+ <label for="pcategoria">Patron de busqueda de producto:</label>
+</td>
+<td>
+  <input type="text" size="10" name="pcategoria" id="pcategoria" class="obligatorio" onchange="submit();"> *
+  <?php echo $var['hits_prod_mensaje']; ?>
+</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>
+ <label for="categoria">Seleccionar producto:</label>
+</td>
+<td>
+  <select name="categoria" id="categoria" class="obligatorio" onblur="submit();">
+   <option value="0">seleccionar</option>
+   <?php echo $var['categoria']; ?>
+  </select> *
+</form>
+</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>
+<form action="form_producto_alta.php" method="post" target="_self" name="sproveedor">
+  <input type="hidden" value="sproveedor" size="10" name="formname" id="formname">
+ <label for="proveedor">Patron de busqueda de proveedor:</label>
+</td>
+<td>
+  <input type="text" size="10" name="proveedor" id="proveedor" class="obligatorio" onchange="submit();"> *
+  <?php echo $var['hits_prov_mensaje']; ?>
+</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>
+ <label for="proveedores">Seleccionar proveedor:</label>
+</td>
+<td>
+  <select name="proveedores" id="proveedores" class="obligatorio" onblur="submit();">
+   <option value="0">seleccionar</option>
+   <?php echo $var['proveedores']; ?>
+  </select> *
+</form>
+</td>
+<td>&nbsp;</td>
+</tr>
+<form action="form_producto_alta.php" method="post" target="_self" name="producto_alta">
+  <input type="hidden" value="producto_alta" size="10" name="formname" id="formname">
+  <input type="hidden" value="<?php echo $var['catval']; ?>" size="10" name="categoria" id="categoria">
+  <input type="hidden" value="<?php echo $var['provval']; ?>" size="10" name="proveedor" id="proveedor">
+<tr>
+<td>
+Producto:
+</td>
+<td>
+<?php echo $var['catname']; ?>
+</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>
+Proveedor:
+</td>
+<td>
+<?php echo $var['provname']; ?>
+</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>
+Unidad de descarga:
+</td>
+<td>
+<?php echo $var['unidad_descarga']; ?>
+</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>
+ <label for="unidad">Unidad de compra:</label>
+</td>
+<td>
+  <select name="unidad" id="unidad" class="obligatorio">
+   <option value="0">seleccionar</option>
+   <?php echo $var['unidades']; ?>
+  </select> *
+</td>
+<td>
+  <label for="factor_unidades">U desc X U compra:</label>
+  <input type="text" value="" size="4" name="factor_unidades" id="factor_unidades" class="obligatorio"> *
+</td>
+</tr>
+
+<tr>
+<td>
+ <label for="codigo_proveedor">Codigo del proveedor:</label>
+</td>
+<td>
+  <input type="text" value='<?php echo $var['codigo_proveedor']; ?>' size="20" name="codigo_proveedor" id="codigo_proveedor" class="opcional">
+</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>
+ <label for="codigo_barras">Codigo de barras:</label>
+</td>
+<td>
+  <input type="text" value="<?php echo $var['codigo_barras']; ?>" size="20" name="codigo_barras" id="codigo_barras" class="<?php echo $var['barras_class']; ?>">
+<?php echo $var['barras_sign']; ?>
+</td>
+<td>
+  <input type="checkbox" id="autoassign" name="autoassign" value="autoassign" class="<?php echo $var['barras_class']; ?>"> <label for="autoassign">Autoasignar</label>
+</td>
+</tr>
+
+
+<tr>
+<td>
+ <label for="precio">Precio <?php echo $var['moneda']; ?>:</label>
+</td>
+<td>
+  <input type="text" value="" size="10" name="precio" id="precio" class="obligatorio"> *
+</td>
+<td>&nbsp;</td>
+</tr>
+
+<!--
+<tr>
+<td>
+ <label for="precio_nac">Precio nacionalizado (US$):</label>
+</td>
+<td>
+  <input type="text" value="" size="10" name="precio_nac" id="precio_nac" class="opcional">
+</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>
+ <label for="precio_ref">Precio de referencia en AR$:</label>
+</td>
+<td>
+  <input type="text" value="" size="10" name="precio_ref" id="precio_ref" class="opcional">
+</td>
+<td>&nbsp;</td>
+</tr>
+-->
+
+
+</table>
+ <center>
+ <br />Los casilleros marcados con * son obligatorios.<br />
+ <button type="submit" name="enviar" value="enviar">Ingresar</button>
+</form>
+ </center>
+</fieldset>
+</div>
+
+
+</body>
+</html>

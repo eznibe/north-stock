@@ -1,0 +1,80 @@
+-- MySQL dump 8.22
+--
+-- Host: localhost    Database: north
+---------------------------------------------------------
+-- Server version	3.23.51
+
+--
+-- Table structure for table 'paises'
+--
+
+CREATE TABLE paises (
+  id_pais int(11) NOT NULL auto_increment,
+  pais char(50) default NULL,
+  PRIMARY KEY  (id_pais)
+) TYPE=MyISAM;
+
+--
+-- Dumping data for table 'paises'
+--
+
+
+INSERT INTO paises VALUES (1,'Argentina');
+INSERT INTO paises VALUES (2,'EEUU');
+
+--
+-- Table structure for table 'productos'
+--
+
+CREATE TABLE productos (
+  id_producto int(11) NOT NULL auto_increment,
+  producto char(100) NOT NULL default '',
+  id_proveedor int(11) NOT NULL default '0',
+  scan enum('si','no') NOT NULL default 'si',
+  stock_minimo int(11) NOT NULL default '0',
+  codigo_fabricante char(100) default NULL,
+  codigo_barras char(100) default NULL,
+  PRIMARY KEY  (id_producto),
+  UNIQUE KEY producto (producto),
+  UNIQUE KEY codigo_barras (codigo_barras)
+) TYPE=MyISAM;
+
+--
+-- Dumping data for table 'productos'
+--
+
+
+INSERT INTO productos VALUES (1,'moton 5',2,'si',33,'har1222','897sdf98s7f');
+INSERT INTO productos VALUES (2,'cabo #6',1,'no',22,'',NULL);
+INSERT INTO productos VALUES (3,'cabo #8',1,'no',33,'',NULL);
+INSERT INTO productos VALUES (4,'cabo #1',1,'no',212,'','NULL');
+INSERT INTO productos VALUES (5,'molinete #2',5,'si',3,'ron332','ron2-332');
+
+--
+-- Table structure for table 'proveedores'
+--
+
+CREATE TABLE proveedores (
+  id_proveedor int(11) NOT NULL auto_increment,
+  proveedor char(50) NOT NULL default '',
+  direccion char(100) default NULL,
+  id_pais int(11) NOT NULL default '0',
+  telefono char(50) default NULL,
+  contacto char(100) default NULL,
+  PRIMARY KEY  (id_proveedor),
+  UNIQUE KEY proveedor (proveedor)
+) TYPE=MyISAM;
+
+--
+-- Dumping data for table 'proveedores'
+--
+
+
+INSERT INTO proveedores VALUES (1,'Baron','Puerto de Olivos 1111, Olivos',1,'4791-1234','Fernando');
+INSERT INTO proveedores VALUES (2,'Harken','1120 Main Rd, Keystone, Colorado',2,'970-892-1223','Mr Harken');
+INSERT INTO proveedores VALUES (3,'Palau','Tren de la costa 21, San Fernando',1,'4788-2211','Felipe');
+INSERT INTO proveedores VALUES (4,'Lange','San Martin 1170, San Fernando',1,'4777-2233','Santiago Lange');
+INSERT INTO proveedores VALUES (5,'Ronstan','1778 Sunny Road, California',2,'111-222-3456','');
+INSERT INTO proveedores VALUES (6,'GWproducciones','Haedo 1460, Vte Lopez',1,'4796-9446','Guillermo');
+INSERT INTO proveedores VALUES (7,'Pereira','Alvarez Thomas 3348 4 D',1,'4235-5623','Juan Rodriguez');
+

@@ -1,0 +1,98 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+
+<script type="text/javascript">
+
+function setfocus()
+{
+document.<?php echo $var['focus']; ?>.focus()
+}
+</script>
+
+</head>
+<body class="ppal" onload = "setfocus()">
+
+
+<div class="altas">
+<fieldset>
+ <legend>Alta de producto</legend>
+   <?php echo $var['mensaje']; ?>
+<table>
+<form action="form_categoria_alta.php" method="post" target="_self" name="categoria_alta">
+  <input type="hidden" value="categoria_alta" size="10" name="formname" id="formname">
+
+<tr>
+<td>
+ <label for="categoria">Nombre del producto:</label>
+</td>
+<td>
+  <input type="text" value="<?php echo $var['categoria']; ?>" size="50" name="categoria" id="categoria" class="obligatorio"> *
+</td>
+</tr>
+
+<tr>
+<td>
+ <label for="id_grupo">Seleccionar el grupo:</label>
+</td>
+<td>
+  <select name="id_grupo" id="id_grupo" class="obligatorio">
+   <option value="0">seleccionar</option>
+   <?php echo $var['grupo']; ?>
+  </select> *
+</td>
+</tr>
+
+<tr>
+<td>
+ <label for="scan">Scan obligatorio:</label>
+</td>
+<td>
+  <select name="scan" id="scan" class="obligatorio">
+   <option value="no">no</option>
+   <option value="si">si</option>
+  </select> *
+</td>
+</tr>
+<tr>
+<td>
+ <label for="stock_minimo">Stock minimo:</label>
+</td>
+<td>
+  <input type="text" value="<?php echo $var['stock_minimo']; ?>" size="20" name="stock_minimo" id="stock_minimo" class="obligatorio"> *
+</td>
+</tr>
+<tr>
+<td>
+ <label for="unidad">Unidad de descarga:</label>
+</td>
+<td>
+  <select name="unidad" id="unidad" class="obligatorio">
+   <option value="0">seleccionar</option>
+   <?php echo $var['unidades']; ?>
+  </select> *
+</td>
+</tr>
+
+<tr>
+<td>
+ <label for="porcentaje">Porcentaje en impuesto:</label>
+</td>
+<td>
+  <input type="text" value="<?php echo $var['porcentaje']; ?>" size="10" name="porcentaje" id="porcentaje" class="obligatorio"> *
+</td>
+</tr>
+
+</table>
+ <center>
+ <br />Los casilleros marcados con * son obligatorios.<br />
+ <button type="submit" name="enviar" value="enviar">Ingresar</button>
+</form>
+ </center>
+</fieldset>
+</div>
+
+
+</body>
+</html>

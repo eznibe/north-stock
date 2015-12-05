@@ -1,0 +1,90 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+
+<script type="text/javascript">
+
+function setfocus()
+{
+document.<?php echo $var['focus']; ?>.focus()
+}
+
+function update()
+{
+	var cantidad = document.getElementById('cantidad').value;
+	if(cantidad==0 || cantidad=="") {
+		var agree = confirm("Esta accion (cantidad a comprar=0) eliminara el item de la orden, desea continuar?");
+		if(!agree)
+			return false;
+	}
+
+	if(cantidad<0) {
+		alert("No esta permitido ingresar un valor negativo como cantidad a comprar.");
+		return false;
+	}
+	
+// 	document.forms[0].submit();
+ 	window.close(self);
+return true;
+}
+
+</script>
+
+</head>
+<body class="ppal" onload = "setfocus()">
+
+
+<table>
+<tr>
+<td>
+Producto:
+</td>
+<td>
+<?php echo $var['categoria']; ?>
+</td>
+</tr>
+
+<tr>
+<td>
+Proveedor:
+</td>
+<td>
+<?php echo $var['proveedor']; ?>
+</td>
+</tr>
+
+<form action="<?php echo $var['submitto']; ?>" method="post" target="ppal" name="orden_confirma" onsubmit="return update();">
+<input type="hidden" value="orden_update" size="10" name="formname" id="formname">
+<input type="hidden" value="<?php echo $var['id_orden_item']; ?>" size="10" name="id_orden_item" id="id_orden_item">
+<input type="hidden" value="<?php echo $var['id_orden']; ?>" size="10" name="id_orden" id="id_orden">
+
+<tr>
+<td>
+<label for="cantidad">Cantidad a comprar:</label>
+</td>
+<td>
+<input type="text" value="<?php echo $var['cantidad']; ?>" size="10" name="cantidad" id="cantidad" class="obligatorio" > (<?php echo $var['unidad']; ?>)*
+</td>
+</tr>
+
+<tr>
+<td>
+<label for="precio_fob">Precio (<?php echo $var['moneda']; ?>):</label>
+</td>
+<td>
+<input type="text" value="<?php echo $var['precio']; ?>" size="10" name="precio" id="precio" class="optativo" >
+</td>
+</tr>
+
+</table>
+ <center>
+ <br />Los casilleros marcados con * son obligatorios.<br />
+ <button type="submit" name="enviar" value="enviar" >Actualizar</button>
+</form>
+ </center>
+
+
+
+</body>
+</html>

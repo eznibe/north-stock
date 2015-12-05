@@ -1,0 +1,37 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+
+<script type="text/javascript">
+  function resaltar(BOTON)
+  {
+    document.getElementById('orden_compra').style.background="#000099";
+    document.getElementById('orden_confirma').style.background="#000099";
+    document.getElementById('orden_arribo').style.background="#000099";
+    document.getElementById('buscar_orden').style.background="#000099";
+    document.getElementById(BOTON).style.background="#6699ff";
+
+  }
+</script>
+
+</head>
+<body class="menu" background="imagenes/fondo.bmp">
+
+<div class="conectado">
+ <p class="normal">Usuario conectado:<br />
+ <?php echo $var['username']; ?> </p>
+ <center><a class="link" href="index.php" target="_top">Desconectar</a></center>
+</div>
+
+<div class="menu">
+ <center>
+<!--  <a name="orden_compra" id="orden_compra" onclick="resaltar('orden_compra');" href="orden_compra.php" target="ppal" class="menu_link">Compra</a><br /><br />-->
+  <a name="orden_compra" id="orden_compra" onclick="resaltar('orden_compra');" href="orden_compra_listar.php" target="ppal" class="menu_link">Compra</a><br /><br />
+  <a name="orden_confirma" id="orden_confirma" onclick="resaltar('orden_confirma');" href="orden_confirma.php" target="ppal" class="menu_link">Ordenes a confirmar</a><br /><br />
+  <a name="orden_arribo" id="orden_arribo" onclick="resaltar('orden_arribo');" href="orden_arribo.php" target="ppal" class="menu_link">Ordenes en transito</a><br /><br />
+  <a name="buscar_orden" id="buscar_orden" onclick="resaltar('buscar_orden');" href="buscar_orden.html" target="ppal" class="menu_link">Buscar orden</a><br />
+ </center>
+</div>
+</body>
+</html>
