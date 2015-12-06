@@ -27,8 +27,9 @@ if($tipo_producto==1){
 		(SUM(Item.stock_disponible)-Categoria.stock_minimo),
 		Unidad.unidad,
 		SUM(Item.stock_transito),
-		(SUM(Item.stock_disponible)+SUM(Item.stock_transito)-Categoria.stock_minimo),
-		Grupo.grupo
+		(SUM(Item.stock_disponible)+SUM(Item.stock_transito)-Categoria.stock_minimo-Categoria.reservado),
+		Grupo.grupo,
+    Categoria.reservado
 	  FROM
 		Item, Categoria, Unidad, Grupo
 	  WHERE (
@@ -55,8 +56,9 @@ else{
 	(SUM(Item.stock_disponible)-Categoria.stock_minimo),
 	Unidad.unidad,
 	SUM(Item.stock_transito),
-	(SUM(Item.stock_disponible)+SUM(Item.stock_transito)-Categoria.stock_minimo),
-	Grupo.grupo
+	(SUM(Item.stock_disponible)+SUM(Item.stock_transito)-Categoria.stock_minimo-Categoria.reservado),
+	Grupo.grupo,
+  Categoria.reservado
   FROM
 	Item, Categoria, Unidad, Grupo, Proveedor, Pais
   WHERE (
@@ -85,7 +87,7 @@ while ($row = mysql_fetch_array($result))
  if ($row[7] < 0) $row[7] = "<em>$row[7]</em>";
  $producto = htmlspecialchars(stripslashes($row[0]));
  $aux = $aux . "<tr class=\"provlistrow\"><td><a class=\"list\" onclick=\"show_detail($row[3]);\">$producto</a></td>
-      <td>$row[2]</td><td>$row[1]</td><td>$row[4]</td>". desglose_transito_por_tipo_envio($row[3]) ."<td>$row[7]</td><td>$row[5]</td></tr>\n";
+      <td>$row[2]</td><td>$row[1]</td><td>$row[4]</td>". desglose_transito_por_tipo_envio($row[3]) ."<td><a class=\"list\" onclick=\"edit_reservado($row[3]);\">$row[9]</a></td><td>$row[7]</td><td>$row[5]</td></tr>\n";
 }
 
 $action = "grupo_listar.php";

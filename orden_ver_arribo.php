@@ -1,5 +1,5 @@
 <?php
-// Detalle orden en transito 
+// Detalle orden en transito
 
 include 'main.php';
 include 'dbutils.php';
@@ -21,7 +21,7 @@ $focus = "forms[0].dia";
 $cant_filas=0;
 
 if (isset($_POST['formname']) && $_POST['formname'] == "orden_update")
-{ 
+{
 	$id_orden_item = $_POST['id_orden_item'];
 	$cantidad = $_POST['cantidad'];
 	$precio = $_POST['precio'];
@@ -29,7 +29,7 @@ if (isset($_POST['formname']) && $_POST['formname'] == "orden_update")
 	update_orden($id_orden, $id_orden_item, $cantidad, $precio);
 	//  Actualiza el valor del item gral., no solo en la orden
 	update_precio_item($id_orden_item, $precio);
-}	
+}
 
 if(obtener_tipo_proveedor($id_orden) == "EXTRANJERO")
 {
@@ -63,14 +63,14 @@ if(obtener_tipo_proveedor($id_orden) == "EXTRANJERO")
 			  ORDER BY
 				Categoria.categoria, TipoEnvio.id_tipo_envio";
 
-	$orden="";	
+	$orden="";
 	$result = mysql_query($query);
-	
+
 	while ($row = mysql_fetch_array($result))
 	{
 	 $header = "$row[1] $row[0] / $id_orden";
 	 $orden = $orden . "<tr class=\"provlistrow\" id='item$cant_filas' name='item$cant_filas' value='$row[2]'>
-	 	
+
 		<td class=\"centrado\"><a class=\"list\" onclick=\"update_orden($row[2]);\">$row[3]</a></td>
 		<td class=\"centrado\">$row[8]</td>
 		<td class=\"centrado\">$row[4]</td>
@@ -86,10 +86,10 @@ if(obtener_tipo_proveedor($id_orden) == "EXTRANJERO")
 		<td class=\"centrado\">$row[7]</td>
 		<td class=\"centrado\">US$</td>
 	   </tr>\n";
-	
+
 	 $cant_filas = $cant_filas+1;
 	}
-	
+
 	$query = "SELECT
 	        sum((OrdenItem.cantidad_pendiente * OrdenItem.precio_fob))
 	  FROM
@@ -99,7 +99,7 @@ if(obtener_tipo_proveedor($id_orden) == "EXTRANJERO")
 	  )";
 		$result = mysql_query($query);
 		$row = mysql_fetch_array($result);
-	
+
 		$total = $row[0];
 		$total_dolar = $total;
 		$total_pesos = $total * obtener_precio_dolar_orden($id_orden);
@@ -114,7 +114,7 @@ else
 	Proveedor.proveedor,
 	OrdenItem.id_orden_item,
 	Categoria.categoria,
-	OrdenItem.cantidad,	
+	OrdenItem.cantidad,
 	CONCAT(Unidad.unidad,'(',Item.factor_unidades,')'),
 	OrdenItem.precio_ref,
 	(OrdenItem.cantidad_pendiente * OrdenItem.precio_ref),
@@ -140,11 +140,11 @@ else
 			Categoria.categoria, TipoEnvio.id_tipo_envio";
 
 	$result = mysql_query($query);
-	
+
 	while ($row = mysql_fetch_array($result))
 	{
 	 $header = "$row[1] $row[0] / $id_orden";
-	 $orden = $orden . "<tr class=\"provlistrow\" value='$row[2]'> 	
+	 $orden = $orden . "<tr class=\"provlistrow\" value='$row[2]'>
 		<td class=\"centrado\"><a class=\"list\" onclick=\"update_orden($row[2]);\">$row[3]</a></td>
 		<td class=\"centrado\">$row[8]</td>
 		<td class=\"centrado\">$row[4]</td>
@@ -160,10 +160,10 @@ else
 		<td class=\"centrado\">$row[7]</td>
 		<td class=\"centrado\">AR$</td>
 	   </tr>\n";
-	
+
 	 $cant_filas = $cant_filas+1;
 	}
-	
+
 	  $query = "SELECT
 	        sum((OrdenItem.cantidad_pendiente * OrdenItem.precio_ref))
 	  FROM
@@ -171,7 +171,7 @@ else
 	  WHERE (
 	        (OrdenItem.id_orden = $id_orden)
 	  )";
-	
+
 	$result = mysql_query($query);
 	$row = mysql_fetch_array($result);
 
@@ -193,7 +193,7 @@ $diaopc = opciones_dia();
 $mesopc = opciones_mes();
 $anoopc = opciones_ano();
 
-$date = date("F j, Y, g:i a"); 
+$date = date("F j, Y, g:i a");
 
 $var = array(
   "header" => $header,
@@ -217,7 +217,7 @@ eval_html('orden_ver_arribo_ajax.php', $var);
 
 
 //FUNCIONES
-function orden_descripcion($id_orden) 
+function orden_descripcion($id_orden)
 {
 	$query = "SELECT descripcion FROM Orden WHERE Orden.id_orden = $id_orden";
 	$result = mysql_query($query);
@@ -226,7 +226,7 @@ function orden_descripcion($id_orden)
 }
 
 /**
- * 
+ *
  */
 function update_orden($id_orden, $id_orden_item, $cantidad, $precio)
 {
@@ -236,7 +236,7 @@ function update_orden($id_orden, $id_orden_item, $cantidad, $precio)
  $factor_unidades = get_factor_unidades($id_item);
  $nuevo_stock = $stock_transito_actual + (($cantidad - $cantidad_anterior) * $factor_unidades);
  set_stock_transito($id_item, $nuevo_stock);
- 
+
  // DEBUG intended -> por ahora logueo siempre
  //if($nuevo_stock < 0) {
  	log_stock_transito_negativo($_SESSION['valid_user'], $id_item, $id_orden, $stock_transito_actual, $nuevo_stock, $cantidad_anterior, $cantidad, 'manual');
@@ -247,26 +247,26 @@ function update_orden($id_orden, $id_orden_item, $cantidad, $precio)
   $query = "SELECT id_orden, id_item FROM OrdenItem WHERE id_orden_item = $id_orden_item";
   $result = mysql_query($query);
   $row = mysql_fetch_array($result);
-  
+
   $query = "DELETE FROM OrdenItem WHERE id_orden_item = $id_orden_item";
-  
+
   // logueo item borrado de la orden (8)
   log_trans($_SESSION['valid_user'], 8, $row[1], 0, date("Y-m-d"), $row[0]);
  }
  else
  {
 	  if ($precio == "") $precio="NULL";
-	
+
 	  // update cantidad pendiente del item de la orden y update del precio
 	  if(obtener_tipo_proveedor_por_orden_item($id_orden_item) == "EXTRANJERO")
 	  {
 	  	$query = "UPDATE
 	        OrdenItem
 	   		SET ";
-	   	if($cantidad_anterior != 0){ 
+	   	if($cantidad_anterior != 0){
 	   		$query .= "cantidad = (cantidad + ($cantidad - cantidad_pendiente)),";
 	   	}
-	    	$query .= " 
+	    	$query .= "
 		aereo_pendiente = (aereo_pendiente + ($cantidad - cantidad_pendiente)),
 		cantidad_pendiente = $cantidad,
 	        precio_fob = $precio
@@ -278,30 +278,30 @@ function update_orden($id_orden, $id_orden_item, $cantidad, $precio)
 	  	$query = "UPDATE
 	        OrdenItem
 	   		SET ";
-	   	if($cantidad_anterior != 0){ 
+	   	if($cantidad_anterior != 0){
 	   		$query .= "cantidad = (cantidad + ($cantidad - cantidad_pendiente)),";
 	   	}
-	    	$query .= " 
+	    	$query .= "
 		aereo_pendiente = (aereo_pendiente + ($cantidad - cantidad_pendiente)),
 		cantidad_pendiente = $cantidad,
 	        precio_ref = $precio
 	   	WHERE
 	        id_orden_item = $id_orden_item";
 	  }
-	  
+
 	  // restar del stock la cantidad ingresada, solo si la cantidad pendiente anterior era 0 (es cancelar arribo)
 	  if($cantidad_anterior == 0) {
 
 		// logueo transaccion de recupero -> agrego movimiento negativo para representarlo reduccion de stock disp.
 	  	log_trans($_SESSION['valid_user'], 1, $id_item, $cantidad * (-1), date("Y-m-d"), $id_orden);
-	  	
+
 	  	$stock_query = "UPDATE Item SET stock_disponible = stock_disponible - ($cantidad * $factor_unidades) WHERE id_item = $id_item";
 	  	var_dump($stock_query);
 	  	$result = mysql_query($stock_query);
 	  }
  }
  $result = mysql_query($query);
- 
+
  // mantener siempre el status de la orden en 1 (en transito) -> si la orden estaba cerrada la vuelva a poner en transito
  $query = "UPDATE Orden SET id_status = 1 WHERE id_orden = $id_orden";
  $result = mysql_query($query);
@@ -310,22 +310,22 @@ function update_orden($id_orden, $id_orden_item, $cantidad, $precio)
 
 function update_precio_item($id_orden_item, $precio)
 {
- 
- $id_item = get_id_item_por_orden_item($id_orden_item); 
- 
+
+ $id_item = get_id_item_por_orden_item($id_orden_item);
+
  // update cantidad pendiente del item de la orden y update del precio
  if(obtener_tipo_proveedor_por_orden_item($id_orden_item) == "EXTRANJERO")
  {
  	$precio_fob = $precio;
- 	
+
  	//Calculo los precios nac y ref a partir del precio_fob ingresado si es un item de proveedor extranjero
 	//
   	$id_categoria  = obtener_categoria($id_item);
   	$precio_nac = $precio_fob + ($precio_fob * porcentaje_impuesto_categoria($id_categoria)/100);
   	$precio_ref = $precio_nac * precio_dolar();
- 	
- 
-  	$query = "UPDATE Item SET				
+
+
+  	$query = "UPDATE Item SET
 				precio_fob = $precio_fob,
 				precio_nac = $precio_nac,
 				precio_ref = $precio_ref
@@ -335,13 +335,13 @@ function update_precio_item($id_orden_item, $precio)
  else
  {
   	$precio_ref = $precio;
-  	
+
   	$query = "UPDATE Item SET
 				precio_ref = $precio_ref
 			  WHERE
 				Item.id_item = $id_item";
  }
- 
+
  $result = mysql_query($query);
 }
 
@@ -408,7 +408,7 @@ function get_id_item_por_orden_item($id_orden_item){
 	$query = "SELECT id_item
 				FROM ordenitem
 				WHERE id_orden_item = $id_orden_item";
-				
+
 	$result = mysql_query($query);
 	$row = mysql_fetch_array($result);
 	return $row[0];

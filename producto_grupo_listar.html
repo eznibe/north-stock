@@ -2,19 +2,34 @@
 <head>
   <title>North Sails - Sistema de Control de Stock</title>
   <link rel="stylesheet" type="text/css" href="north.css" />
-  <script language="JavaScript" src="javascript/jsGral.js"?<?php echo date("m.d.y"); ?>"></script>
+  <script language="JavaScript" src="javascript/jsGral.js"?<?php echo date("m.d.y"); ?>></script>
 
 <script type="text/javascript">
 
 function setfocus()
 {
-document.forms[0].proveedor.focus()
+  document.forms[0].proveedor.focus()
 }
 
 function show_detail(ID_CATEGORIA)
 {
  var url="producto_detalle.php?id_categoria=" + ID_CATEGORIA;
  window.open(url,"producto_detalle","toolbar=no, location=no, directories=no, status=yes, menubar=no, scrollbars=yes, resizable=yes, width=750, height=300");
+}
+
+function edit_reservado(ID_CATEGORIA)
+{
+ var url="categoria_reservado.php?id_categoria=" + ID_CATEGORIA;
+ var popup = window.open(url,"categoria_reservado","toolbar=no, location=no, directories=no, status=yes, menubar=no, scrollbars=yes, resizable=yes, width=550, height=200");
+
+ var firstAttemptDone=false;
+ popup.onunload = function () {
+    if(firstAttemptDone) {
+      window.location.reload();
+    } else {
+      firstAttemptDone = true;
+    }
+ }
 }
 
 </script>

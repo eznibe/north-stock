@@ -1,0 +1,66 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+  <script language="JavaScript" src="javascript/jsGral.js"?<?php echo date("m.d.y"); ?>></script>
+
+<script type="text/javascript">
+
+function setfocus()
+{
+document.<?php echo $var['focus']; ?>.focus()
+}
+
+function cerrarYRefrescar()
+{
+ window.close(self);
+ //window.opener.location.reload();
+ return true;
+}
+
+</script>
+
+</head>
+<body class="ppal" onload = "setfocus()">
+<table>
+<tr>
+<td>
+Categoria:
+</td>
+<td>
+<?php echo $var['categoria']; ?>
+</td>
+</tr>
+
+<form action="form_categoria_reservado.php" method="post" target="_self" name="categoria_reservado" id="categoria_reservado" onsubmit="return cerrarYRefrescar();">
+<input type="hidden" value="categoria_reservado" size="10" name="formname" id="formname">
+<input type="hidden" value="<?php echo $var['id_categoria']; ?>" size="10" name="id_categoria" id="id_categoria">
+
+<tr>
+<td>
+<label for="cantidad">Reservado:</label>
+</td>
+<td>
+<input type="text" size="7" name="reservado" id="reservado" class="obligatorio" value="<?php echo $var['reservado']; ?>"> *
+</td>
+</tr>
+
+<tr>
+<td><br></td>
+<td><br></td>
+</tr>
+
+</table>
+
+<div id="error"></div>
+
+ <center>
+ <br />Los casilleros marcados con * son obligatorios.<br />
+ <button type="submit" name="enviar" value="enviar" >Ingresar</button>
+ <!-- <button name="enviar" value="enviar" onclick='cerrar()' >Ingresar</button> -->
+</form>
+ </center>
+
+
+</body>
+</html>

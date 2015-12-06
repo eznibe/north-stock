@@ -1,2 +1,2 @@
 
-alter table item add column reservado int default 0;
+alter table categoria add column reservado int default 0;
