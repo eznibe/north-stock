@@ -27,13 +27,13 @@ $query = "SELECT
 	Item.stock_disponible - Categoria.stock_minimo,
 	Unidad.unidad,
 	Item.stock_transito,
-	Item.stock_disponible + Item.stock_transito - Categoria.stock_minimo,
+	Item.stock_disponible + Item.stock_transito - Categoria.stock_minimo - Categoria.reservado,
 	Item.codigo_proveedor,
 	Item.id_item,
 	Item.precio_fob,
 	Item.precio_nac,
-	Item.precio_ref
-
+	Item.precio_ref,
+	Categoria.reservado
   FROM
 	Item, Categoria, Unidad, Proveedor
   WHERE (
@@ -54,7 +54,7 @@ while ($row = mysql_fetch_array($result))
  if ($row[6] < 0) $row[6] = "<em>$row[6]</em>";
  if ($row[9] < 0) $row[9] = "<em>$row[9]</em>";
  $aux = $aux . "<tr class=\"provlistrow\"><td><a class=\"list\" onclick=\"add_comprar($row[11]);\">$row[0]</a></td>
-      <td bgcolor=#D4D4D4>$row[4]</td><td bgcolor=#D4D4D4>$row[5]</td><td>$row[6]</td><td>$row[8]</td><td>$row[9]</td> <td bgcolor=#D4D4D4>$row[12]</td><td bgcolor=#D4D4D4>$row[13]</td><td bgcolor=#D4D4D4>$row[14]</td> <td>$row[7]</td><td>$row[3]</td><td>$row[10]</td></tr>\n";
+      <td bgcolor=#D4D4D4>$row[4]</td><td bgcolor=#D4D4D4>$row[5]</td><td>$row[6]</td><td>$row[8]</td><td title='Reservado: $row[15]'>$row[9]</td> <td bgcolor=#D4D4D4>$row[12]</td><td bgcolor=#D4D4D4>$row[13]</td><td bgcolor=#D4D4D4>$row[14]</td> <td>$row[7]</td><td>$row[3]</td><td>$row[10]</td></tr>\n";
 }
 
 $grupo = obtener_grupo($id_grupo);
