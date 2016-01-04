@@ -9,7 +9,7 @@ session_start();
 db_connect();
 
 
-$query = "alter table categoria add column reservado int default 0";
+$query = "update item set stock_transito = 0 where id_item = 5129";
 $result = mysql_query($query);
 
 echo 'Ejecutado.';

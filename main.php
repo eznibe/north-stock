@@ -16,19 +16,19 @@ function desconectar ()
 
 function check_session() {
   session_start();
-  if (!isset($_SESSION["valid_user"])) 
+  if (!isset($_SESSION["valid_user"]))
   {
    desconectar();
    exit();
   }
-}    
+}
 
 
 
-function eval_html($filename, $var) { 
+function eval_html($filename, $var) {
   if ((file_exists($filename)) and (is_readable($filename))) {
-    $handle = fopen($filename, "r"); 
-    $openedfile = fread($handle, filesize($filename)); 
+    $handle = fopen($filename, "r");
+    $openedfile = fread($handle, filesize($filename));
 
     eval('?>' . $openedfile);
   }
@@ -102,7 +102,7 @@ function get_categoria_opt($id_categoria)
 
 function get_subproducto_opt($id_item)
 {
- $query = "SELECT 
+ $query = "SELECT
 	Item.id_item, concat(Categoria.categoria, \" - \", Proveedor.proveedor)
 	FROM
 	Item, Categoria, Proveedor
@@ -138,7 +138,7 @@ function get_scan_opt($scan)
 
 function get_proveedor_opt($id_proveedor)
 {
- $query = "SELECT 
+ $query = "SELECT
 	Proveedor.id_proveedor, Proveedor.proveedor
   FROM
 	Proveedor
@@ -238,7 +238,7 @@ function get_usuario($id_usuario, $tipo)
  //$tipo: 1: retorna username
  //	      2: retorna nombre de usuario
  if($tipo==1) $query = "SELECT username FROM Usuario WHERE id_usuario = $id_usuario";
- else         $query = "SELECT nombre   FROM Usuario WHERE id_usuario = $id_usuario";  
+ else         $query = "SELECT nombre   FROM Usuario WHERE id_usuario = $id_usuario";
  $result = mysql_query($query);
  mysql_num_rows($result);
  $row = mysql_fetch_array($result);
@@ -247,12 +247,12 @@ function get_usuario($id_usuario, $tipo)
 
 function get_item($id_item)
 {
- $query = "SELECT 
-	CONCAT(Categoria.categoria, \" - \", Proveedor.proveedor) 
-  FROM 
-	Item, 
-	Categoria, 
-	Proveedor 
+ $query = "SELECT
+	CONCAT(Categoria.categoria, \" - \", Proveedor.proveedor)
+  FROM
+	Item,
+	Categoria,
+	Proveedor
   WHERE (
 	(Item.id_item = $id_item) AND
 	(Categoria.id_categoria = Item.id_categoria) AND
@@ -375,19 +375,19 @@ function get_ordenes_a_confirmar($id_proveedor)
  }
 
  $query = "SELECT Orden.id_orden, DATE_FORMAT(Orden.fecha, '%d-%m-%Y') AS fecha, proveedor
-           FROM 
-		Orden, 
-		OrdenItem, 
-		Item, 
-		Proveedor 
-	  WHERE ( 
-		(Orden.id_status = 0) AND 
-		(OrdenItem.id_orden = Orden.id_orden) AND 
-		(Item.id_item = OrdenItem.id_item) AND 
+           FROM
+		Orden,
+		OrdenItem,
+		Item,
+		Proveedor
+	  WHERE (
+		(Orden.id_status = 0) AND
+		(OrdenItem.id_orden = Orden.id_orden) AND
+		(Item.id_item = OrdenItem.id_item) AND
 		(Proveedor.id_proveedor = Item.id_proveedor)
 		$condition
 	  )
-	  GROUP BY Orden.id_orden, Orden.fecha, proveedor	 
+	  GROUP BY Orden.id_orden, Orden.fecha, proveedor
 	  ORDER BY fecha, proveedor";
  $result = mysql_query($query);
  return $result;
@@ -399,7 +399,7 @@ function get_agrupacion_contable($id_categoria)
 		   WHERE c.id_categoria = $id_categoria";
  $result = mysql_query($query);
  $row = mysql_fetch_array($result);
- return $row[0];	
+ return $row[0];
 }
 
 function get_item_agrupacion_contable($id_item)
@@ -408,7 +408,7 @@ function get_item_agrupacion_contable($id_item)
 		   WHERE i.id_item = $id_item";
  $result = mysql_query($query);
  $row = mysql_fetch_array($result);
- return $row[0];	
+ return $row[0];
 }
 
 function get_tipos_de_envio() {
@@ -428,7 +428,7 @@ function es_proveedor_nacional($id_proveedor, $pais) {
 	return $row[0] == $pais;
 }
 
-function result_a_memoria($result) 
+function result_a_memoria($result)
 {
 	$rows = array();
 	while($row = mysql_fetch_array($result)) {
@@ -441,7 +441,7 @@ function result_a_memoria($result)
 // Los parametros indican la fecha a seleccionar por default
 function armar_select_fechas($dia_ini, $mes_ini, $ano_ini)
 {
-  
+
 	$meses = array('enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre');
 
   	$codigo = "<select name='dia_ini' id='dia_ini' class='obligatorio'>";
@@ -463,7 +463,7 @@ function armar_select_fechas($dia_ini, $mes_ini, $ano_ini)
 				"</select>
 				/
 				<select name='ano_ini' id='ano_ini' class='obligatorio'>";
-				for ($i = 2004; $i <= 2015; $i++) {
+				for ($i = 2010; $i <= 2025; $i++) {
 				    $codigo = $codigo . ((!empty($ano_ini) && $ano_ini==$i) ? "<option value='".$i."' selected>" : "<option value='".$i."'>"). $i ."</option>";
 				}
 	$codigo = 	$codigo . "</select>";

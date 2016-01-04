@@ -487,7 +487,7 @@ function opciones_ano()
 {
 	$anohoy = strftime("%Y");
 	$anoopc = "";
-	for ($i = 2004; $i <= 2015 ; $i++) {
+	for ($i = 2010; $i <= 2025 ; $i++) {
 		if($i <> $anohoy)
 			$anoopc = $anoopc . "<option value='$i'>$i</option>\n";
 		else

@@ -14,7 +14,7 @@ if ($_SESSION['user_level'] < 11) $imprimir = "";
 else {
 	$imprimir = "<div class=\"imprimir\">
 					<a class=\"imprimir\" onclick=\"self.print();\">Imprimir</a>
-				  </div>";	
+				  </div>";
 }
 
 
@@ -31,10 +31,10 @@ $tipo_rango = $_POST['tipo_rango'];  //Si se busca por fechas o por fechas por p
 
 $dia_ini = $_POST['dia_ini'];
 $mes_ini = $_POST['mes_ini'];
-$ano_ini = $_POST['ano_ini'];
-$dia_fin = $_POST['dia_fin'];
-$mes_fin = $_POST['mes_fin'];
-$ano_fin = $_POST['ano_fin'];
+$ano_ini = isset($_POST['ano_ini']) ? $_POST['ano_ini'] : date("Y");
+$dia_fin = isset($_POST['dia_fin']) ? $_POST['dia_fin'] : sprintf("%02d", date("d"));
+$mes_fin = isset($_POST['mes_fin']) ? $_POST['mes_fin'] : sprintf("%02d", date("m"));
+$ano_fin = isset($_POST['ano_fin']) ? $_POST['ano_fin'] : date("Y");
 
 $rango_periodo = $_POST['rango_periodo'];  //El valor a leer para atras en el periodo
 $tipo_periodo  = $_POST['tipo_periodo'];   //Si es en dias, meses o anos
