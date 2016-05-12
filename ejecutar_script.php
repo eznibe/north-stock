@@ -9,7 +9,7 @@ session_start();
 db_connect();
 
 
-$query = "update item set stock_transito = 0 where id_item = 5129";
+$query = "UPDATE Item SET precio_ref = precio_nac * 15 WHERE precio_nac IS NOT NULL AND precio_nac <> 0";
 $result = mysql_query($query);
 
 echo 'Ejecutado.';
