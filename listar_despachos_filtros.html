@@ -1,0 +1,49 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+
+<script type="text/javascript">
+
+function setfocus()
+{
+document.<?php echo $var['focus']; ?>.focus()
+}
+
+</script>
+
+</head>
+<body class="ppal" onload = "setfocus()">
+
+
+<div class="altas">
+<fieldset>
+ <legend>Listado por despachos</legend>
+   <?php echo $var['mensaje']; ?>
+<form action="form_listar_despachos.php" method="post" target="_self" name="listar_despachos_filtros">
+  <input type="hidden" value="listar_despachos_filtros" size="10" name="formname" id="formname">
+
+  <div style="margin-top: 20px;">
+    <label style="margin-right: 10px;">Despacho</label><input type="text" size="20" value="<?php echo $var['despacho']; ?>" name="despacho" id="despacho">
+  </div>
+
+  <div style="margin-top: 20px;">
+    <label style="margin-right: 10px;">Codigo de orden</label><input value="<?php echo $var['id_orden']; ?>" type="text" size="10" name="id_orden" id="id_orden">
+  </div>
+
+  <div style="margin-top: 20px;">
+    <?php echo $var['fechas']; ?>
+  </div>
+
+  <br />
+  <center>
+  <button type="submit" name="enviar" value="enviar" >Listar</button>
+
+</form>
+ </center>
+</fieldset>
+</div>
+
+
+</body>
+</html>

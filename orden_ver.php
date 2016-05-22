@@ -39,7 +39,8 @@ if(obtener_tipo_proveedor($id_orden) == "EXTRANJERO")
 	(OrdenItem.cantidad * OrdenItem.precio_fob),
 	Item.codigo_proveedor,
 	Orden.descripcion,
-	TipoEnvio.tipo_envio		
+	TipoEnvio.tipo_envio,
+	Orden.despacho
   FROM
       Orden, Categoria, Proveedor, OrdenItem, Item, Unidad, TipoEnvio
   WHERE (
@@ -49,7 +50,7 @@ if(obtener_tipo_proveedor($id_orden) == "EXTRANJERO")
 	(Categoria.id_categoria = Item.id_categoria) AND
 	(Proveedor.id_proveedor = Item.id_proveedor) AND
 	(Unidad.id_unidad = Item.id_unidad_compra) AND
-	(OrdenItem.id_tipo_envio = TipoEnvio.id_tipo_envio) 
+	(OrdenItem.id_tipo_envio = TipoEnvio.id_tipo_envio)
   )
   ORDER BY
 	Categoria.categoria, TipoEnvio.id_tipo_envio";
@@ -105,7 +106,8 @@ else
 	(OrdenItem.cantidad * OrdenItem.precio_ref),
 	Item.codigo_proveedor,
 	Orden.descripcion,
-	TipoEnvio.tipo_envio
+	TipoEnvio.tipo_envio,
+	Orden.despacho
   FROM
       Orden, Categoria, Proveedor, OrdenItem, Item, Unidad, TipoEnvio
   WHERE (
@@ -115,7 +117,7 @@ else
 	(Categoria.id_categoria = Item.id_categoria) AND
 	(Proveedor.id_proveedor = Item.id_proveedor) AND
 	(Unidad.id_unidad = Item.id_unidad_compra) AND
-	(OrdenItem.id_tipo_envio = TipoEnvio.id_tipo_envio) 
+	(OrdenItem.id_tipo_envio = TipoEnvio.id_tipo_envio)
   )
   ORDER BY
 	Categoria.categoria, TipoEnvio.id_tipo_envio";
@@ -171,13 +173,14 @@ $var = array(
   "cotiz_dolar" => $cotizacion_dolar,
   "cotiz_fecha" => $cotizacion_fecha,
   "descripcion" => orden_descripcion($id_orden),
+	"despacho" => orden_despacho($id_orden),
   "focus" => $focus);
 
 //eval_html('orden_ver.html', $var);
 eval_html('orden_ver_ajax.php', $var);
 
 
-function orden_descripcion($id_orden) 
+function orden_descripcion($id_orden)
 {
 	$query = "SELECT descripcion FROM Orden WHERE Orden.id_orden = $id_orden";
 	$result = mysql_query($query);
@@ -185,9 +188,17 @@ function orden_descripcion($id_orden)
 	return $row[0];
 }
 
+function orden_despacho($id_orden)
+{
+	$query = "SELECT despacho FROM Orden WHERE Orden.id_orden = $id_orden";
+	$result = mysql_query($query);
+	$row = mysql_fetch_array($result);
+	return $row[0];
+}
+
 /**
  * Actualiza la cantidad (y cant pendiente) y le precio del item de la compra pasado
- * como parametro 
+ * como parametro
  */
 function update_orden($id_orden_item, $cantidad, $precio)
 {
@@ -196,9 +207,9 @@ function update_orden($id_orden_item, $cantidad, $precio)
   $query = "SELECT id_orden, id_item FROM OrdenItem WHERE id_orden_item = $id_orden_item";
   $result = mysql_query($query);
   $row = mysql_fetch_array($result);
-  
+
   $query = "DELETE FROM OrdenItem WHERE id_orden_item = $id_orden_item";
-  
+
   // logueo item borrado de la orden (8)
   log_trans($_SESSION['valid_user'], 8, $row[1], 0, date("Y-m-d"), $row[0]);
  }

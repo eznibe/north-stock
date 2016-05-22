@@ -32,7 +32,8 @@ db_connect();
 <head>
   <title>North Sails - Sistema de Control de Stock</title>
   <link rel="stylesheet" type="text/css" href="north.css" />
-  <script language="JavaScript" src="javascript/jsGral.js?"<?php echo $var['date']; ?>></script>	
+  <script language="JavaScript" src="javascript/jsGral.js?"<?php echo $var['date']; ?>></script>
+  <script language="JavaScript" src="include/jquery-1.12.4.min.js"></script>
 
 <script type="text/javascript">
 
@@ -51,19 +52,34 @@ if (envio == true)
  }
 }
 
-function showFeedback() 
+function showFeedback()
 {
 	document.getElementById('modifiedDescripcion').innerHTML = " (guardada)";
 }
 
 function toggleDescripcion() {
 	var container = document.getElementById('descripcionContainer');
-	
+
 	container.style.display = (container.style.display=='none') ? 'block' : 'none';
 }
 
 function descripcionKeyPress() {
 	document.getElementById('modifiedDescripcion').innerHTML = " (sin guardar)";
+}
+
+function guardarDespacho() {
+  // var data = {despacho: $('#despacho').val()};
+  $.ajax({
+    url:'api/ordenes.php?guardarDespacho=true&id_orden='+$('#id_orden').val()+'&despacho='+$('#despacho').val(),
+    success: function(data, status){
+      //console.log("Data: " + data + "\nStatus: " + status);
+      $('#label_despacho').text('Guardado');
+    }
+  })
+}
+
+function despachoKeyPress() {
+	$('#label_despacho').text('Guardar');
 }
 
 </script>
@@ -77,8 +93,7 @@ function descripcionKeyPress() {
    <?php echo $var['mensaje']; ?>
 
 <form action="form_orden_confirma_arribo.php" method="post" target="_self" name="orden_confirma_arribo" onsubmit="return validar_tabla();">
-  <input type="hidden" value="<?php echo $var['cant_filas']; ?>" size="10" name="rows" id="rows">
-
+  
 <table width="100%" id="orden_table" name="orden_table">
 <tr class="provlisthead">
   <th>Item</th> <th>Cod. producto</th> <th>Cantidad<br/>Original</th> <th>Cantidad<br/>Pendiente</th> <th>Cantidad<br/>Arribada</th> <th>Tipo<br/>envio</th> <th>Unidad</th> <th>Precio<br /> unitario</th> <th>Precio</th> <th>Moneda</th>
@@ -89,27 +104,39 @@ function descripcionKeyPress() {
  <br><span id="error" style="display:none; color:red;"><b>Hay error en una de las cantidades arribadas. No se puede confirmar el arribo</b></span>
  <br />Total de la compra: US$ <?php echo $var['total_dolar']; ?> &nbsp;=&nbsp; $ <?php echo $var['total_pesos']; ?><br /><br />
 
+ <table width="100%">
+ <tr>
+ <td class="centrado">
+   <label style="margin: 20px;">Despacho:</label>
+   <input type="text" value="<?php echo $var['despacho']; ?>" size="20" name="despacho" id="despacho" onkeypress="despachoKeyPress();">
+   <button name="guardar" value="guardar" style="margin-left: 20px; margin-bottom: 20px;" onclick="guardarDespacho();"><label id="label_despacho">Guardar</label></button>
+ </td>
+ </tr>
+
+ <tr>
+ <td class="centrado">
+   Fecha de arribo:
+   <select name="dia" id="dia" class="obligatorio">
+      <?php echo $var['dia']; ?>
+   </select>
+   /
+   <select name="mes" id="mes" class="obligatorio">
+      <?php echo $var['mes']; ?>
+   </select>
+   /
+   <select name="ano" id="ano" class="obligatorio">
+      <?php echo $var['ano']; ?>
+   </select>
+ </td>
+ </tr>
+ </table>
+
 <table width="100%">
-<tr>
-<td colspan="2">
-Fecha de arribo:
-<select name="dia" id="dia" class="obligatorio">
-   <?php echo $var['dia']; ?>
-</select>
-/
-<select name="mes" id="mes" class="obligatorio">
-   <?php echo $var['mes']; ?>
-</select>
-/
-<select name="ano" id="ano" class="obligatorio">
-   <?php echo $var['ano']; ?>
-</select>
-
-</td>
-</tr>
 
 <tr>
+
 <td class="centrado">
+  <input type="hidden" value="<?php echo $var['cant_filas']; ?>" size="10" name="rows" id="rows">
   <input type="hidden" value="orden_confirma_arribo" size="10" name="formname" id="formname">
   <input type="hidden" value="<?php echo $var['id_orden']; ?>" size="10" name="id_orden" id="id_orden">
  <button type="submit" name="enviar" value="enviar">Confirmar arribo</button>
@@ -137,7 +164,7 @@ Fecha de arribo:
  		<span class="tituloDescripcion">Descripcion</span><span id="modifiedDescripcion"></span>
  		<span class="guardarDescripcion"><a onclick="saveDescripcion();" class="linkGuardarDescripcion">Guardar</a></span>
  	</td>
- </tr> 
+ </tr>
  <tr>
 	 <td>
 	 	<textarea rows="6" name="descripcion" id="descripcion" style="width:100%;" onkeypress="descripcionKeyPress();"><?php echo $var['descripcion']; ?></textarea>

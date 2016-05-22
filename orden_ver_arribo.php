@@ -210,6 +210,7 @@ $var = array(
   "cant_filas" => $cant_filas,
   "date" => $date,
   "descripcion" => orden_descripcion($id_orden),
+	"despacho" => orden_despacho($id_orden),
   "mensaje" => $mensaje);
 
 //eval_html('orden_ver_arribo.html', $var);
@@ -220,6 +221,14 @@ eval_html('orden_ver_arribo_ajax.php', $var);
 function orden_descripcion($id_orden)
 {
 	$query = "SELECT descripcion FROM Orden WHERE Orden.id_orden = $id_orden";
+	$result = mysql_query($query);
+	$row = mysql_fetch_array($result);
+	return $row[0];
+}
+
+function orden_despacho($id_orden)
+{
+	$query = "SELECT despacho FROM Orden WHERE Orden.id_orden = $id_orden";
 	$result = mysql_query($query);
 	$row = mysql_fetch_array($result);
 	return $row[0];

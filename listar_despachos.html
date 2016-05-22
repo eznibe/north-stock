@@ -1,0 +1,54 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+
+<script type="text/javascript">
+
+function setfocus()
+{
+document.forms[0].proveedor.focus()
+}
+
+function submitForm()
+{
+	document.getElementById('backForm').submit();
+}
+
+</script>
+
+</head>
+<body class="ppal">
+
+<form id="backForm" action="form_despachos_filtros.php" method="post" target="_self">
+	<div>
+		<input type="hidden" value="<?php echo $var['despacho']; ?>" size="10" name="despacho" id="despacho">
+		<input type="hidden" value="<?php echo $var['id_orden']; ?>" size="10" name="id_orden" id="id_orden">
+		<input type="hidden" value="<?php echo $var['dia_ini']; ?>" size="10" name="dia_ini" id="dia_ini">
+		<input type="hidden" value="<?php echo $var['mes_ini']; ?>" size="10" name="mes_ini" id="mes_ini">
+		<input type="hidden" value="<?php echo $var['ano_ini']; ?>" size="10" name="ano_ini" id="ano_ini">
+		<input type="hidden" value="<?php echo $var['dia_fin']; ?>" size="10" name="dia_fin" id="dia_fin">
+		<input type="hidden" value="<?php echo $var['mes_fin']; ?>" size="10" name="mes_fin" id="mes_fin">
+		<input type="hidden" value="<?php echo $var['ano_fin']; ?>" size="10" name="ano_fin" id="ano_fin">
+	</div>
+	<div>
+		<div class="volver"><a class="volver" onclick="submitForm();">Volver</a></div>
+		<?php echo $var['imprimir']; ?>
+	</div>
+</form>
+
+<center class="fechas_center">
+<em class="titulo"><?php echo $var['titulo']; ?></em>
+<br />
+<br />
+</center>
+
+<table width="100%">
+<tr class="provlisthead">
+<th>Despacho</th><th>Orden</th><th style="width:90px;">Fecha</th><th>Item</th><th>Proveedor</th><th>Cant.</th><th>Precio</th><th>Unidad</th>
+</tr>
+   <?php echo $var['listado']; ?>
+</table>
+
+</body>
+</html>

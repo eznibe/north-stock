@@ -15,7 +15,7 @@ $formname = $_POST['formname'];
 $cant_filas = $_POST['rows'];
 $table_map = array();
 for ($i = 0; $i < $cant_filas; $i++) {
-	$table_map[$i][0] = $_POST['id_orden_item'.$i];	
+	$table_map[$i][0] = $_POST['id_orden_item'.$i];
 	$table_map[$i][1] = $_POST['cantidad'.$i];
 }
 
@@ -26,12 +26,13 @@ $focus = "forms[0].pais";
 
 db_connect();
 
-$query = "UPDATE 
+$query = "UPDATE
 	Orden
   SET
-	id_status = 1 
+	id_status = 1 ,
+	fecha = now()
   WHERE (
-	(id_orden = $id_orden) 
+	(id_orden = $id_orden)
   )";
 $result = mysql_query($query);
 
@@ -74,4 +75,3 @@ $var = array(
 eval_html('orden_confirma_fin.html', $var);
 
 ?>
-
