@@ -2,7 +2,7 @@
 <head>
   <title>North Sails - Sistema de Control de Stock</title>
   <link rel="stylesheet" type="text/css" href="north.css" />
-  <script language="JavaScript" src="javascript/jsGral.js"?<?php echo date("m.d.y"); ?>"></script>	
+  <script language="JavaScript" src="javascript/jsGral.js"?<?php echo date("m.d.y"); ?>></script>	
 
 <script type="text/javascript">
 
@@ -31,13 +31,13 @@ function show_detail(ID_CATEGORIA)
 			<span><input type="submit" value="Listar" style="margin-left: 15px;"></input></span>
 		</form>
 	</div>
-	<?php echo $var['imprimir']; ?>	
+	<?php echo $var['imprimir']; ?>
 </div>
-<?php 
+<?php
 }
 else {
 	echo $var['imprimir'];
-}; 
+};
 ?>
 
 <!-- Search form -->
@@ -48,7 +48,7 @@ else {
 <form action="<?php echo $var['action']; ?>" method="get" target="_self" name="grupo_search">
 <!--	<input type="hidden" id="id_grupo" name="id_grupo" value="<?php echo $var['id_grupo']; ?>">-->
 <!--	<input type="hidden" id="id_prod" name="id_prod" value="<?php echo $var['tipo_producto']; ?>">-->
-	
+
 	<?php
 		$id_grupo = $var['id_grupo'];
 		$tipo_producto = $var['tipo_producto'];
@@ -56,11 +56,11 @@ else {
 		echo "<input type='hidden' id='id_grupo' name='id_grupo' value='$id_grupo'/>";
 		echo "<input type='hidden' id='id_prod' name='id_prod' value='$tipo_producto'/>";
 	?>
-	
+
 	<div onclick="mostrar_filtro();" class="filtro">
 		<span>+ <i><b>Buscar&nbsp;</b></i></span>
 	</div>
-	
+
 	<div id="filtro" class="form_filtro">
 	<table>
 		<tr>
@@ -75,7 +75,7 @@ else {
 			<td align="right"><button type="submit" name="enviar" value="enviar">Listar</button></td>
 		</tr>
 	</table>
-	</div>	
+	</div>
 </form>
 <?php }; ?>
 

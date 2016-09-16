@@ -67,7 +67,7 @@ eval_html('producto_addcomprar.html', $var);
 
 
 function ordenes_a_confirmar($id_proveedor) {
-	
+
 	$codigo = "<option value=''>Elige una orden</option>";
 	$result = get_ordenes_a_confirmar($id_proveedor);
 
