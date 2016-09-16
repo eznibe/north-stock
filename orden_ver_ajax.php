@@ -61,7 +61,7 @@ function showFeedback()
 function toggleDescripcion() {
 	var container = document.getElementById('descripcionContainer');
 
-	container.style.display = (container.style.display=='none') ? 'block' : 'none';
+	container.style.display = (container.style.display=='none') ? 'inline-table' : 'none';
 }
 
 function descripcionKeyPress() {
@@ -93,6 +93,8 @@ function despachoKeyPress() {
  <legend><?php echo $var['header']; ?></legend>
    <?php echo $var['mensaje']; ?>
 
+<form action="form_orden_confirma.php" method="post" target="_self" name="orden_confirma" onsubmit="return validar_tabla_orden_confirmar();">
+
 <table width="100%" id="orden_table">
 
 <tr class="provlisthead">
@@ -104,42 +106,46 @@ function despachoKeyPress() {
  <br><span id="error" style="display:none; color:red;"><b>Hay error en las cantidades de uno de los items. No se puede confirmar la orden.</b></span>
  <br />Total de la compra: US$ <?php echo $var['total_dolar']; ?> &nbsp;=&nbsp; $ <?php echo $var['total_pesos']; ?><br /><br />
 
- <table width="100%">
- <tr>
- <td class="centrado">
-   <label style="margin: 20px;">Despacho:</label>
-   <input type="text" value="<?php echo $var['despacho']; ?>" size="20" name="despacho" id="despacho" onkeypress="despachoKeyPress();">
-   <button name="guardar" value="guardar" style="margin-left: 20px;" onclick="guardarDespacho();"><label id="label_despacho">Guardar</label></button>
- </td>
- </tr>
- </table>
 
-<table width="100%">
-<tr>
-<form action="form_orden_confirma.php" method="post" target="_self" name="orden_confirma" onsubmit="return validar_tabla_orden_confirmar();">
+</center>
 
-<td class="centrado">
+
+<div style="float:left; margin-top: 15px;">
   <input type="hidden" value="<?php echo $var['cant_filas']; ?>" size="10" name="rows" id="rows">
   <input type="hidden" value="orden_confirma" size="10" name="formname" id="formname">
   <input type="hidden" value="<?php echo $var['id_orden']; ?>" size="10" name="id_orden" id="id_orden">
   <button type="submit" name="enviar" value="enviar">Confirmar pedido</button>
-</td>
+</div>
 
 </form>
 
-<td class="centrado"><span><a onclick="toggleDescripcion();" class="toggleDescripcion">Ver descripcion</a></span></td>
 
-<td class="centrado">
-<form action="form_orden_elimina.php" method="post" target="_self" name="orden_elimina">
-  <input type="hidden" value="orden_elimina" size="10" name="formname" id="formname">
-  <input type="hidden" value="<?php echo $var['id_orden']; ?>" size="10" name="id_orden" id="id_orden">
- <button type="submit" name="enviar" value="enviar">Eliminar pedido</button>
-</form>
-</td>
-</tr>
-</table>
+<div style="float:right;">
+  <form action="form_orden_elimina.php" method="post" target="_self" name="orden_elimina">
+    <input type="hidden" value="orden_elimina" size="10" name="formname" id="formname">
+    <input type="hidden" value="<?php echo $var['id_orden']; ?>" size="10" name="id_orden" id="id_orden">
+    <button type="submit" name="enviar" value="enviar">Eliminar pedido</button>
+  </form>
+</div>
 
- </center>
+
+ <table width="100%">
+ <tr>
+ <td>
+   <div style="margin-bottom: 10px;">
+     <label>Despacho:</label>
+     <input type="text" value="<?php echo $var['despacho']; ?>" size="20" name="despacho" id="despacho" onkeypress="despachoKeyPress();">
+     <button name="guardar" value="guardar" style="margin-left: 20px;" onclick="guardarDespacho();"><label id="label_despacho">Guardar</label></button>
+   </div>
+ </td>
+ </tr>
+
+ <tr>
+   <td>
+     <div style="margin-bottom: 15px;"><a onclick="toggleDescripcion();" class="toggleDescripcion">Ver descripcion</a></div>
+   </td>
+ </tr>
+ </table>
 
 <table style="width: 100%; display:none;" id="descripcionContainer">
  <tr class="headerDescripcion">
