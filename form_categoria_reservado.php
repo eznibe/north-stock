@@ -15,6 +15,6 @@ $query = "UPDATE Categoria SET reservado = $reservado WHERE id_categoria = $id_c
 $result = mysql_query($query);
 
 $var = "";
-//eval_html('producto_grupo_listar.php', $var);
+eval_html('cerrar_popup.html', $var);
 
 ?>
