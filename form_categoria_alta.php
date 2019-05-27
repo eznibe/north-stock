@@ -11,6 +11,7 @@ $scan = $_POST['scan'];
 $stock_minimo = $_POST['stock_minimo'];
 $unidad = $_POST['unidad'];
 $porcentaje = $_POST['porcentaje'];
+$pos_arancelaria = $_POST['pos_arancelaria'];
 $formname = $_POST['formname'];
 
 $mensaje = "";
@@ -18,7 +19,7 @@ $focus = "forms[0].categoria";
 
 db_connect();
 
-function insert_categoria(&$mensaje, $categoria, $id_grupo, $scan, $stock_minimo, $unidad, $porcentaje)
+function insert_categoria(&$mensaje, $categoria, $id_grupo, $scan, $stock_minimo, $unidad, $porcentaje, $pos_arancelaria)
 {
  if ( ($categoria == "") or ($id_grupo == 0) or ($unidad == 0) or ($porcentaje == ""))
  {
@@ -34,9 +35,9 @@ function insert_categoria(&$mensaje, $categoria, $id_grupo, $scan, $stock_minimo
   $categoria = addslashes(trim(strtoupper($categoria)));
   $stock_minimo = addslashes(trim($stock_minimo));
   $query = "INSERT INTO Categoria
-            (categoria, id_grupo, scan, stock_minimo, id_unidad_visual, porc_impuesto)
+            (categoria, id_grupo, scan, stock_minimo, id_unidad_visual, porc_impuesto, pos_arancelaria)
             VALUES
-            (\"$categoria\", $id_grupo, \"$scan\", $stock_minimo, $unidad, $porcentaje)";
+            (\"$categoria\", $id_grupo, \"$scan\", $stock_minimo, $unidad, $porcentaje, \"$pos_arancelaria\")";
 
   if (!($result = mysql_query($query)))
   {
@@ -63,7 +64,7 @@ function insert_categoria(&$mensaje, $categoria, $id_grupo, $scan, $stock_minimo
  }
 }
 
-if (insert_categoria($mensaje, $categoria, $id_grupo, $scan, $stock_minimo, $unidad, $porcentaje))
+if (insert_categoria($mensaje, $categoria, $id_grupo, $scan, $stock_minimo, $unidad, $porcentaje, $pos_arancelaria))
 {
  $categoria = "";
  $stock_minimo = "";
@@ -79,7 +80,8 @@ $var = array("mensaje" => $mensaje,
   "categoria" => $categoria,
   "stock_minimo" => $stock_minimo,
   "unidades" => $unidades,
-  "porcentaje" => $porcentaje);
+  "porcentaje" => $porcentaje,
+  "pos_arancelaria" => $pos_arancelaria);
 
 eval_html('categoria_alta.html', $var);
 

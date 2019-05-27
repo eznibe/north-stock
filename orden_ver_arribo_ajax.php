@@ -76,6 +76,14 @@ function guardarDespacho() {
       $('#label_despacho').text('Guardado');
     }
   })
+
+  $.ajax({
+    url:'api/ordenes.php?guardarNrFactura=true&id_orden='+$('#id_orden').val()+'&nr_factura='+$('#nr_factura').val(),
+    success: function(data, status){
+      //console.log("Data: " + data + "\nStatus: " + status);
+      $('#label_despacho').text('Guardado');
+    }
+  })
 }
 
 function despachoKeyPress() {
@@ -151,6 +159,15 @@ function despachoKeyPress() {
   <div style="margin-bottom: 10px;">
     <label >Despacho:</label>
     <input type="text" value="<?php echo $var['despacho']; ?>" size="20" name="despacho" id="despacho" onkeypress="despachoKeyPress();">
+    <!-- <button name="guardar" value="guardar" style="margin-left: 20px;" onclick="guardarDespacho();"><label id="label_despacho">Guardar</label></button> -->
+  </div>
+</td>
+</tr>
+<tr>
+<td>
+  <div style="margin-bottom: 10px;">
+    <label >Nr. factura:</label>
+    <input type="text" value="<?php echo $var['nr_factura']; ?>" size="20" name="nr_factura" id="nr_factura" onkeypress="despachoKeyPress();">
     <button name="guardar" value="guardar" style="margin-left: 20px;" onclick="guardarDespacho();"><label id="label_despacho">Guardar</label></button>
   </div>
 </td>

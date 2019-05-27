@@ -211,6 +211,7 @@ $var = array(
   "date" => $date,
   "descripcion" => orden_descripcion($id_orden),
 	"despacho" => orden_despacho($id_orden),
+	"nr_factura" => orden_nr_factura($id_orden),
   "mensaje" => $mensaje);
 
 //eval_html('orden_ver_arribo.html', $var);
@@ -229,6 +230,14 @@ function orden_descripcion($id_orden)
 function orden_despacho($id_orden)
 {
 	$query = "SELECT despacho FROM Orden WHERE Orden.id_orden = $id_orden";
+	$result = mysql_query($query);
+	$row = mysql_fetch_array($result);
+	return $row[0];
+}
+
+function orden_nr_factura($id_orden)
+{
+	$query = "SELECT nr_factura FROM Orden WHERE Orden.id_orden = $id_orden";
 	$result = mysql_query($query);
 	$row = mysql_fetch_array($result);
 	return $row[0];

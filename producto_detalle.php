@@ -16,7 +16,8 @@ $query = "SELECT
 	(SUM(Item.stock_disponible)-Categoria.stock_minimo), 
 	Unidad.unidad,
 	SUM(Item.stock_transito),
-	(SUM(Item.stock_disponible)+SUM(Item.stock_transito)-Categoria.stock_minimo) 
+	(SUM(Item.stock_disponible)+SUM(Item.stock_transito)-Categoria.stock_minimo),
+	Categoria.pos_arancelaria
   FROM 
 	Item, Categoria, Unidad 
   WHERE (
@@ -38,7 +39,7 @@ if ($row[6] < 0) $row[6] = "<em>$row[6]</em>";
 
 $unidad = "<em>" . strtoupper($row[4]) . "</em>";
 $producto = htmlspecialchars(stripslashes($row[0]));
-$header = "<tr class=\"provlistrow\"><td>$producto</td><td>$row[2]</td><td>$row[1]</td><td>$row[3]</td><td>$row[5]</td><td>$row[6]</td><td>$unidad</td></tr>\n";
+$header = "<tr class=\"provlistrow\"><td>$producto</td><td>$row[2]</td><td>$row[1]</td><td>$row[3]</td><td>$row[5]</td><td>$row[6]</td><td>$unidad</td><td>$row[7]</td></tr>\n";
 
 $query = "SELECT 
 	Proveedor.proveedor, 

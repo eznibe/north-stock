@@ -13,6 +13,7 @@ $scan = $_POST['scan'];
 $stock_minimo = $_POST['stock_minimo'];
 $unidad = $_POST['unidad'];
 $porcentaje = $_POST['porcentaje'];
+$pos_arancelaria = $_POST['pos_arancelaria'];
 
 
 $mensaje = "";
@@ -29,7 +30,8 @@ function get_cat_data(&$data, $id_categoria)
 	scan,
 	stock_minimo,
 	id_unidad_visual,
-	porc_impuesto
+	porc_impuesto,
+  pos_arancelaria
   FROM
 	Categoria
   WHERE (
@@ -39,7 +41,7 @@ function get_cat_data(&$data, $id_categoria)
  $data = mysql_fetch_array($result);
 }
 
-function update_categoria(&$mensaje, $categoria, $id_grupo, $scan, $stock_minimo, $unidad, $id_categoria, $porcentaje)
+function update_categoria(&$mensaje, $categoria, $id_grupo, $scan, $stock_minimo, $unidad, $id_categoria, $porcentaje, $pos_arancelaria)
 {
  if ( ($categoria == "") or ($id_grupo == 0) or ($unidad == 0) or ($porcentaje == ""))
  {
@@ -62,7 +64,8 @@ function update_categoria(&$mensaje, $categoria, $id_grupo, $scan, $stock_minimo
 	scan = \"$scan\",
 	stock_minimo = $stock_minimo,
 	id_unidad_visual = $unidad,
-  	porc_impuesto = $porcentaje
+  	porc_impuesto = $porcentaje,
+    pos_arancelaria = \"$pos_arancelaria\"
   WHERE
 	Categoria.id_categoria = $id_categoria";
 
@@ -130,6 +133,7 @@ if ($formname == "categoria_modificacion")
   "stock_minimo" => $datos[3],
   "unidades" => $unidades,
   "porcentaje" => $datos[5],
+  "pos_arancelaria" => $datos[6],
   "focus" => $focus,
   );
 
@@ -137,7 +141,7 @@ if ($formname == "categoria_modificacion")
 }
 elseif ($formname == "categoria_datosmodificar")
 {
- if (update_categoria($mensaje, $categoria, $id_grupo, $scan, $stock_minimo, $unidad, $id_categoria, $porcentaje))
+ if (update_categoria($mensaje, $categoria, $id_grupo, $scan, $stock_minimo, $unidad, $id_categoria, $porcentaje, $pos_arancelaria))
  {
   if (mensaje != "") $mensaje = "<script type=\"text/javascript\">alert(\"$mensaje\")</script>";
  }
