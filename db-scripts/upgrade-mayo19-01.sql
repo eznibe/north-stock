@@ -5,6 +5,8 @@ alter table orden add column nr_factura varchar(64);
 
 create table inflacion (id_inflacion int not null auto_increment, anio int, mes int, valor decimal, primary key (id_inflacion)) engine=MyISAM;
 
+alter table inflacion modify column valor decimal(5,2);
+
 insert into inflacion (anio, mes,valor) values (2001, 13, 0);
 insert into inflacion (anio, mes,valor) values (2002, 13, 0);
 insert into inflacion (anio, mes,valor) values (2003, 13, 0);
