@@ -26,3 +26,20 @@ insert into inflacion (anio, mes,valor) values (2016, 13, 0);
 insert into inflacion (anio, mes,valor) values (2017, 13, 25);
 insert into inflacion (anio, mes,valor) values (2018, 13, 45);
 insert into inflacion (anio, mes,valor) values (2019, 13, 40);
+
+
+
+create or replace view v_last_orders as
+SELECT 
+oi.id_item,
+SUBSTRING_INDEX(group_concat(oi.precio_fob order by o.fecha desc, o.id_orden desc), ',', 1) as precio_fob,
+SUBSTRING_INDEX(group_concat(oi.precio_ref order by o.fecha desc, o.id_orden desc), ',', 1) as precio_ref,
+SUBSTRING_INDEX(group_concat(o.id_orden order by o.fecha desc, o.id_orden desc), ',', 1) as id_orden,
+SUBSTRING_INDEX(group_concat(o.fecha order by o.fecha desc, o.id_orden desc), ',', 1) as fecha,
+SUBSTRING_INDEX(group_concat(o.cotizacion_dolar order by o.fecha desc, o.id_orden desc), ',', 1) as cotizacion_dolar,
+SUBSTRING_INDEX(group_concat(o.nr_factura order by o.fecha desc, o.id_orden desc), ',', 1) as nr_factura,
+SUBSTRING_INDEX(group_concat(o.despacho order by o.fecha desc, o.id_orden desc), ',', 1) as despacho,
+count(*)
+FROM ordenitem oi join orden o on o.id_orden=oi.id_orden 
+--where oi.id_item = 3488 
+group by oi.id_item

@@ -65,8 +65,8 @@ $query = "SELECT
 		Grupo.grupo,
 		Categoria.pos_arancelaria,
 		orden.cotizacion_dolar,
-		ordenitem.precio_ref,
-		ordenitem.precio_fob,
+		orden.precio_ref,
+		orden.precio_fob,
 		orden.fecha,
 		orden.nr_factura,
 		orden.despacho
@@ -77,21 +77,19 @@ $query = "SELECT
 		Unidad,
 		Grupo,
 		Pais,
-		ordenitem,
-		orden
+		v_last_orders orden
   WHERE
     (Item.id_categoria = Categoria.id_categoria) AND
     (Item.id_proveedor = Proveedor.id_proveedor) AND
 		(Unidad.id_unidad = Item.id_unidad_compra) AND
 		(Grupo.id_grupo = Categoria.id_grupo) AND
 		(Proveedor.id_pais = Pais.id_pais) AND
-		ordenitem.id_item = Item.id_item AND
-		orden.id_orden = ordenitem.id_orden
+		orden.id_item = Item.id_item
 		$grupos_condicion
   GROUP BY
     Item.id_item, Item.id_categoria
   HAVING
-    disponible > 0 AND max(orden.fecha)
+    disponible > 0
   ORDER BY
 		$orderbygrupo
 		Categoria.categoria";
