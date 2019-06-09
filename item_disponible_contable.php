@@ -34,102 +34,148 @@ $id_grupos = isset($_POST['id_grupos']) ? $_POST['id_grupos'] : array();
 
 $grupos_condicion = "";
 if(count($id_grupos) > 0) {
+	
 	$grupos_condicion = " AND Grupo.id_grupo IN (";
 	foreach ($id_grupos as $id_grupo) {
 		$grupos_condicion .= $id_grupo . ',';
 	}
 	$grupos_condicion = substr($grupos_condicion, 0, -1);
 	$grupos_condicion .= " ) ";
-}
 
-//dump($grupos_condicion);
 
-// Note: Al stock disponible del item al 'current date' se le agregan todos los consumidos y se le restan todos los comprados despues de la fecha seleccionada
+	//dump($grupos_condicion);
 
-$query = "SELECT
-    CONCAT(Categoria.categoria,'<br>',Proveedor.proveedor),
-    Item.codigo_proveedor,
-    (Item.stock_disponible
-    	- COALESCE((SELECT sum(cantidad) from Log where Log.fecha > $fecha and Log.id_item = Item.id_item and Log.id_accion = 1 ),0)
-			+ COALESCE((SELECT sum(cantidad) from Log where Log.fecha > $fecha and Log.id_item = Item.id_item and Log.id_accion = 2 ),0)) AS disponible,
-    Item.precio_fob,
-    Item.precio_nac,
-    Item.id_item,
-    Item.stock_transito,
-    Item.precio_ref,
-    Item.oculto_fob,
-    Item.oculto_nac,
-		CONCAT(Unidad.unidad,'(',Item.factor_unidades,')'),
-		Item.agrupacion_contable,
-		Pais.pais,
-		Grupo.grupo,
-		Categoria.pos_arancelaria,
-		orden.cotizacion_dolar,
-		orden.precio_ref,
-		orden.precio_fob,
-		orden.fecha,
-		orden.nr_factura,
-		orden.despacho
-  FROM
-    Item,
-    Categoria,
-    Proveedor,
-		Unidad,
-		Grupo,
-		Pais,
-		v_last_orders orden
-  WHERE
-    (Item.id_categoria = Categoria.id_categoria) AND
-    (Item.id_proveedor = Proveedor.id_proveedor) AND
-		(Unidad.id_unidad = Item.id_unidad_compra) AND
-		(Grupo.id_grupo = Categoria.id_grupo) AND
-		(Proveedor.id_pais = Pais.id_pais) AND
-		orden.id_item = Item.id_item
-		$grupos_condicion
-  GROUP BY
-    Item.id_item, Item.id_categoria
-  HAVING
-    disponible > 0
-  ORDER BY
-		$orderbygrupo
-		Categoria.categoria";
-$result = mysql_query($query);
+	// Note: Al stock disponible del item al 'current date' se le agregan todos los consumidos y se le restan todos los comprados despues de la fecha seleccionada
 
-//dump($query);
+	$query = "SELECT
+		CONCAT(Categoria.categoria,'<br>',Proveedor.proveedor),
+		Item.codigo_proveedor,
+		(Item.stock_disponible
+			- COALESCE((SELECT sum(cantidad) from Log where Log.fecha > $fecha and Log.id_item = Item.id_item and Log.id_accion = 1 ),0)
+				+ COALESCE((SELECT sum(cantidad) from Log where Log.fecha > $fecha and Log.id_item = Item.id_item and Log.id_accion = 2 ),0)) AS disponible,
+		Item.precio_fob,
+		Item.precio_nac,
+		Item.id_item,
+		Item.stock_transito,
+		Item.precio_ref,
+		Item.oculto_fob,
+		Item.oculto_nac,
+			CONCAT(Unidad.unidad,'(',Item.factor_unidades,')'),
+			Item.agrupacion_contable,
+			Pais.pais,
+			Grupo.grupo,
+			Categoria.pos_arancelaria,
+			orden.cotizacion_dolar,
+			ordenitem.precio_ref,
+			ordenitem.precio_fob,
+			orden.fecha,
+			orden.nr_factura,
+			orden.despacho,
+			ordenitem.cantidad
+	FROM
+		Item,
+		Categoria,
+		Proveedor,
+			Unidad,
+			Grupo,
+			Pais,
+			ordenitem,
+			orden
+	WHERE
+		(Item.id_categoria = Categoria.id_categoria) AND
+		(Item.id_proveedor = Proveedor.id_proveedor) AND
+			(Unidad.id_unidad = Item.id_unidad_compra) AND
+			(Grupo.id_grupo = Categoria.id_grupo) AND
+			(Proveedor.id_pais = Pais.id_pais) AND
+			ordenitem.id_item = Item.id_item AND
+			orden.id_orden = ordenitem.id_orden
+			$grupos_condicion
+	ORDER BY
+			$orderbygrupo
+			Categoria.categoria,
+			Orden.fecha desc";
+	$result = mysql_query($query);
 
-$queryInflacion = "select anio, mes, valor from inflacion order by anio, mes";
-$resultInflacion = mysql_query($queryInflacion);
+	//dump($query);
 
-$aux = "";
-$totalFOB=0;
-$totalRef=0;
-$totalRefNac=0;
-while ($row = mysql_fetch_array($result))
-{
 
-	$precioRef = 0;
-	$pctInflacion = obtener_porcentaje_inflacion($row[18], $fecha_hasta, $resultInflacion);
-	
-	$precioInflacion = number_format($row[2] * $row[17] * $row[15] * (1 + ($pctInflacion/100)), 2); // default FOB
 
-	$totalFOB += $row[2] * $row[17];
-	if(tipoProveedor($row[12])=='NAC') {
-		$precioRef = number_format($row[2] * $row[16], 2);
-		$totalRefNac += $row[2] * $row[16];
+	$rows = array();
 
-		$precioInflacion = number_format($row[2] * $row[16] * (1 + ($pctInflacion/100)), 2); // default FOB
+	$lastItem;
+
+	while ($row = mysql_fetch_array($result))
+	{
+		//dump($row);
+
+		$cantidad = $row[21];
+
+		if (!isset($lastItem) || $lastItem != $row[5]) {
+			// nuevo item
+			$disponible = $row[2];
+			$lastItem = $row[5];
+
+			if ($disponible > 0) {
+				
+				if ($cantidad < $disponible) {
+					$row[2] = $cantidad;
+				}
+
+				$disponible = $disponible - $cantidad; // disponible - cantidad pedida en orden
+				array_push($rows, $row);
+			}
+		} else {
+			// mismo item que row anterior
+			if ($disponible > 0) {
+				
+				if ($cantidad >= $disponible) {
+					$row[2] = $disponible;
+				} else {
+					$row[2] = $cantidad;
+				}
+
+				array_push($rows, $row);
+
+				$disponible = $disponible - $cantidad; // disponible - cantidad pedida en orden
+			}
+		}
 	}
 
-	$dolarArribo = number_format($row[15], 2);
-	$fechaArribo = date('d-m-Y', strtotime($row[18]));
+	$queryInflacion = "select anio, mes, valor from inflacion order by anio, mes";
+	$resultInflacion = mysql_query($queryInflacion);
+
+	$aux = "";
+	$totalFOB=0;
+	$totalRef=0;
+	$totalRefNac=0;
+	//while ($row = mysql_fetch_array($result))
+	foreach ($rows as $row) 
+	{
+
+		$precioRef = 0;
+		$pctInflacion = obtener_porcentaje_inflacion($row[18], $fecha_hasta, $resultInflacion);
+		
+		$precioInflacion = number_format($row[2] * $row[17] * $row[15] * (1 + ($pctInflacion/100)), 2); // default FOB
+
+		$totalFOB += $row[2] * $row[17];
+		if(tipoProveedor($row[12])=='NAC') {
+			$precioRef = number_format($row[2] * $row[16], 2);
+			$totalRefNac += $row[2] * $row[16];
+
+			$precioInflacion = number_format($row[2] * $row[16] * (1 + ($pctInflacion/100)), 2); // default FOB
+		}
+
+		$dolarArribo = number_format($row[15], 2);
+		$fechaArribo = date('d-m-Y', strtotime($row[18]));
 
 
- 	$aux = $aux . "<tr class=\"provlistrow\"><td><a class=\"list\" onclick=\"add_comprar($row[5]);\">$row[0]</a></td>
-			  <td>$row[13]</td><td>$row[14]</td><td>$row[19]</td><td>$row[20]</td><td nowrap>$fechaArribo</td><td>$row[2]</td>
-			  <td>".number_format($row[2] * $row[17], 2)."</td><td>".$precioRef."</td>
-			  <td>$dolarArribo</td><td>$precioInflacion</td>
-			  <td>".tipoProveedor($row[12])."</td></tr>\n";
+		$aux = $aux . "<tr class=\"provlistrow\"><td><a class=\"list\" onclick=\"add_comprar($row[5]);\">$row[0]</a></td>
+				<td>$row[13]</td><td>$row[14]</td><td>$row[19]</td><td>$row[20]</td><td nowrap>$fechaArribo</td><td>$row[2]</td>
+				<td>".number_format($row[2] * $row[17], 2)."</td><td>".$precioRef."</td>
+				<td>$dolarArribo</td><td>$precioInflacion</td>
+				<td>".tipoProveedor($row[12])."</td></tr>\n";
 
+	}
 }
 
 $titulo = "Existencias disponibles";
