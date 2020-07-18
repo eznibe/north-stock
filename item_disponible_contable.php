@@ -93,6 +93,7 @@ if(count($id_grupos) > 0) {
 	ORDER BY
 			$orderbygrupo
 			Categoria.categoria,
+			Item.id_item,
 			Orden.fecha desc";
 	$result = mysql_query($query);
 
