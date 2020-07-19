@@ -32,6 +32,9 @@ $orderbygrupo = " Grupo.grupo, ";
 $id_grupos = isset($_POST['id_grupos']) ? $_POST['id_grupos'] : array();
 //dump($id_grupos);
 
+// TODO remove
+// array_push($id_grupos,7);
+
 $grupos_condicion = "";
 if(count($id_grupos) > 0) {
 	
@@ -51,8 +54,8 @@ if(count($id_grupos) > 0) {
 		CONCAT(Categoria.categoria,'<br>',Proveedor.proveedor),
 		Item.codigo_proveedor,
 		(Item.stock_disponible
-			- COALESCE((SELECT sum(cantidad) from Log where Log.fecha > $fecha and Log.id_item = Item.id_item and Log.id_accion = 1 ),0)
-				+ COALESCE((SELECT sum(cantidad) from Log where Log.fecha > $fecha and Log.id_item = Item.id_item and Log.id_accion = 2 ),0)) AS disponible,
+			- COALESCE((SELECT COALESCE(sum(cantidad), 0) from Log where Log.fecha > $fecha and Log.id_item = Item.id_item and Log.id_accion = 1 ),0)
+				+ COALESCE((SELECT COALESCE(sum(cantidad), 0) from Log where Log.fecha > $fecha and Log.id_item = Item.id_item and Log.id_accion = 2 ),0)) AS disponible,
 		Item.precio_fob,
 		Item.precio_nac,
 		Item.id_item,
@@ -65,30 +68,23 @@ if(count($id_grupos) > 0) {
 			Pais.pais,
 			Grupo.grupo,
 			Categoria.pos_arancelaria,
-			orden.cotizacion_dolar,
-			ordenitem.precio_ref,
-			ordenitem.precio_fob,
-			orden.fecha,
+			COALESCE(orden.cotizacion_dolar, '?'),
+			COALESCE(ordenitem.precio_ref, Item.precio_ref),
+			COALESCE(ordenitem.precio_fob, Item.precio_fob),
+			COALESCE(orden.fecha, '2003-02-01'),
 			orden.nr_factura,
 			orden.despacho,
-			ordenitem.cantidad
+			coalesce(ordenitem.cantidad, -1)
 	FROM
-		Item,
-		Categoria,
-		Proveedor,
-			Unidad,
-			Grupo,
-			Pais,
-			ordenitem,
-			orden
-	WHERE
-		(Item.id_categoria = Categoria.id_categoria) AND
-		(Item.id_proveedor = Proveedor.id_proveedor) AND
-			(Unidad.id_unidad = Item.id_unidad_compra) AND
-			(Grupo.id_grupo = Categoria.id_grupo) AND
-			(Proveedor.id_pais = Pais.id_pais) AND
-			ordenitem.id_item = Item.id_item AND
-			orden.id_orden = ordenitem.id_orden
+		Item
+		join Categoria on Item.id_categoria = Categoria.id_categoria
+		join Proveedor on Item.id_proveedor = Proveedor.id_proveedor
+		join Unidad on Unidad.id_unidad = Item.id_unidad_compra
+		join Grupo on Grupo.id_grupo = Categoria.id_grupo
+		join Pais on Proveedor.id_pais = Pais.id_pais
+		left join ordenitem on ordenitem.id_item = Item.id_item
+		left join orden on orden.id_orden = ordenitem.id_orden
+	WHERE 1=1
 			$grupos_condicion
 	ORDER BY
 			$orderbygrupo
@@ -98,8 +94,6 @@ if(count($id_grupos) > 0) {
 	$result = mysql_query($query);
 
 	//dump($query);
-
-
 
 	$rows = array();
 
@@ -119,7 +113,7 @@ if(count($id_grupos) > 0) {
 			if ($disponible > 0) {
 				
 				if ($cantidad < $disponible) {
-					$row[2] = $cantidad;
+					$row[2] = $cantidad > 0 ? $cantidad : $disponible;
 				}
 
 				$disponible = $disponible - $cantidad; // disponible - cantidad pedida en orden
@@ -149,6 +143,7 @@ if(count($id_grupos) > 0) {
 	$totalFOB=0;
 	$totalRef=0;
 	$totalRefNac=0;
+	$totalStock=0;
 	//while ($row = mysql_fetch_array($result))
 	foreach ($rows as $row) 
 	{
@@ -169,6 +164,7 @@ if(count($id_grupos) > 0) {
 		$dolarArribo = number_format($row[15], 2);
 		$fechaArribo = date('d-m-Y', strtotime($row[18]));
 
+		$totalStock += $row[2];
 
 		$aux = $aux . "<tr class=\"provlistrow\"><td><a class=\"list\" onclick=\"add_comprar($row[5]);\">$row[0]</a></td>
 				<td>$row[13]</td><td>$row[14]</td><td>$row[19]</td><td>$row[20]</td><td nowrap>$fechaArribo</td><td>$row[2]</td>
@@ -191,7 +187,8 @@ $var = array("header" => $header,
 			"grupos" => armar_select_grupos(),
 	    "rows" => $aux,
 			"totalFOB" => $totalFOB,
-			"totalRefNac" => $totalRefNac);
+			"totalRefNac" => $totalRefNac,
+			"totalStock" => $totalStock);
 eval_html('item_disponible_contable.html', $var);
 
 
