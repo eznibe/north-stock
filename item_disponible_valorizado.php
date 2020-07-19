@@ -91,6 +91,7 @@ $aux = "";
 $totalFOB=0;
 $totalRef=0;
 $totalRefNac=0;
+$totalStock=0;
 while ($row = mysql_fetch_array($result))
 {
 
@@ -101,6 +102,8 @@ while ($row = mysql_fetch_array($result))
 		$precioRef = $row[2] * $row[7];
 		$totalRefNac += $row[2] * $row[7];
 	}
+
+	$totalStock += $row[2];
 
  	$aux = $aux . "<tr class=\"provlistrow\"><td><a class=\"list\" onclick=\"add_comprar($row[5]);\">$row[0]</a></td>
               <td>$row[13]</td><td>$row[2]</td><td>$row[10]</td><td>".($row[2] * $row[3])."</td><td>".$precioRef."</td><td>".tipoProveedor($row[12])."</td></tr>\n";
@@ -120,7 +123,8 @@ $var = array("header" => $header,
 			"grupos" => armar_select_grupos(),
 	    "rows" => $aux,
 			"totalFOB" => $totalFOB,
-			"totalRefNac" => $totalRefNac);
+			"totalRefNac" => $totalRefNac,
+			"totalStock" => $totalStock);
 eval_html('item_disponible_valorizado.html', $var);
 
 

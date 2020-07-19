@@ -55,7 +55,7 @@ Seleccione el Item para ir a la lista de compras.
 <th>Item</th><th>Grupo</th><th>Stock</th><th>Unidad</th><th>Precio Total FOB</th><th>Precio Total Ref $</th><th>Tipo proveedor</th>
 </tr>
    <?php echo $var['rows']; ?>
-<tr class="provlisthead"><td>Total valorizado IMPORTADO (FOB)</td><td></td><td></td><td></td><td><?php echo $var['totalFOB']; ?> USD</td><td></td><td></td></tr>
+<tr class="provlisthead"><td>Total valorizado IMPORTADO (FOB)</td><td></td><td><?php echo $var['totalStock']; ?></td><td></td><td><?php echo $var['totalFOB']; ?> USD</td><td></td><td></td></tr>
 <tr class="provlisthead"><td>Total valorizado NACIONAL</td><td></td><td></td><td></td><td></td><td><?php echo $var['totalRefNac']; ?> $</td><td></td></tr>
 </table>
 
