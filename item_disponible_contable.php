@@ -68,10 +68,10 @@ if(count($id_grupos) > 0) {
 			Pais.pais,
 			Grupo.grupo,
 			Categoria.pos_arancelaria,
-			COALESCE(orden.cotizacion_dolar, '?'),
+			COALESCE(orden.cotizacion_dolar, 1),
 			COALESCE(ordenitem.precio_ref, Item.precio_ref),
 			COALESCE(ordenitem.precio_fob, Item.precio_fob),
-			COALESCE(orden.fecha, '2003-02-01'),
+			COALESCE(orden.fecha, '2003-01-01'),
 			orden.nr_factura,
 			orden.despacho,
 			coalesce(ordenitem.cantidad, -1)
@@ -85,6 +85,7 @@ if(count($id_grupos) > 0) {
 		left join ordenitem on ordenitem.id_item = Item.id_item
 		left join orden on orden.id_orden = ordenitem.id_orden
 	WHERE 1=1
+		AND (ordenitem.id_item is null or ordenitem.cantidad - ordenitem.cantidad_pendiente > 0)
 			$grupos_condicion
 	ORDER BY
 			$orderbygrupo
