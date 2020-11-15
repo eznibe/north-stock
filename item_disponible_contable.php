@@ -86,6 +86,7 @@ if(count($id_grupos) > 0) {
 		left join orden on orden.id_orden = ordenitem.id_orden
 	WHERE 1=1
 		AND (ordenitem.id_item is null or ordenitem.cantidad - ordenitem.cantidad_pendiente > 0)
+		-- AND Categoria.id_categoria = 98
 			$grupos_condicion
 	ORDER BY
 			$orderbygrupo
@@ -94,7 +95,7 @@ if(count($id_grupos) > 0) {
 			Orden.fecha desc";
 	$result = mysql_query($query);
 
-	//dump($query);
+	// dump($query);
 
 	$rows = array();
 

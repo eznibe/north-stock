@@ -6,7 +6,7 @@ include 'dbutils.php';
 check_session();
 
 $id_item = $_POST['id_subproducto'];
-$categoria = $_POST['categoria'];
+$categoria = isset($_POST['categoria']) ? $_POST['categoria'] : null;
 $proveedores = $_POST['proveedores'];
 $id_proveedor = $_POST['proveedor'];
 $unidad = $_POST['unidad'];
@@ -79,6 +79,16 @@ function item_scan_oblig($id_item)
  else return FALSE;
 }
 
+function log_modificacion_item($id_item, $precio_fob, $precio_nac, $precio_ref, $stock_anterior, $stock_nuevo)
+{
+ $query = "INSERT INTO logprecios
+	(id_item, precio_fob, precio_nac, precio_ref, stock_anterior, stock_disponible)
+  VALUES
+	($id_item, $precio_fob, $precio_nac, $precio_ref, $stock_anterior, $stock_nuevo)";
+ $result = mysql_query($query);
+ echo mysql_error();
+}
+
 function update_item(&$mensaje, $id_item, $codigo_proveedor, $codigo_barras, $stock_disponible, $stock_transito, $precio_fob, $precio_nac, $precio_ref, $oculto_fob, $oculto_nac, $unidad, $factor_unidades, $id_proveedor, $agrupacion)
 {
  if ( ((item_scan_oblig($id_item)) and ($codigo_barras == "")) or ($unidad == 0) or ($factor_unidades == "") or ($factor_unidades <= 0) )
@@ -111,6 +121,10 @@ function update_item(&$mensaje, $id_item, $codigo_proveedor, $codigo_barras, $st
   if ($precio_ref == "") $precio_ref = 'NULL';
   if ($oculto_fob == "") $oculto_fob = $precio_fob;
   if ($oculto_nac == "") $oculto_nac = $precio_nac;
+
+  get_item_data($datos, $id_item);
+
+  log_modificacion_item($id_item, $precio_fob, $precio_nac, $precio_ref, $datos[4], $stock_disponible);
 
   $query = "UPDATE Item SET
 	codigo_proveedor = \"$codigo_proveedor\",

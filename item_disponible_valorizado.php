@@ -51,11 +51,11 @@ $query = "SELECT
     (Item.stock_disponible
     	- COALESCE((SELECT sum(cantidad) from Log where Log.fecha > $fecha and Log.id_item = Item.id_item and Log.id_accion = 1 ),0)
 			+ COALESCE((SELECT sum(cantidad) from Log where Log.fecha > $fecha and Log.id_item = Item.id_item and Log.id_accion = 2 ),0)) AS disponible,
-    Item.precio_fob,
-    Item.precio_nac,
+	(SELECT round(l.precio_fob, 2) FROM logprecios l where l.id_item = Item.id_item and l.insertado < $fecha order by insertado desc limit 1) as precio_fob,
+    (SELECT round(l.precio_nac, 2) FROM logprecios l where l.id_item = Item.id_item and l.insertado < $fecha order by insertado desc limit 1) as precio_nac,
     Item.id_item,
     Item.stock_transito,
-    Item.precio_ref,
+    (SELECT round(l.precio_ref, 2) FROM logprecios l where l.id_item = Item.id_item and l.insertado < $fecha order by insertado desc limit 1) as precio_ref,
     Item.oculto_fob,
     Item.oculto_nac,
 		CONCAT(Unidad.unidad,'(',Item.factor_unidades,')'),
@@ -75,6 +75,7 @@ $query = "SELECT
 		(Unidad.id_unidad = Item.id_unidad_compra) AND
 		(Grupo.id_grupo = Categoria.id_grupo) AND
 		(Proveedor.id_pais = Pais.id_pais)
+		-- AND Item.id_item = 431 
 		$grupos_condicion
   GROUP BY
     Item.id_item, Item.id_categoria
@@ -85,7 +86,7 @@ $query = "SELECT
 		Categoria.categoria";
 $result = mysql_query($query);
 
-//dump($query);
+// dump($query);
 
 $aux = "";
 $totalFOB=0;
