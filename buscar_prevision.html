@@ -1,0 +1,36 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+
+<script type="text/javascript">
+function changeAction() {
+	// document.getElementById('buscar_orden').action = 'orden_ver_arribo.php?id_orden=' + document.getElementById('orden_codigo').value + "&incluir_completos=true";
+}
+</script>
+
+</head>
+<body class="ppal" >
+
+
+<div class="altas">
+<fieldset>
+ <legend>Buscar previsión descargada</legend>
+ 	<br/>
+ 
+	<form action="buscar_prevision.php" id="buscar_orden" method="post" target="_self">
+		<table>
+		<tr>
+			<td>Numero de orden: </td>
+			<td><input type="text" id="numero_orden" name="numero_orden"></input></td>
+			<td><button type="submit" name="enviar" value="enviar">Ver</button></td>
+		</tr>
+		</table>
+	</form>
+
+</fieldset>
+</div>
+
+
+</body>
+</html>  

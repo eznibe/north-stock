@@ -1,8 +1,8 @@
 <?php
 // Detalle orden en transito
 
-include 'main.php';
-include 'dbutils.php';
+include_once 'main.php';
+include_once 'dbutils.php';
 
 session_start();
 
@@ -474,45 +474,6 @@ if($tok2<>""){
 
 }
 
-function opciones_dia()
-{
-	$diahoy = strftime("%d");
-	$diaopc = "";
-	for ($i = 1; $i <= 31 ; $i++) {
-		if($i <> $diahoy)
-			$diaopc = $diaopc . "<option value='$i'>$i</option>\n";
-		else
-			$diaopc = $diaopc . "<option value='$i' selected='true'>$i</option>\n";
-	}
-	return $diaopc;
-}
-
-function opciones_mes()
-{
-	$meshoy = strftime("%m");
-	$meses = array(1=>'enero',2=>'febrero',3=>'marzo',4=>'abril',5=>'mayo',6=>'junio',7=>'julio',8=>'agosto',9=>'septiembre',10=>'octubre',11=>'noviembre',12=>'diciembre');
-	$mesopc = "";
-	for ($i = 1; $i <= 12 ; $i++) {
-		if($i <> $meshoy)
-			$mesopc = $mesopc . "<option value='$i'>$meses[$i]</option>\n";
-		else
-			$mesopc = $mesopc . "<option value='$i' selected='true'>$meses[$i]</option>\n";
-	}
-	return $mesopc;
-}
-
-function opciones_ano()
-{
-	$anohoy = strftime("%Y");
-	$anoopc = "";
-	for ($i = 2010; $i <= 2025 ; $i++) {
-		if($i <> $anohoy)
-			$anoopc = $anoopc . "<option value='$i'>$i</option>\n";
-		else
-			$anoopc = $anoopc . "<option value='$i' selected='true'>$i</option>\n";
-	}
-	return $anoopc;
-}
 
 // retorna lo que qeuda por comprar del item en la orden
 function get_cantidad_pendiente_comprar($id_orden_item)

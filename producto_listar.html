@@ -22,7 +22,7 @@ function show_detail(ID_CATEGORIA)
 </head>
 <body class="ppal">
 
-<?php if($var['action']=='producto_bajo_minimo.php'){ ?>
+<?php if(isset($var['action']) && $var['action']=='producto_bajo_minimo.php'){ ?>
 <div>
 	<div style="float:left;">
 		<form action="producto_bajo_minimo.php" method="get" target="_self">
@@ -43,7 +43,7 @@ else {
 <!-- Search form -->
 <!--<form action="grupo_listar.php" method="get" target="_self" name="grupo_search">-->
 
-<?php if($var['action']=='grupo_listar.php'){ ?>
+<?php if(isset($var['action']) && $var['action']=='grupo_listar.php'){ ?>
 
 <form action="<?php echo $var['action']; ?>" method="get" target="_self" name="grupo_search">
 <!--	<input type="hidden" id="id_grupo" name="id_grupo" value="<?php echo $var['id_grupo']; ?>">-->
@@ -87,7 +87,7 @@ Seleccione el producto para mas informacion.
 
 <table style="clear:both;">
 <tr class="provlisthead">
-<th>Producto</th><th>Stock</th><th>Stock minimo</th><th>Delta fisico</th><th>En transito</th><th>Delta total</th><th>Unidad</th>
+<th>Producto</th><th>Stock</th><th>Stock minimo</th><th>Delta fisico</th><th>En transito</th><th>Prevision</th><th>Delta total</th><th>Unidad</th>
 </tr>
    <?php echo $var['rows']; ?>
 </table>

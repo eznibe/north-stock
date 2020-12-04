@@ -3,8 +3,8 @@
 include 'main.php';
 include 'dbutils.php';
 
-$username = $_POST['username'];
-$clave = $_POST['password'];
+$username = isset($_POST['username']) ? $_POST['username'] : "";
+$clave = isset($_POST['password']) ? $_POST['password'] : "";
 
 db_connect();
 

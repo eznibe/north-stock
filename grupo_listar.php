@@ -27,21 +27,23 @@ if($tipo_producto==1){
 		(SUM(Item.stock_disponible)-Categoria.stock_minimo),
 		Unidad.unidad,
 		SUM(Item.stock_transito),
-		(SUM(Item.stock_disponible)+SUM(Item.stock_transito)-Categoria.stock_minimo-Categoria.reservado),
+		(SUM(Item.stock_disponible)+SUM(Item.stock_transito)-Categoria.stock_minimo-(coalesce(sum(pi.cantidad), 0))),
 		Grupo.grupo,
-    Categoria.reservado
+    Categoria.reservado,
+    coalesce(sum(pi.cantidad), 0) as prevision
 	  FROM
-		Item, Categoria, Unidad, Grupo
-	  WHERE (
-		(Item.id_categoria = Categoria.id_categoria) AND
-		(Unidad.id_unidad = Categoria.id_unidad_visual) AND
-		(Categoria.id_grupo = Grupo.id_grupo) AND
-		(Grupo.id_grupo = $id_grupo)
-	        )
+      Item  
+      JOIN Categoria on Item.id_categoria = Categoria.id_categoria
+      JOIN Unidad on Unidad.id_unidad = Categoria.id_unidad_visual
+      JOIN Grupo on Categoria.id_grupo = Grupo.id_grupo
+      LEFT JOIN previsionitem pi on pi.id_item = Item.id_item
+      LEFT JOIN prevision p on p.id_prevision = pi.id_prevision
+	  WHERE 
+		  Grupo.id_grupo = $id_grupo
 	  GROUP BY
-		Item.id_categoria
+		  Item.id_categoria
 	  ORDER BY
-		Categoria.categoria";
+		  Categoria.categoria";
 }
 else{
 	// productos segun el tipo de producto elegido (import o naci)
@@ -49,31 +51,33 @@ else{
 	if($tipo_producto==2) $condicion = "<> $id_argentina"; else $condicion = "= $id_argentina";
 
 	$query = "SELECT
-	Categoria.categoria,
-	Categoria.stock_minimo,
-	SUM(Item.stock_disponible),
-	Item.id_categoria,
-	(SUM(Item.stock_disponible)-Categoria.stock_minimo),
-	Unidad.unidad,
-	SUM(Item.stock_transito),
-	(SUM(Item.stock_disponible)+SUM(Item.stock_transito)-Categoria.stock_minimo-Categoria.reservado),
-	Grupo.grupo,
-  Categoria.reservado
+    Categoria.categoria,
+    Categoria.stock_minimo,
+    SUM(Item.stock_disponible),
+    Item.id_categoria,
+    (SUM(Item.stock_disponible)-Categoria.stock_minimo),
+    Unidad.unidad,
+    SUM(Item.stock_transito),
+    (SUM(Item.stock_disponible)+SUM(Item.stock_transito)-Categoria.stock_minimo-(coalesce(sum(pi.cantidad), 0))),
+    Grupo.grupo,
+    Categoria.reservado,
+    coalesce(sum(pi.cantidad), 0) as prevision
   FROM
-	Item, Categoria, Unidad, Grupo, Proveedor, Pais
-  WHERE (
-	(Item.id_categoria = Categoria.id_categoria) AND
-	(Unidad.id_unidad = Categoria.id_unidad_visual) AND
-	(Categoria.id_grupo = Grupo.id_grupo)AND
-	Grupo.id_grupo = $id_grupo AND
-	Proveedor.id_proveedor = Item.id_proveedor AND
-	Pais.id_pais = Proveedor.id_pais AND
-	Pais.id_pais $condicion
-        )
+    Item  
+    JOIN Categoria on Item.id_categoria = Categoria.id_categoria
+    JOIN Unidad on Unidad.id_unidad = Categoria.id_unidad_visual
+    JOIN Grupo on Categoria.id_grupo = Grupo.id_grupo
+    JOIN Proveedor on Proveedor.id_proveedor = Item.id_proveedor
+    JOIN Pais on Pais.id_pais = Proveedor.id_pais
+    LEFT JOIN previsionitem pi on pi.id_item = Item.id_item
+    LEFT JOIN prevision p on p.id_prevision = pi.id_prevision
+  WHERE 
+    Grupo.id_grupo = $id_grupo AND
+    Pais.id_pais $condicion
   GROUP BY
-	Item.id_categoria
+	  Item.id_categoria
   ORDER BY
-	Categoria.categoria";
+	  Categoria.categoria";
 }
 
 $result = mysql_query($query);
@@ -87,7 +91,8 @@ while ($row = mysql_fetch_array($result))
  if ($row[7] < 0) $row[7] = "<em>$row[7]</em>";
  $producto = htmlspecialchars(stripslashes($row[0]));
  $aux = $aux . "<tr class=\"provlistrow\"><td><a class=\"list\" onclick=\"show_detail($row[3]);\">$producto</a></td>
-      <td>$row[2]</td><td>$row[1]</td><td>$row[4]</td>". desglose_transito_por_tipo_envio($row[3]) ."<td><a class=\"list\" onclick=\"edit_reservado($row[3]);\">$row[9]</a></td><td>$row[7]</td><td>$row[5]</td></tr>\n";
+      <td>$row[2]</td><td>$row[1]</td><td>$row[4]</td>". desglose_transito_por_tipo_envio($row[3]) .
+      "<td>$row[10]</td><td>$row[7]</td><td>$row[5]</td></tr>\n";
 }
 
 $action = "grupo_listar.php";

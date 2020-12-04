@@ -11,13 +11,14 @@ db_connect();
 $focus = "forms[0].pproducto";
 $mensaje = "";
 $hits_mensaje = "";
-$pproducto = $_POST['pproducto'];
-$sproducto = $_POST['sproducto'];
-$item = $_POST['item'];
-$cantidad = $_POST['cantidad'];
-$stock_disponible = $_POST['stock_disponible'];
-$producto = $_POST['producto'];
-$unidad = $_POST['unidad'];
+$items = "";
+$pproducto = isset($_POST['pproducto']) ? $_POST['pproducto'] : "";
+$sproducto = isset($_POST['sproducto']) ? $_POST['sproducto'] : "";
+$item = isset($_POST['item']) ? $_POST['item'] : "";
+$cantidad = isset($_POST['cantidad']) ? $_POST['cantidad'] : "";
+$stock_disponible = isset($_POST['stock_disponible']) ? $_POST['stock_disponible'] : "";
+$producto = isset($_POST['producto']) ? $_POST['producto'] : "";
+$unidad = isset($_POST['unidad']) ? $_POST['unidad'] : "";
 $formname = $_POST['formname'];
 
 // setear la fecha por default (current date si no hay nada seleccionado por el usuario)
@@ -177,8 +178,13 @@ elseif ($formname == "producto_salida")
    //log_trans($valid_user, 2, $item, $cantidad, strftime('%G-%m-%d')); 
    $fechaHoy = date(Y)."-".date(n)."-".date(d);
    
-   // nota: el log del egreso se hace con la fecha que ingresa el usuario, por default es el current date
-   log_trans($valid_user, 2, $item, $cantidad, $fecha); 
+  // nota: el log del egreso se hace con la fecha que ingresa el usuario, por default es el current date
+  if ($cantidad < 0) {
+    $id_orden = ingresarOrdenManual($item, $cantidad * -1, $fecha);
+    log_trans($valid_user, 1, $item, $cantidad * -1, $fecha, $id_orden); 
+  } else {
+    log_trans($valid_user, 2, $item, $cantidad, $fecha); 
+  }
   
    $item = "";
 //   $stock_disponible = "";
@@ -200,8 +206,58 @@ $var = array("items" => $items,
         "producto" => $producto,
         "stock_disponible" => $stock_disponible,
         "unidad" => $unidad,
-		"fecha" => $fecha_select,
+		    "fecha" => $fecha_select,
         "focus" => $focus);
 eval_html('producto_salida.html', $var);
 
+
+function ingresarOrdenManual($id_item, $cantidad, $fecha) {
+
+  $cotiz_dolar = obtener_precio_dolar();
+
+  $query = "INSERT INTO orden (fecha,	cotizacion_dolar,	id_status, descripcion) 
+    VALUES ('$fecha', $cotiz_dolar, 2, 'Orden desde descarga manual')";
+
+  $result = mysql_query($query);
+  $row = mysql_fetch_array($result);
+  
+  // id ultima orden ingresada
+  $query = "SELECT id_orden FROM orden ORDER BY id_orden desc LIMIT 1";
+  $result = mysql_query($query);
+  $row = mysql_fetch_array($result);
+  
+  $id_orden = $row[0];
+
+  // datos item
+  $query = "SELECT round(precio_fob, 2), round(precio_ref, 2),
+    case when pro.id_pais = 1 then 'AR$' when pro.id_pais > 1 then 'US$' end as moneda 
+    FROM item i 
+    JOIN proveedor pro on pro.id_proveedor = i.id_proveedor
+    WHERE i.id_item = $id_item";
+
+  $result = mysql_query($query);
+  $row = mysql_fetch_array($result);
+
+  $precio_fob = $row[0];
+  $precio_ref = $row[1];
+  $moneda = $row[2];
+
+  $query = "INSERT INTO ordenitem (id_orden, id_item, cantidad, cantidad_pendiente, precio_fob, precio_ref, moneda) 
+    VALUES ($id_orden, $id_item, $cantidad, 0, $precio_fob, $precio_ref, '$moneda')";
+
+  $result = mysql_query($query);
+
+  return $id_orden;
+}
+
+
+function obtener_precio_dolar()
+{
+	$query = "SELECT precio_dolar from DolarHoy where id_dolar=(SELECT max(id_dolar) FROM DolarHoy)";
+
+	$result = mysql_query($query);
+	$row = mysql_fetch_array($result);
+	//Devuelvo el precio del dolar actual
+	return $row[0];
+}
 ?>

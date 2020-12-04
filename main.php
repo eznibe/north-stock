@@ -188,13 +188,14 @@ function get_usuario_opt($id_usuario)
  return $usuario;
 }
 
-function log_trans($username, $id_accion, $id_item, $cantidad, $fecha, $id_orden='NULL')
+function log_trans($username, $id_accion, $id_item, $cantidad, $fecha, $id_orden='NULL', $id_prevision='NULL')
 {
- // id_accion: 1 ingreso 2 egreso 3 update 4 confirma orden 5 elimina orden 6 orden arribada completa 8 elimina item de orden
+ // id_accion: 1 ingreso 2 egreso (manual y desde descarga prevision) 3 update 4 confirma orden 5 elimina orden 6 orden arribada completa 8 elimina item de orden
+ // id_accion: 21 agrego item - 23 update prevision item - 24 ? - 25 elimina prevision - 26 prevision descargada - 27 prevision revertida - 28 elimina item de prevision
  $query = "INSERT INTO Log
-	(username, id_accion, id_item, cantidad, fecha, id_orden)
+	(username, id_accion, id_item, cantidad, fecha, id_orden, id_prevision)
   VALUES
-	(\"$username\", $id_accion, $id_item, $cantidad, \"$fecha\", $id_orden)";
+	(\"$username\", $id_accion, $id_item, $cantidad, \"$fecha\", $id_orden, $id_prevision)";
  $result = mysql_query($query);
  echo mysql_error();
 }
@@ -471,4 +472,63 @@ function armar_select_fechas($dia_ini, $mes_ini, $ano_ini)
 	return $codigo;
 }
 
+function opciones_dia($dia = null, $conOpcionVacia = false, $iniciaVacio = false)
+{
+  $diahoy = isset($dia) ? $dia : strftime("%d");
+  if ($iniciaVacio) {
+    $diahoy = -1;
+  }
+
+  $diaopc = "";
+  if ($conOpcionVacia) {
+    $diaopc = $diaopc . "<option value='0'>-</option>\n";
+  }
+	for ($i = 1; $i <= 31 ; $i++) {
+		if($i <> $diahoy)
+			$diaopc = $diaopc . "<option value='$i'>$i</option>\n";
+		else
+			$diaopc = $diaopc . "<option value='$i' selected='true'>$i</option>\n";
+	}
+	return $diaopc;
+}
+
+function opciones_mes($mes = null, $conOpcionVacia = false, $iniciaVacio = false)
+{
+  $meshoy = isset($mes) ? $mes : strftime("%m");
+  if ($iniciaVacio) {
+    $meshoy = -1;
+  }
+
+	$meses = array(1=>'enero',2=>'febrero',3=>'marzo',4=>'abril',5=>'mayo',6=>'junio',7=>'julio',8=>'agosto',9=>'septiembre',10=>'octubre',11=>'noviembre',12=>'diciembre');
+  $mesopc = "";
+  if ($conOpcionVacia) {
+    $mesopc = $mesopc . "<option value='0'>-</option>\n";
+  }
+	for ($i = 1; $i <= 12 ; $i++) {
+		if($i <> $meshoy)
+			$mesopc = $mesopc . "<option value='$i'>$meses[$i]</option>\n";
+		else
+			$mesopc = $mesopc . "<option value='$i' selected='true'>$meses[$i]</option>\n";
+	}
+	return $mesopc;
+}
+
+function opciones_ano($anio = null, $conOpcionVacia = false, $iniciaVacio = false)
+{
+  $anohoy = isset($anio) ? $anio : strftime("%Y");
+  if ($iniciaVacio) {
+    $anohoy = -1;
+  }
+  $anoopc = "";
+  if ($conOpcionVacia) {
+    $anoopc = $anoopc . "<option value='0'>-</option>\n";
+  }
+	for ($i = 2010; $i <= 2025 ; $i++) {
+		if($i <> $anohoy)
+			$anoopc = $anoopc . "<option value='$i'>$i</option>\n";
+		else
+			$anoopc = $anoopc . "<option value='$i' selected='true'>$i</option>\n";
+	}
+	return $anoopc;
+}
 ?>

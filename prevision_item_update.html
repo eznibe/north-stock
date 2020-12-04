@@ -1,0 +1,105 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+
+<script type="text/javascript">
+
+let eliminandoItem;
+
+function setfocus()
+{
+  document.<?php echo $var['focus']; ?>.focus()
+}
+
+function update()
+{
+  // alert('Update item ' + document.getElementById('cantidad').value);
+	var cantidad = document.getElementById('cantidad').value;
+	if((cantidad==0 || cantidad=="") && !eliminandoItem) {
+		var agree = confirm("Esta accion (cantidad a comprar=0) eliminara el item de la orden, desea continuar?");
+		if(!agree)
+			return false;
+	}
+	else if(cantidad<0) {
+		alert("No esta permitido ingresar un valor negativo como cantidad a comprar.");
+		return false;
+	}
+	
+// 	document.forms[0].submit();
+ 	window.close(self);
+	return true;
+}
+
+function eliminarItem() {
+  document.getElementById('cantidad').value = 0;
+  eliminandoItem = true;
+}
+
+</script>
+
+</head>
+<body class="ppal" onload = "setfocus()">
+
+
+<table>
+<tr>
+<td>
+Producto:
+</td>
+<td>
+<?php echo $var['categoria']; ?>
+</td>
+</tr>
+
+<tr>
+<td>
+Proveedor:
+</td>
+<td>
+<?php echo $var['proveedor']; ?>
+</td>
+</tr>
+
+<tr>
+<td>
+Stock disponible:
+</td>
+<td>
+<?php echo $var['stock_disponible']; ?>
+</td>
+</tr>
+
+<tr>
+<td>
+Stock tránsito:
+</td>
+<td>
+<?php echo $var['stock_transito']; ?>
+</td>
+</tr>
+
+<form action="<?php echo $var['submitto']; ?>" method="post" target="ppal" name="prevision_update" onsubmit="return update();">
+	<input type="hidden" value="prevision_update" size="10" name="formname" id="formname">
+	<input type="hidden" value="<?php echo $var['id_prevision_item']; ?>" size="10" name="id_prevision_item" id="id_prevision_item">
+	<input type="hidden" value="<?php echo $var['id_prevision']; ?>" size="10" name="id_prevision" id="id_prevision">
+
+	<tr>
+	<td>
+	<label for="cantidad">Cantidad:</label>
+	</td>
+	<td>
+	<input type="text" value="<?php echo $var['cantidad']; ?>" size="10" name="cantidad" id="cantidad" class="obligatorio" > (<?php echo $var['unidad']; ?>)*
+	</td>
+	</tr>
+
+	</table>
+	<center>
+		<br />Los casilleros marcados con * son obligatorios.<br />
+		<button type="submit" name="enviar" value="enviar" style="margin-right: 50px;">Actualizar</button>
+    <button type="submit" name="enviar" value="enviar" onclick="eliminarItem()">Eliminar item</button>
+ 	</center>
+</form>
+
+</body>
+</html>

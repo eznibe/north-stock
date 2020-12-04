@@ -1,5 +1,5 @@
 <?php
-
+// @deprecated
 include 'main.php';
 include 'dbutils.php';
 

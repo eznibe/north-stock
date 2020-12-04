@@ -1,0 +1,136 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+  <!-- <link rel="stylesheet" type="text/css" href="css/autocomplete.css" /> -->
+
+  <script language="JavaScript" src="include/jquery-1.12.4.min.js"></script>
+  <script src="javascript/autocomplete.js"></script>
+
+<script type="text/javascript">
+
+function setfocus()
+{
+  // document.<?php echo $var['focus']; ?>.focus()
+}
+
+function agregar()
+{
+  // alert('Update item ' + document.getElementById('cantidad').value);
+  console.log($('#id_item').val());
+  console.log($('#precio').val());
+  console.log($('#moneda').val());
+
+	var cantidad = document.getElementById('cantidad').value;
+	if(cantidad <= 0) {
+		alert("No esta permitido ingresar un valor 0 o negativo como cantidad.");
+		return false;
+	}
+  
+  if ($('#items').val() === '-') {
+    alert("Debe seleccionar un item.");
+    return false;
+  }
+
+ 	window.close(self);
+	return true;
+}
+
+function seleccionaItem() {
+  console.log('Item:', $('#items').val());
+  const values = $('#items').val().split(',');
+  if (values.length > 1) {
+    $('#id_item').val(values[0]);
+    $('#precio').val(values[1]);
+    $('#moneda').val(values[2]);
+    $('#unidad').text(values[3]);
+    $('#stock_disponible').text(values[4]);
+    $('#stock_transito').text(values[5]);
+  } else {
+    $('#unidad').text('');
+  }
+}
+
+function loadItems() {
+  $.ajax({
+    url:'api/prevision.php?allItems=true',
+    success: function(data, status){
+      // console.log("Data: " + data + "\nStatus: " + status);
+      autocomplete(document.getElementById("myInput"), data);
+    }
+  });
+}
+
+</script>
+
+</head>
+<body class="ppal" onload = "loadItems();">
+
+
+<table>
+<tr>
+  <td>
+  Item:
+  </td>
+  <td>
+    <select style="max-width: 450px;" id="items" onchange="seleccionaItem()">
+      <option value="-" selected>selecciona item</option>
+      <?php echo $var['items']; ?>
+    </select> *
+  </td>
+</tr>
+
+<!-- <tr>
+  <td>
+  Item AC:
+  </td>
+  <td>
+    <div class="autocomplete" style="width:300px;">
+      <input id="myInput" type="text" name="myCountry" placeholder="Item">
+    </div>
+  </td>
+</tr> -->
+
+<tr>
+  <td>
+  Stock disponible:
+  </td>
+  <td>
+    <label id="stock_disponible"></label>
+  </td>
+</tr>
+
+<tr>
+  <td>
+  Stock tránsito:
+  </td>
+  <td>
+    <label id="stock_transito"></label>
+  </td>
+</tr>
+
+<form action="<?php echo $var['submitto']; ?>" method="post" target="ppal" name="prevision_item_nuevo" onsubmit="return agregar();" autocomplete="off">
+	<input type="hidden" value="prevision_item_nuevo" size="10" name="formname" id="formname">
+	<input type="hidden" value="<?php echo $var['id_prevision']; ?>" size="10" name="id_prevision" id="id_prevision">
+	<input type="hidden" size="10" name="id_item" id="id_item">
+  <input type="hidden" size="10" name="precio" id="precio">
+  <input type="hidden" size="10" name="moneda" id="moneda">
+	<tr>
+	<td>
+	  <label for="cantidad">Cantidad:</label>
+	</td>
+	<td>
+    <input type="text" size="10" name="cantidad" id="cantidad" class="obligatorio" autocomplete="off">
+    <label id="unidad"></label> *
+	</td>
+	</tr>
+
+	</table>
+	<center>
+		<br />Los casilleros marcados con * son obligatorios.<br />
+		<button type="submit" name="enviar" value="enviar" style="margin-right: 50px;">Agregar</button>
+ 	</center>
+</form>
+
+</body>
+</html>
