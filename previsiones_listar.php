@@ -10,11 +10,15 @@ db_connect();
 $mensaje = "";
 $focus = "producto";
 
-$query = "SELECT p.id_prevision, coalesce(p.numero_orden, p.id_prevision), coalesce(DATE_FORMAT(p.fecha_entrega, '%d-%m-%Y'), '-') AS fecha_entrega, SUM(CASE WHEN pi.id_item is not null THEN 1 ELSE 0 END) as items, count(*) 
-		FROM prevision p LEFT JOIN previsionitem pi on p.id_prevision = pi.id_prevision
-		WHERE p.fecha_descarga is null
-  		GROUP BY p.id_prevision
-  		ORDER BY p.fecha_entrega, p.numero_orden, p.id_prevision";
+$query = "SELECT p.id_prevision, 
+	coalesce(p.numero_orden, concat('(', p.id_prevision, ')')), 
+    coalesce(DATE_FORMAT(p.fecha_entrega, '%d-%m-%Y'), '-') AS fecha_entrega, 
+    SUM(CASE WHEN pi.id_item is not null THEN 1 ELSE 0 END) as items, 
+    count(*) 
+	FROM prevision p LEFT JOIN previsionitem pi on p.id_prevision = pi.id_prevision
+	WHERE p.fecha_descarga is null
+	GROUP BY p.id_prevision
+	ORDER BY p.fecha_entrega, p.numero_orden, p.id_prevision";
 
 $previsiones = "";
 $result = mysql_query($query);

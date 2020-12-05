@@ -34,7 +34,7 @@ $query = "SELECT
 	round(Item.precio_nac, 2),
 	round(Item.precio_ref, 2),
 	Categoria.reservado,
-  coalesce(sum(pi.cantidad), 0) as prevision
+  	coalesce(sum(pi.cantidad), 0) as prevision
   FROM
     Item  
     JOIN Categoria on Item.id_categoria = Categoria.id_categoria
@@ -44,6 +44,7 @@ $query = "SELECT
     LEFT JOIN prevision p on p.id_prevision = pi.id_prevision
   WHERE
 	  Categoria.id_grupo = $id_grupo
+	  AND p.fecha_descarga is null
   GROUP BY 
     Item.id_item
   ORDER BY
@@ -56,9 +57,9 @@ while ($row = mysql_fetch_array($result))
  if ($row[6] < 0) $row[6] = "<em>$row[6]</em>";
  if ($row[9] < 0) $row[9] = "<em>$row[9]</em>";
  $aux = $aux . "<tr class=\"provlistrow\"><td><a class=\"list\" onclick=\"add_comprar($row[11]);\">$row[0]</a></td>
-      <td bgcolor=#D4D4D4>$row[4]</td><td bgcolor=#D4D4D4>$row[5]</td><td>$row[6]</td><td>$row[8]</td>
-      <td>$row[16]</td>
-      <td title='Reservado: $row[15]'>$row[9]</td> <td bgcolor=#D4D4D4>$row[12]</td><td bgcolor=#D4D4D4>$row[13]</td><td bgcolor=#D4D4D4>$row[14]</td> <td>$row[7]</td><td>$row[3]</td><td>$row[10]</td></tr>\n";
+      <td bgcolor=#D4D4D4>$row[4]</td><td bgcolor=#D4D4D4>$row[5]</td><td>$row[6]</td><td>$row[8]</td>"
+      . ($row[16] > 0 ? "<td><a class=\"list\" onclick=\"show_detail_previsiones($row[11]);\">$row[16]</a></td>" : "<td>$row[16]</td>").
+      "<td>$row[9]</td> <td bgcolor=#D4D4D4>$row[12]</td><td bgcolor=#D4D4D4>$row[13]</td><td bgcolor=#D4D4D4>$row[14]</td> <td>$row[7]</td><td>$row[3]</td><td>$row[10]</td></tr>\n";
 }
 
 $grupo = obtener_grupo($id_grupo);

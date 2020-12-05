@@ -17,6 +17,12 @@ function show_detail(ID_CATEGORIA)
  window.open(url,"producto_detalle","toolbar=no, location=no, directories=no, status=yes, menubar=no, scrollbars=yes, resizable=yes, width=750, height=300");
 }
 
+function show_detail_previsiones(ID_CATEGORIA)
+{
+ var url="producto_ver_previsiones.php?id_categoria=" + ID_CATEGORIA;
+ window.open(url,"producto_previsiones","toolbar=no, location=no, directories=no, status=yes, menubar=no, scrollbars=yes, resizable=yes, width=750, height=500");
+}
+
 </script>
 
 </head>
@@ -67,9 +73,9 @@ else {
 			<td>Productos:&nbsp;</td>
 			<td>
 			<select id="tipo_producto" name="tipo_producto">
-				<option value="1" <?php if($var['tipo_producto']==1){ echo "selected='selected'";} ?>>Todos</option>
-				<option value="2" <?php if($var['tipo_producto']==2){ echo "selected='selected'";} ?>>Importados</option>
-				<option value="3" <?php if($var['tipo_producto']==3){ echo "selected='selected'";} ?>>Nacionales</option>
+				<option value="1" <?php if($var['tipo_producto']==1){ echo "selected='selected'";} ?> >Todos</option>
+				<option value="2" <?php if($var['tipo_producto']==2){ echo "selected='selected'";} ?> >Importados</option>
+				<option value="3" <?php if($var['tipo_producto']==3){ echo "selected='selected'";} ?> >Nacionales</option>
 			</select>
 			</td>
 			<td align="right"><button type="submit" name="enviar" value="enviar">Listar</button></td>

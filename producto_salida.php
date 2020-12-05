@@ -5,7 +5,7 @@ include 'dbutils.php';
 
 check_session();
 
-$mensaje = "";
+$mensaje = isset($var["mensaje"]) ? $var["mensaje"] : "";
 $focus = "forms[0].pproducto";
 $producto = "";
 

@@ -176,7 +176,7 @@ elseif ($formname == "producto_salida")
    $result = mysql_query($query);
    
    //log_trans($valid_user, 2, $item, $cantidad, strftime('%G-%m-%d')); 
-   $fechaHoy = date(Y)."-".date(n)."-".date(d);
+   $fechaHoy = date('Y')."-".date('n')."-".date('d');
    
   // nota: el log del egreso se hace con la fecha que ingresa el usuario, por default es el current date
   if ($cantidad < 0) {

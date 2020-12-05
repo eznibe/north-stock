@@ -29,7 +29,7 @@ function update_prevision(id_prevision_item)
 function agregar_prevision_item(id_prevision)
 {
   const url="prevision_item_nuevo.php?id_prevision=" + id_prevision;
-  window.open(url,"prevsion_item_nuevo","toolbar=no, location=no, directories=no, status=yes, menubar=no, scrollbars=yes, resizable=yes, width=600, height=300");
+  window.open(url,"prevsion_item_nuevo","toolbar=no, location=no, directories=no, status=yes, menubar=no, scrollbars=yes, resizable=yes, width=750, height=300");
 }
 
 function confirmaEliminar()

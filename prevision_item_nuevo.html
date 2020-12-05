@@ -21,7 +21,7 @@ function agregar()
   console.log($('#precio').val());
   console.log($('#moneda').val());
 
-	var cantidad = document.getElementById('cantidad').value;
+	var cantidad = $('#cantidad').val();
 	if(cantidad <= 0) {
 		alert("No esta permitido ingresar un valor 0 o negativo como cantidad.");
 		return false;
@@ -34,6 +34,39 @@ function agregar()
 
  	window.close(self);
 	return true;
+}
+
+function getItemValue(item) {
+  return `${item.id_item},${item.precio},${item.moneda},${item.unidad},${item.stock_disponible},${item.stock_transito}`;
+}
+
+function buscaProducto(event) {
+  if (event.keyCode==13) {
+    const producto = $('#producto').val();
+    console.log('Search:', producto);
+    $.ajax({
+    url:'api/items.php?search_categoria=' + producto,
+    success: function(data, status){
+      data = JSON.parse(data);
+      console.log("Data: " + data + "\nStatus: " + status);
+
+      const $el = $("#items");
+      $el.empty();
+      if (data.items.length > 1) {
+        $el.append($("<option></option>").attr("value", '-').text('selecciona item'));
+      }
+      data.items.forEach(item => {
+        $el.append($("<option></option>").attr("value", getItemValue(item)).text(`${item.categoria} - ${item.proveedor}`));
+      });
+
+      if (data.items.length === 1) {
+        $("#items").val(getItemValue(data.items[0]));
+        $('#stock_disponible').text(data.items[0].stock_disponible);
+        $('#stock_transito').text(data.items[0].stock_transito);
+      }
+    }
+  });
+  } 
 }
 
 function seleccionaItem() {
@@ -51,12 +84,17 @@ function seleccionaItem() {
   }
 }
 
+function seleccionaPrevision() {
+  const prevision_id = $('#previsiones').val();
+  $('#id_prevision').val(prevision_id);
+}
+
 function loadItems() {
   $.ajax({
     url:'api/prevision.php?allItems=true',
     success: function(data, status){
       // console.log("Data: " + data + "\nStatus: " + status);
-      autocomplete(document.getElementById("myInput"), data);
+      // autocomplete(document.getElementById("myInput"), data);
     }
   });
 }
@@ -68,17 +106,26 @@ function loadItems() {
 
 
 <table>
-<tr>
-  <td>
-  Item:
-  </td>
-  <td>
-    <select style="max-width: 450px;" id="items" onchange="seleccionaItem()">
-      <option value="-" selected>selecciona item</option>
-      <?php echo $var['items']; ?>
-    </select> *
-  </td>
-</tr>
+  <tr style="<?php echo $var['known_item'] == 'true' ? 'display:none;' : '' ?>">
+    <td>
+      Búsqueda de producto:
+    </td>
+    <td>
+      <input type="text" value="" size="20" name="producto" id="producto" class="obligatorio" onkeypress="buscaProducto(event)" > (Presione ENTER para buscar)
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      Item:
+    </td>
+    <td>
+      <select style="max-width: 450px;" id="items" onchange="seleccionaItem()" <?php echo $var['known_item'] == 'true' ? 'disabled' : '' ?> >
+        <option value="-" selected>selecciona item</option>
+        <?php echo $var['items']; ?>
+      </select> *
+    </td>
+  </tr>
 
 <!-- <tr>
   <td>
@@ -96,7 +143,7 @@ function loadItems() {
   Stock disponible:
   </td>
   <td>
-    <label id="stock_disponible"></label>
+    <label id="stock_disponible"><?php echo $var['stock_disponible']; ?></label>
   </td>
 </tr>
 
@@ -105,25 +152,38 @@ function loadItems() {
   Stock tránsito:
   </td>
   <td>
-    <label id="stock_transito"></label>
+    <label id="stock_transito"><?php echo $var['stock_transito']; ?></label>
   </td>
 </tr>
 
 <form action="<?php echo $var['submitto']; ?>" method="post" target="ppal" name="prevision_item_nuevo" onsubmit="return agregar();" autocomplete="off">
 	<input type="hidden" value="prevision_item_nuevo" size="10" name="formname" id="formname">
 	<input type="hidden" value="<?php echo $var['id_prevision']; ?>" size="10" name="id_prevision" id="id_prevision">
-	<input type="hidden" size="10" name="id_item" id="id_item">
+	<input type="hidden" value="<?php echo $var['id_item']; ?>" size="10" name="id_item" id="id_item">
   <input type="hidden" size="10" name="precio" id="precio">
   <input type="hidden" size="10" name="moneda" id="moneda">
+  <input type="hidden" value="<?php echo $var['producto']; ?>" size="10" name="producto" id="producto">
+  <input type="hidden" value="<?php echo $var['unidad']; ?>" size="10" name="unidad" id="unidad">
 	<tr>
-	<td>
-	  <label for="cantidad">Cantidad:</label>
-	</td>
-	<td>
-    <input type="text" size="10" name="cantidad" id="cantidad" class="obligatorio" autocomplete="off">
-    <label id="unidad"></label> *
-	</td>
-	</tr>
+    <td>
+      <label for="cantidad">Cantidad:</label>
+    </td>
+    <td>
+      <input type="text" size="10" name="cantidad" id="cantidad" value="<?php echo $var['cantidad']; ?>" class="obligatorio" autocomplete="off">
+      <label id="unidad"></label> *
+    </td>
+  </tr>
+  <tr style="<?php echo $var['known_prevision'] == 'true' ? 'display:none;' : '' ?>">
+    <td>
+      <label for="cantidad">Prevision:</label>
+    </td>
+    <td>
+      <select style="max-width: 450px;" id="previsiones" onchange="seleccionaPrevision()">
+        <option value="-1" selected>Nueva prevision</option>
+        <?php echo $var['previsiones']; ?>
+      </select>
+    </td>
+  </tr>
 
 	</table>
 	<center>

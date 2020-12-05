@@ -3,7 +3,7 @@
   <title>North Sails - Sistema de Control de Stock</title>
   <link rel="stylesheet" type="text/css" href="north.css" />
   <script language="JavaScript" src="include/jquery-1.12.4.min.js"></script>
-  
+
 <script type="text/javascript">
 
 function setfocus()
@@ -12,9 +12,9 @@ document.<?php echo $var['focus']; ?>.focus()
 }
 
 function asignarPrevision(id_item) {
-  console.log('cantidad asignar:', $('#cantidad').val());
-  var url="prevision_item_update.php?id_prevision_item=" + id_item;
-  window.open(url,"producto_detalle","toolbar=no, location=no, directories=no, status=yes, menubar=no, scrollbars=yes, resizable=yes, width=600, height=300");
+  const cantidad = $('#cantidad').val();
+  const url=`prevision_item_nuevo.php?id_item=${id_item}&cantidad=${cantidad}`;
+  window.open(url,"producto_item_nuevo","toolbar=no, location=no, directories=no, status=yes, menubar=no, scrollbars=yes, resizable=yes, width=750, height=300");
 }
 </script>
 
@@ -111,7 +111,7 @@ function asignarPrevision(id_item) {
 				<br />Los casilleros marcados con * son obligatorios.<br />
 				<div style="margin-top: 20px;">
 					<button type="submit" name="enviar" value="enviar" style="margin-right: 40px;">Ingresar</button>
-					<button type="button" name="asignar" value="asignar" onclick="asignarPrevision(<?php echo (isset($var['item']) ? $var['item'] : ''); ?>)">Asignar prevision</button>
+					<button type="button" name="asignar" value="asignar" onclick="asignarPrevision(<?php echo (isset($var['item']) ? $var['item'] : ''); ?>)" <?php echo (isset($var['item']) && $var['item'] <> "" ? '' : 'disabled');?> >Asignar prevision</button>
 				</div>
 			</center>
 	</form>
