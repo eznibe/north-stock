@@ -155,7 +155,7 @@ function showPrevisionDetailsScreen($id_prevision) {
 
 
 // not used
-function formEliminarItem($id_prevision, $id_prevision_item) {
+function formEliminaritem($id_prevision, $id_prevision_item) {
   return "<td class=\"centrado\">
   <form action=\"prevision_update.php\" method=\"post\" target=\"_self\" name=\"prevision_update\">
     <input type=\"hidden\" value=\"prevision_update\" name=\"formname\" id=\"formname\">
@@ -205,14 +205,14 @@ function agregar_prevision_item($id_prevision, $id_item, $cantidad, $precio, $mo
 	$insert = "INSERT INTO previsionitem (id_prevision, id_item, cantidad, moneda)
     VALUES ($id_prevision, $id_item, $cantidad, '$moneda')";
   $result = mysql_query($insert);
-  
+
   log_trans($_SESSION['valid_user'], 21, $id_item, $cantidad, date("Y-m-d"), $id_prevision);
 }
 
 
 function obtener_precio_dolar_orden($id_prevision)
 {
-	$query = "SELECT cotizacion_dolar FROM Orden WHERE id_orden = $id_prevision";
+	$query = "SELECT cotizacion_dolar FROM orden WHERE id_orden = $id_prevision";
 	$result = mysql_query($query);
 	$row = mysql_fetch_array($result);
 	return $row[0];
@@ -220,7 +220,7 @@ function obtener_precio_dolar_orden($id_prevision)
 
 function obtener_fecha_orden($id_prevision)
 {
-	$query = "SELECT fecha FROM Orden WHERE id_orden = $id_prevision";
+	$query = "SELECT fecha FROM orden WHERE id_orden = $id_prevision";
 	$result = mysql_query($query);
 	$row = mysql_fetch_array($result);
 	return $row[0];

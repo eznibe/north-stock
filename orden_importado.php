@@ -12,15 +12,15 @@ $focus = "producto";
 $productos = "";
 
 $query = "select DISTINCT 
-     Proveedor.id_proveedor, Proveedor.proveedor 
+     proveedor.id_proveedor, proveedor.proveedor 
      FROM 
-      Categoria, Proveedor, ItemComprar, Item, Unidad 
+      categoria, proveedor, itemcomprar, item, unidad 
      WHERE (
-      (ItemComprar.id_item = Item.id_item) AND 
-      (Item.id_proveedor = Proveedor.id_proveedor) AND
-      (Categoria.id_categoria = Item.id_categoria) AND
-      (Unidad.id_unidad = Categoria.id_unidad_visual) AND
-      (Proveedor.id_pais != 1)
+      (itemcomprar.id_item = item.id_item) AND 
+      (item.id_proveedor = proveedor.id_proveedor) AND
+      (categoria.id_categoria = item.id_categoria) AND
+      (unidad.id_unidad = categoria.id_unidad_visual) AND
+      (proveedor.id_pais != 1)
      )";
 
 $result = mysql_query($query);

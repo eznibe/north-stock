@@ -26,7 +26,7 @@ function delete_grupo(&$mensaje, $id_grupo)
  {
   // Si estan todos los campos requeridos
   //
-  $query = "DELETE FROM Grupo 
+  $query = "DELETE FROM grupo 
             WHERE id_grupo = $id_grupo";
 
   $result = mysql_query($query);

@@ -23,34 +23,34 @@ function obtener_grupo($id_grupo)
 
 // todos los items del grupo seleccionado
 $query = "SELECT
-	Categoria.categoria,
-	Item.id_categoria,
-	Item.id_proveedor,
-	Proveedor.proveedor,
-	Item.stock_disponible,
-	Categoria.stock_minimo,
-	Item.stock_disponible - Categoria.stock_minimo,
-	Unidad.unidad,
-	Item.stock_transito,
-	Item.stock_disponible + Item.stock_transito - Categoria.stock_minimo,
-	Item.codigo_proveedor,
-	Item.id_item,
-	Item.precio_fob,
-	Item.precio_nac,
-	Item.precio_ref
+	categoria.categoria,
+	item.id_categoria,
+	item.id_proveedor,
+	proveedor.proveedor,
+	item.stock_disponible,
+	categoria.stock_minimo,
+	item.stock_disponible - categoria.stock_minimo,
+	unidad.unidad,
+	item.stock_transito,
+	item.stock_disponible + item.stock_transito - categoria.stock_minimo,
+	item.codigo_proveedor,
+	item.id_item,
+	item.precio_fob,
+	item.precio_nac,
+	item.precio_ref
 
   FROM
-	Item, Categoria, Unidad, Proveedor
+	item, categoria, unidad, proveedor
   WHERE (
-	(Item.id_categoria = Categoria.id_categoria) AND
-	(Unidad.id_unidad = Categoria.id_unidad_visual) AND
-	(Categoria.id_grupo = $id_grupo)
+	(item.id_categoria = categoria.id_categoria) AND
+	(unidad.id_unidad = categoria.id_unidad_visual) AND
+	(categoria.id_grupo = $id_grupo)
 
-	AND Proveedor.id_proveedor = Item.id_proveedor
+	AND proveedor.id_proveedor = item.id_proveedor
         )
 
   ORDER BY
-	Categoria.categoria";
+	categoria.categoria";
 $result = mysql_query($query);
 
 $aux = "";

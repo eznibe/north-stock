@@ -23,7 +23,7 @@ $var = array("mensaje" => $mensaje,
 
   	function updateGroupFields($id_grupo) {
 
-		$query = "SELECT grupo, agrupacion_contable FROM Grupo WHERE id_grupo = $id_grupo";
+		$query = "SELECT grupo, agrupacion_contable FROM grupo WHERE id_grupo = $id_grupo";
 		$result = mysql_query($query);
 		$row = mysql_fetch_array($result);
 
@@ -35,7 +35,7 @@ $var = array("mensaje" => $mensaje,
 		$tab = new TinyAjaxBehavior();
 //		$tab->add( TabInnerHtml::getBehavior("g_cont", $grupo_input));
 		$tab->add( TabEval::getBehavior("cambiarComboAgrupacion($agrupacion_contable)"));
-		$tab->add( TabEval::getBehavior("cambiarFieldGrupo('$grupo')"));
+		$tab->add( TabEval::getBehavior("cambiarFieldgrupo('$grupo')"));
 //		$tab->add( TabAlert::getBehavior("Hola"));		
 //		$tab->add( TabSetValue::getBehaviour("grupo", $grupo));
 
@@ -82,7 +82,7 @@ var envio = confirm(message);
  }
 }
 
-function cambiarFieldGrupo(grupo) {
+function cambiarFieldgrupo(grupo) {
 
 	document.getElementById("grupo").value = grupo;
 }

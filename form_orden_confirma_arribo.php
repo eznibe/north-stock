@@ -41,11 +41,11 @@ foreach ($table_map as $item)
 {
  $cantidad_factor = (get_factor_unidades($item[2])) * $item[1];
  $query = "UPDATE
-	Item
+	item
   SET
-	Item.stock_disponible = Item.stock_disponible + $cantidad_factor
+	item.stock_disponible = item.stock_disponible + $cantidad_factor
   WHERE (
-	(Item.id_item = $item[2])
+	(item.id_item = $item[2])
   )";
  $result = mysql_query($query);
 
@@ -63,21 +63,21 @@ foreach ($table_map as $item)
  log_stock_transito_negativo($valid_user, $item[2], $id_orden, get_stock_transito($item[2]), (get_stock_transito($item[2])-$cantidad_factor), get_cantidad_pendiente_comprar($item[0]), $item[1], 'auto');
 
  $query = "UPDATE
-        Item
+        item
   SET
-        Item.stock_transito = Item.stock_transito - $cantidad_factor
+        item.stock_transito = item.stock_transito - $cantidad_factor
   WHERE (
-        (Item.id_item = $item[2])
+        (item.id_item = $item[2])
   )";
  $result = mysql_query($query);
 
  // update item de la orden (cantidad pendiente)
  $query = "UPDATE
-        OrdenItem
+        ordenitem
   SET
-        OrdenItem.cantidad_pendiente = OrdenItem.cantidad_pendiente - $item[1]
+        ordenitem.cantidad_pendiente = ordenitem.cantidad_pendiente - $item[1]
   WHERE (
-        (OrdenItem.id_orden_item = $item[0])
+        (ordenitem.id_orden_item = $item[0])
   )";
  $result = mysql_query($query);
 }
@@ -106,7 +106,7 @@ eval_html('orden_arribo_fin.html', $var);
  */
 function update_orden_arribada($id_orden, $fecha, $valid_user)
 {
-	$query = "UPDATE Orden  SET  id_status = 2, fecha = '$fecha'
+	$query = "UPDATE orden  SET  id_status = 2, fecha = '$fecha'
   			  WHERE (id_orden = $id_orden)";
 
 	$result = mysql_query($query);
@@ -119,9 +119,9 @@ function update_orden_arribada($id_orden, $fecha, $valid_user)
  */
 function obtener_cantidad_items_pendientes($id_orden)
 {
-	$query = "SELECT count(*) FROM Orden, OrdenItem ordenitem
-			  WHERE Orden.id_orden = $id_orden
-				AND Orden.id_orden = ordenitem.id_orden
+	$query = "SELECT count(*) FROM orden, ordenitem ordenitem
+			  WHERE orden.id_orden = $id_orden
+				AND orden.id_orden = ordenitem.id_orden
 				AND ordenitem.cantidad_pendiente <> 0";
 
 	$result = mysql_query($query);
@@ -133,9 +133,9 @@ function obtener_cantidad_items_pendientes($id_orden)
 // retorna lo que qeuda por comprar del item en la orden
 function get_cantidad_pendiente_comprar($id_orden_item)
 {
- $query = "SELECT OrdenItem.cantidad_pendiente
-        FROM OrdenItem
-        WHERE OrdenItem.id_orden_item = $id_orden_item";
+ $query = "SELECT ordenitem.cantidad_pendiente
+        FROM ordenitem
+        WHERE ordenitem.id_orden_item = $id_orden_item";
  $result = mysql_query($query);
  $row = mysql_fetch_array($result);
  return $row[0];

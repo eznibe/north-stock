@@ -20,35 +20,35 @@ $tipo_producto = isset($_GET['tipo_producto']) ? $_GET['tipo_producto'] : 1;
 if($tipo_producto==1){
 	// todos los productos del grupo
 	$query = "SELECT
-		Categoria.categoria,
-		Categoria.stock_minimo,
-		SUM(Item.stock_disponible),
-		Item.id_categoria,
-		(SUM(Item.stock_disponible)-Categoria.stock_minimo),
-		Unidad.unidad,
-		SUM(Item.stock_transito),
-		(SUM(Item.stock_disponible)+SUM(Item.stock_transito)-Categoria.stock_minimo-(coalesce(sum(en_prevision.cantidad), 0))),
-		Grupo.grupo,
-		Categoria.reservado,
+		categoria.categoria,
+		categoria.stock_minimo,
+		SUM(item.stock_disponible),
+		item.id_categoria,
+		(SUM(item.stock_disponible)-categoria.stock_minimo),
+		unidad.unidad,
+		SUM(item.stock_transito),
+		(SUM(item.stock_disponible)+SUM(item.stock_transito)-categoria.stock_minimo-(coalesce(sum(en_prevision.cantidad), 0))),
+		grupo.grupo,
+		categoria.reservado,
 		coalesce(sum(en_prevision.cantidad), 0) as prevision
 	  FROM
-      Item  
-      JOIN Categoria on Item.id_categoria = Categoria.id_categoria
-      JOIN Unidad on Unidad.id_unidad = Categoria.id_unidad_visual
-      JOIN Grupo on Categoria.id_grupo = Grupo.id_grupo
+      item  
+      JOIN categoria on item.id_categoria = categoria.id_categoria
+      JOIN unidad on unidad.id_unidad = categoria.id_unidad_visual
+      JOIN grupo on categoria.id_grupo = grupo.id_grupo
       LEFT JOIN (
     	SELECT pi.id_item, sum(pi.cantidad) as cantidad
     	FROM prevision p
     	JOIN previsionitem pi on pi.id_prevision = p.id_prevision
     	where p.fecha_descarga is null
     	group by pi.id_item
-      ) en_prevision on en_prevision.id_item = Item.id_item
+      ) en_prevision on en_prevision.id_item = item.id_item
 	  WHERE 
-		Grupo.id_grupo = $id_grupo
+		grupo.id_grupo = $id_grupo
 	  GROUP BY
-		  Item.id_categoria
+		  item.id_categoria
 	  ORDER BY
-		  Categoria.categoria";
+		  categoria.categoria";
 }
 else{
 	// productos segun el tipo de producto elegido (import o naci)
@@ -56,34 +56,34 @@ else{
 	if($tipo_producto==2) $condicion = "<> $id_argentina"; else $condicion = "= $id_argentina";
 
 	$query = "SELECT
-    Categoria.categoria,
-    Categoria.stock_minimo,
-    SUM(Item.stock_disponible),
-    Item.id_categoria,
-    (SUM(Item.stock_disponible)-Categoria.stock_minimo),
-    Unidad.unidad,
-    SUM(Item.stock_transito),
-    (SUM(Item.stock_disponible)+SUM(Item.stock_transito)-Categoria.stock_minimo-(coalesce(sum(pi.cantidad), 0))),
-    Grupo.grupo,
-    Categoria.reservado,
+    categoria.categoria,
+    categoria.stock_minimo,
+    SUM(item.stock_disponible),
+    item.id_categoria,
+    (SUM(item.stock_disponible)-categoria.stock_minimo),
+    unidad.unidad,
+    SUM(item.stock_transito),
+    (SUM(item.stock_disponible)+SUM(item.stock_transito)-categoria.stock_minimo-(coalesce(sum(pi.cantidad), 0))),
+    grupo.grupo,
+    categoria.reservado,
     coalesce(sum(pi.cantidad), 0) as prevision
   FROM
-    Item  
-    JOIN Categoria on Item.id_categoria = Categoria.id_categoria
-    JOIN Unidad on Unidad.id_unidad = Categoria.id_unidad_visual
-    JOIN Grupo on Categoria.id_grupo = Grupo.id_grupo
-    JOIN Proveedor on Proveedor.id_proveedor = Item.id_proveedor
-    JOIN Pais on Pais.id_pais = Proveedor.id_pais
-    LEFT JOIN previsionitem pi on pi.id_item = Item.id_item
+    item  
+    JOIN categoria on item.id_categoria = categoria.id_categoria
+    JOIN unidad on unidad.id_unidad = categoria.id_unidad_visual
+    JOIN grupo on categoria.id_grupo = grupo.id_grupo
+    JOIN proveedor on proveedor.id_proveedor = item.id_proveedor
+    JOIN pais on pais.id_pais = proveedor.id_pais
+    LEFT JOIN previsionitem pi on pi.id_item = item.id_item
     LEFT JOIN prevision p on p.id_prevision = pi.id_prevision
   WHERE 
-    Grupo.id_grupo = $id_grupo AND
-    Pais.id_pais $condicion
+    grupo.id_grupo = $id_grupo AND
+    pais.id_pais $condicion
 	AND p.fecha_descarga is null
   GROUP BY
-	  Item.id_categoria
+	  item.id_categoria
   ORDER BY
-	  Categoria.categoria";
+	  categoria.categoria";
 }
 
 $result = mysql_query($query);
@@ -118,8 +118,8 @@ eval_html('producto_grupo_listar.html', $var);
  * Obtiene el id en la base de datos del pais con nombre Argentina
  */
 function obtener_id_pais_argentina(){
-	$query = "SELECT id_pais FROM Pais
-		 	  WHERE Pais.pais = 'ARGENTINA'";
+	$query = "SELECT id_pais FROM pais
+		 	  WHERE pais.pais = 'ARGENTINA'";
 	$result = mysql_query($query);
 	$row = mysql_fetch_array($result);
 
@@ -142,7 +142,7 @@ function obtener_grupo($id_grupo)
 */
 function desglose_transito_por_tipo_envio($id_categoria) {
 
-	$query = "SELECT count(*) FROM TipoEnvio";
+	$query = "SELECT count(*) FROM tipoenvio";
 	$result = mysql_query($query);
 	$row = mysql_fetch_array($result);
 

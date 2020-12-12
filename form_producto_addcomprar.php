@@ -22,19 +22,19 @@ if(isset($id_orden) && !empty($id_orden)) {
 	// se inserta el item directo en la orden ya existente seleccionada
 	if(es_proveedor_nacional($id_proveedor, 'ARGENTINA'))
 	{
-	  $query = "INSERT INTO	OrdenItem (id_orden, id_item, cantidad,	cantidad_pendiente, precio_ref,	moneda, id_tipo_envio)
-		    SELECT $id_orden, $id_item, $cantidad, $cantidad, Item.precio_ref, 'AR$', $tipoenvio  FROM  Item  WHERE Item.id_item = $id_item";
+	  $query = "INSERT INTO	ordenitem (id_orden, id_item, cantidad,	cantidad_pendiente, precio_ref,	moneda, id_tipo_envio)
+		    SELECT $id_orden, $id_item, $cantidad, $cantidad, item.precio_ref, 'AR$', $tipoenvio  FROM  item  WHERE item.id_item = $id_item";
 	}
 	else
 	{
-	  //Proveedor extranjero
-	  $query = "INSERT INTO OrdenItem (id_orden, id_item, cantidad, cantidad_pendiente, precio_fob, moneda, id_tipo_envio)
-		    SELECT $id_orden, $id_item, $cantidad, $cantidad, Item.precio_fob, 'US$', $tipoenvio  FROM  Item  WHERE Item.id_item = $id_item";
+	  //proveedor extranjero
+	  $query = "INSERT INTO ordenitem (id_orden, id_item, cantidad, cantidad_pendiente, precio_fob, moneda, id_tipo_envio)
+		    SELECT $id_orden, $id_item, $cantidad, $cantidad, item.precio_fob, 'US$', $tipoenvio  FROM  item  WHERE item.id_item = $id_item";
 	}
 }
 else {
 	// se inserta el item en la lista de items a comprar
-	$query = "INSERT INTO ItemComprar (id_item, cantidad, id_tipo_envio) VALUES ($id_item, $cantidad, $tipoenvio)";
+	$query = "INSERT INTO itemcomprar (id_item, cantidad, id_tipo_envio) VALUES ($id_item, $cantidad, $tipoenvio)";
 }
 
 $result = mysql_query($query);

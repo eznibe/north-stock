@@ -24,7 +24,7 @@ $fecha = "'" . $ano_ini . "-" . $mes_ini . "-" . $dia_ini . "'";
 
 $orderbygrupo = "";
 if (isset($_POST['orderbygrupo'])) {
-	$orderbygrupo = " Grupo.id_grupo, ";
+	$orderbygrupo = " grupo.id_grupo, ";
 }
 
 $id_grupos = isset($_POST['id_grupos']) ? $_POST['id_grupos'] : array();
@@ -32,7 +32,7 @@ $id_grupos = isset($_POST['id_grupos']) ? $_POST['id_grupos'] : array();
 
 $grupos_condicion = "";
 if(count($id_grupos) > 0) {
-	$grupos_condicion = " AND Grupo.id_grupo IN (";
+	$grupos_condicion = " AND grupo.id_grupo IN (";
 	foreach ($id_grupos as $id_grupo) {
 		$grupos_condicion .= $id_grupo . ',';
 	}
@@ -45,43 +45,43 @@ if(count($id_grupos) > 0) {
 // Note: Al stock disponible del item al 'current date' se le agregan todos los consumidos y se le restan todos los comprados despues de la fecha seleccionada
 
 $query = "SELECT
-        CONCAT(Categoria.categoria,'<br>',Proveedor.proveedor),
-        Item.codigo_proveedor,
-        (Item.stock_disponible
-        - COALESCE((SELECT sum(cantidad) from Log where Log.fecha > $fecha and Log.id_item = Item.id_item and Log.id_accion = 1 ),0)
-	 	+ COALESCE((SELECT sum(cantidad) from Log where Log.fecha > $fecha and Log.id_item = Item.id_item and Log.id_accion = 2 ),0)) AS disponible,
-        Item.precio_fob,
-        Item.precio_nac,
-        Item.id_item,
-        Item.stock_transito,
-        Item.precio_ref,
-        Item.oculto_fob,
-        Item.oculto_nac,
-		CONCAT(Unidad.unidad,'(',Item.factor_unidades,')'),
-		Item.agrupacion_contable,
-		Pais.pais
+        CONCAT(categoria.categoria,'<br>',proveedor.proveedor),
+        item.codigo_proveedor,
+        (item.stock_disponible
+        - COALESCE((SELECT sum(cantidad) from log where log.fecha > $fecha and log.id_item = item.id_item and log.id_accion = 1 ),0)
+	 	+ COALESCE((SELECT sum(cantidad) from log where log.fecha > $fecha and log.id_item = item.id_item and log.id_accion = 2 ),0)) AS disponible,
+        item.precio_fob,
+        item.precio_nac,
+        item.id_item,
+        item.stock_transito,
+        item.precio_ref,
+        item.oculto_fob,
+        item.oculto_nac,
+		CONCAT(unidad.unidad,'(',item.factor_unidades,')'),
+		item.agrupacion_contable,
+		pais.pais
   FROM
-        Item,
-        Categoria,
-        Proveedor,
-		Unidad,
-		Grupo,
-		Pais
+        item,
+        categoria,
+        proveedor,
+		unidad,
+		grupo,
+		pais
   WHERE (
-        (Item.id_categoria = Categoria.id_categoria) AND
-        (Item.id_proveedor = Proveedor.id_proveedor) AND
-		(Unidad.id_unidad = Item.id_unidad_compra) AND
-		(Grupo.id_grupo = Categoria.id_grupo) AND
-		(Proveedor.id_pais = Pais.id_pais)
+        (item.id_categoria = categoria.id_categoria) AND
+        (item.id_proveedor = proveedor.id_proveedor) AND
+		(unidad.id_unidad = item.id_unidad_compra) AND
+		(grupo.id_grupo = categoria.id_grupo) AND
+		(proveedor.id_pais = pais.id_pais)
 		$grupos_condicion
   )
   GROUP BY
-        Item.id_item, Item.id_categoria
+        item.id_item, item.id_categoria
   HAVING
         disponible > 0
   ORDER BY
 	$orderbygrupo
-	Categoria.categoria";
+	categoria.categoria";
 $result = mysql_query($query);
 
 //dump($query);
@@ -90,7 +90,7 @@ $aux = "";
 while ($row = mysql_fetch_array($result))
 {
  $aux = $aux . "<tr class=\"provlistrow\"><td><a class=\"list\" onclick=\"add_comprar($row[5]);\">$row[0]</a></td>
-              <td>$row[1]</td><td>$row[2]</td><td>$row[6]</td><td>$row[3]</td><td>$row[4]</td><td>$row[7]</td><td>$row[10]</td><td>$row[8]</td><td>$row[9]</td><td>$row[11]</td><td>".tipoProveedor($row[12])."</td></tr>\n";
+              <td>$row[1]</td><td>$row[2]</td><td>$row[6]</td><td>$row[3]</td><td>$row[4]</td><td>$row[7]</td><td>$row[10]</td><td>$row[8]</td><td>$row[9]</td><td>$row[11]</td><td>".tipoproveedor($row[12])."</td></tr>\n";
  $aux2 = $aux2 . "<tr class=\"provlistrow\"><td><a class=\"list\" onclick=\"add_comprar($row[5]);\">$row[0]</a></td>
               <td>$row[1]</td><td>$row[2]</td><td>$row[6]</td><td>$row[3]</td><td>$row[4]</td><td>$row[7]</td><td>$row[10]</td></tr>\n";
 }
@@ -122,7 +122,7 @@ else
 }
 
 
-function tipoProveedor($pais) {
+function tipoproveedor($pais) {
 
 	if($pais == "ARGENTINA") return "NAC";
 

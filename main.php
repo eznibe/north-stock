@@ -40,8 +40,8 @@ function eval_html($filename, $var) {
 function get_units_opt($id_unidad)
 {
  $unidades = "";
- $query = "SELECT Unidad.id_unidad, Unidad.unidad
-           FROM Unidad";
+ $query = "SELECT unidad.id_unidad, unidad.unidad
+           FROM unidad";
  $result = mysql_query($query);
  while ($row = mysql_fetch_array($result))
  {
@@ -54,7 +54,7 @@ function get_units_opt($id_unidad)
 
 function get_group_opt($id_grupo)
 {
- $query = "SELECT id_grupo, grupo FROM Grupo ORDER BY grupo";
+ $query = "SELECT id_grupo, grupo FROM grupo ORDER BY grupo";
  $result = mysql_query($query);
  if (mysql_num_rows($result) > 0)
  {
@@ -70,7 +70,7 @@ function get_group_opt($id_grupo)
 
 function get_pais_opt($id_pais)
 {
- $query = "SELECT id_pais, pais FROM Pais ORDER BY pais";
+ $query = "SELECT id_pais, pais FROM pais ORDER BY pais";
  $result = mysql_query($query);
  if (mysql_num_rows($result) > 0)
  {
@@ -86,7 +86,7 @@ function get_pais_opt($id_pais)
 
 function get_categoria_opt($id_categoria)
 {
- $query = "SELECT id_categoria, categoria FROM Categoria ORDER BY categoria";
+ $query = "SELECT id_categoria, categoria FROM categoria ORDER BY categoria";
  $result = mysql_query($query);
  if (mysql_num_rows($result) > 0)
  {
@@ -103,14 +103,14 @@ function get_categoria_opt($id_categoria)
 function get_subproducto_opt($id_item)
 {
  $query = "SELECT
-	Item.id_item, concat(Categoria.categoria, \" - \", Proveedor.proveedor)
+	item.id_item, concat(categoria.categoria, \" - \", proveedor.proveedor)
 	FROM
-	Item, Categoria, Proveedor
+	item, categoria, proveedor
 	WHERE (
-	(Item.id_categoria = Categoria.id_categoria) AND
-	(Item.id_proveedor = Proveedor.id_proveedor)
+	(item.id_categoria = categoria.id_categoria) AND
+	(item.id_proveedor = proveedor.id_proveedor)
 	)
-	ORDER BY Categoria.categoria";
+	ORDER BY categoria.categoria";
  $result = mysql_query($query);
  if (mysql_num_rows($result) > 0)
  {
@@ -139,10 +139,10 @@ function get_scan_opt($scan)
 function get_proveedor_opt($id_proveedor)
 {
  $query = "SELECT
-	Proveedor.id_proveedor, Proveedor.proveedor
+	proveedor.id_proveedor, proveedor.proveedor
   FROM
-	Proveedor
-  ORDER BY Proveedor.proveedor";
+	proveedor
+  ORDER BY proveedor.proveedor";
  $result = mysql_query($query);
  if (mysql_num_rows($result) > 0)
  {
@@ -158,7 +158,7 @@ function get_proveedor_opt($id_proveedor)
 
 function get_tipousr_opt($id_tipo)
 {
- $query = "SELECT id_tipousr, tipousr FROM Tipousr ORDER BY tipousr";
+ $query = "SELECT id_tipousr, tipousr FROM tipousr ORDER BY tipousr";
  $result = mysql_query($query);
  if (mysql_num_rows($result) > 0)
  {
@@ -174,7 +174,7 @@ function get_tipousr_opt($id_tipo)
 
 function get_usuario_opt($id_usuario)
 {
- $query = "SELECT id_usuario, username FROM Usuario ORDER BY username";
+ $query = "SELECT id_usuario, username FROM usuario ORDER BY username";
  $result = mysql_query($query);
  if (mysql_num_rows($result) > 0)
  {
@@ -192,7 +192,7 @@ function log_trans($username, $id_accion, $id_item, $cantidad, $fecha, $id_orden
 {
  // id_accion: 1 ingreso 2 egreso (manual y desde descarga prevision) 3 update 4 confirma orden 5 elimina orden 6 orden arribada completa 8 elimina item de orden
  // id_accion: 21 agrego item - 23 update prevision item - 24 ? - 25 elimina prevision - 26 prevision descargada - 27 prevision revertida - 28 elimina item de prevision
- $query = "INSERT INTO Log
+ $query = "INSERT INTO log
 	(username, id_accion, id_item, cantidad, fecha, id_orden, id_prevision)
   VALUES
 	(\"$username\", $id_accion, $id_item, $cantidad, \"$fecha\", $id_orden, $id_prevision)";
@@ -202,7 +202,7 @@ function log_trans($username, $id_accion, $id_item, $cantidad, $fecha, $id_orden
 
 function get_group($id_grupo)
 {
- $query = "SELECT grupo FROM Grupo WHERE id_grupo = $id_grupo";
+ $query = "SELECT grupo FROM grupo WHERE id_grupo = $id_grupo";
  $result = mysql_query($query);
  mysql_num_rows($result);
  $row = mysql_fetch_array($result);
@@ -211,14 +211,14 @@ function get_group($id_grupo)
 
 function get_groups()
 {
- $query = "SELECT * FROM Grupo ORDER BY grupo";
+ $query = "SELECT * FROM grupo ORDER BY grupo";
  $result = mysql_query($query);
  return $result;
 }
 
 function get_proveedor($id_proveedor)
 {
- $query = "SELECT proveedor FROM Proveedor WHERE id_proveedor = $id_proveedor";
+ $query = "SELECT proveedor FROM proveedor WHERE id_proveedor = $id_proveedor";
  $result = mysql_query($query);
  mysql_num_rows($result);
  $row = mysql_fetch_array($result);
@@ -227,7 +227,7 @@ function get_proveedor($id_proveedor)
 
 function get_categoria($id_categoria)
 {
- $query = "SELECT categoria FROM Categoria WHERE id_categoria = $id_categoria";
+ $query = "SELECT categoria FROM categoria WHERE id_categoria = $id_categoria";
  $result = mysql_query($query);
  mysql_num_rows($result);
  $row = mysql_fetch_array($result);
@@ -238,8 +238,8 @@ function get_usuario($id_usuario, $tipo)
 {
  //$tipo: 1: retorna username
  //	      2: retorna nombre de usuario
- if($tipo==1) $query = "SELECT username FROM Usuario WHERE id_usuario = $id_usuario";
- else         $query = "SELECT nombre   FROM Usuario WHERE id_usuario = $id_usuario";
+ if($tipo==1) $query = "SELECT username FROM usuario WHERE id_usuario = $id_usuario";
+ else         $query = "SELECT nombre   FROM usuario WHERE id_usuario = $id_usuario";
  $result = mysql_query($query);
  mysql_num_rows($result);
  $row = mysql_fetch_array($result);
@@ -249,15 +249,15 @@ function get_usuario($id_usuario, $tipo)
 function get_item($id_item)
 {
  $query = "SELECT
-	CONCAT(Categoria.categoria, \" - \", Proveedor.proveedor)
+	CONCAT(categoria.categoria, \" - \", proveedor.proveedor)
   FROM
-	Item,
-	Categoria,
-	Proveedor
+	item,
+	categoria,
+	proveedor
   WHERE (
-	(Item.id_item = $id_item) AND
-	(Categoria.id_categoria = Item.id_categoria) AND
-	(Proveedor.id_proveedor = Item.id_proveedor)
+	(item.id_item = $id_item) AND
+	(categoria.id_categoria = item.id_categoria) AND
+	(proveedor.id_proveedor = item.id_proveedor)
 	)";
  $result = mysql_query($query);
  mysql_num_rows($result);
@@ -267,11 +267,11 @@ function get_item($id_item)
 
 function get_unidad_descarga($id_categoria)
 {
- $query = "SELECT Unidad.unidad
-        FROM Unidad, Categoria
+ $query = "SELECT unidad.unidad
+        FROM unidad, categoria
         WHERE
-                Unidad.id_unidad = Categoria.id_unidad_visual AND
-                Categoria.id_categoria = $id_categoria";
+                unidad.id_unidad = categoria.id_unidad_visual AND
+                categoria.id_categoria = $id_categoria";
  $result = mysql_query($query);
  $row = mysql_fetch_array($result);
  return (strtoupper($row[0]));
@@ -282,11 +282,11 @@ function get_unidad_descarga($id_categoria)
  */
 function get_unidad_compra($id_item)
 {
- $query = "SELECT Unidad.unidad
-  		   FROM Unidad, Item
+ $query = "SELECT unidad.unidad
+  		   FROM unidad, item
     	   WHERE
-            	Unidad.id_unidad = Item.id_unidad_compra AND
-            	Item.id_item = $id_item";
+            	unidad.id_unidad = item.id_unidad_compra AND
+            	item.id_item = $id_item";
  $result = mysql_query($query);
  $row = mysql_fetch_array($result);
  return (strtoupper($row[0]));
@@ -294,9 +294,9 @@ function get_unidad_compra($id_item)
 
 function get_stock_transito($id_item)
 {
- $query = "SELECT Item.stock_transito
-        FROM Item
-        WHERE Item.id_item = $id_item";
+ $query = "SELECT item.stock_transito
+        FROM item
+        WHERE item.id_item = $id_item";
  $result = mysql_query($query);
  $row = mysql_fetch_array($result);
  return $row[0];
@@ -304,11 +304,11 @@ function get_stock_transito($id_item)
 
 function set_stock_transito($id_item, $stock)
 {
- $query = "UPDATE Item
+ $query = "UPDATE item
         SET
 		stock_transito = $stock
         WHERE
-                Item.id_item = $id_item";
+                item.id_item = $id_item";
  return mysql_query($query);
 }
 
@@ -329,9 +329,9 @@ function log_stock_transito_negativo($username, $id_item,  $id_orden, $stock_tra
  */
 function get_factor_unidades($id_item)
 {
- $query = "SELECT Item.factor_unidades
-        FROM Item
-        WHERE Item.id_item = $id_item";
+ $query = "SELECT item.factor_unidades
+        FROM item
+        WHERE item.id_item = $id_item";
  $result = mysql_query($query);
  $row = mysql_fetch_array($result);
  return $row[0];
@@ -339,9 +339,9 @@ function get_factor_unidades($id_item)
 
 function get_cantidad_comprar($id_orden_item)
 {
- $query = "SELECT OrdenItem.cantidad
-        FROM OrdenItem
-        WHERE OrdenItem.id_orden_item = $id_orden_item";
+ $query = "SELECT ordenitem.cantidad
+        FROM ordenitem
+        WHERE ordenitem.id_orden_item = $id_orden_item";
  $result = mysql_query($query);
  $row = mysql_fetch_array($result);
  return $row[0];
@@ -349,10 +349,10 @@ function get_cantidad_comprar($id_orden_item)
 
 function get_ordenitem_id_item($id_orden_item)
 {
- $query = "SELECT OrdenItem.id_item
-        FROM OrdenItem
+ $query = "SELECT ordenitem.id_item
+        FROM ordenitem
         WHERE
-                OrdenItem.id_orden_item = $id_orden_item";
+                ordenitem.id_orden_item = $id_orden_item";
  $result = mysql_query($query);
  $row = mysql_fetch_array($result);
  return $row[0];
@@ -360,9 +360,9 @@ function get_ordenitem_id_item($id_orden_item)
 
 function get_orden_status($id_orden)
 {
- $query = "SELECT Orden.id_status
-        FROM Orden
-        WHERE Orden.id_orden = $id_orden";
+ $query = "SELECT orden.id_status
+        FROM orden
+        WHERE orden.id_orden = $id_orden";
  $result = mysql_query($query);
  $row = mysql_fetch_array($result);
  return $row[0];
@@ -372,23 +372,23 @@ function get_ordenes_a_confirmar($id_proveedor)
 {
  $condition = "";
  if(isset($id_proveedor) && !empty($id_proveedor)) {
-	$condition =  " AND Proveedor.id_proveedor = $id_proveedor ";
+	$condition =  " AND proveedor.id_proveedor = $id_proveedor ";
  }
 
- $query = "SELECT Orden.id_orden, DATE_FORMAT(Orden.fecha, '%d-%m-%Y') AS fecha, proveedor
+ $query = "SELECT orden.id_orden, DATE_FORMAT(orden.fecha, '%d-%m-%Y') AS fecha, proveedor
            FROM
-		Orden,
-		OrdenItem,
-		Item,
-		Proveedor
+		orden,
+		ordenitem,
+		item,
+		proveedor
 	  WHERE (
-		(Orden.id_status = 0) AND
-		(OrdenItem.id_orden = Orden.id_orden) AND
-		(Item.id_item = OrdenItem.id_item) AND
-		(Proveedor.id_proveedor = Item.id_proveedor)
+		(orden.id_status = 0) AND
+		(ordenitem.id_orden = orden.id_orden) AND
+		(item.id_item = ordenitem.id_item) AND
+		(proveedor.id_proveedor = item.id_proveedor)
 		$condition
 	  )
-	  GROUP BY Orden.id_orden, Orden.fecha, proveedor
+	  GROUP BY orden.id_orden, orden.fecha, proveedor
 	  ORDER BY fecha, proveedor";
  $result = mysql_query($query);
  return $result;
@@ -396,7 +396,7 @@ function get_ordenes_a_confirmar($id_proveedor)
 
 function get_agrupacion_contable($id_categoria)
 {
- $query = "SELECT g.agrupacion_contable FROM Grupo g join Categoria c on c.id_grupo = g.id_grupo
+ $query = "SELECT g.agrupacion_contable FROM grupo g join categoria c on c.id_grupo = g.id_grupo
 		   WHERE c.id_categoria = $id_categoria";
  $result = mysql_query($query);
  $row = mysql_fetch_array($result);
@@ -405,7 +405,7 @@ function get_agrupacion_contable($id_categoria)
 
 function get_item_agrupacion_contable($id_item)
 {
- $query = "SELECT i.agrupacion_contable FROM Item i
+ $query = "SELECT i.agrupacion_contable FROM item i
 		   WHERE i.id_item = $id_item";
  $result = mysql_query($query);
  $row = mysql_fetch_array($result);
@@ -414,7 +414,7 @@ function get_item_agrupacion_contable($id_item)
 
 function get_tipos_de_envio() {
 
- $query = "SELECT * FROM TipoEnvio ORDER BY id_tipo_envio";
+ $query = "SELECT * FROM tipoenvio ORDER BY id_tipo_envio";
  $result = mysql_query($query);
 
  return $result;

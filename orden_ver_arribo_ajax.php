@@ -12,7 +12,7 @@ db_connect();
 
   function saveDescripcion($descripcion, $id_orden) {
 
-	$query = "UPDATE Orden SET descripcion = '$descripcion' WHERE id_orden = $id_orden";
+	$query = "UPDATE orden SET descripcion = '$descripcion' WHERE id_orden = $id_orden";
 	$result = mysql_query($query);
 
 	$tab = new TinyAjaxBehavior();
@@ -105,7 +105,7 @@ function despachoKeyPress() {
 
 <table width="100%" id="orden_table" name="orden_table">
 <tr class="provlisthead">
-  <th>Item</th> <th>Cod. producto</th> <th>Cantidad<br/>Original</th> <th>Cantidad<br/>Pendiente</th> <th>Cantidad<br/>Arribada</th> <th>Tipo<br/>envio</th> <th>Unidad</th> <th>Precio<br /> unitario</th> <th>Precio</th> <th>Moneda</th>
+  <th>item</th> <th>Cod. producto</th> <th>Cantidad<br/>Original</th> <th>Cantidad<br/>Pendiente</th> <th>Cantidad<br/>Arribada</th> <th>Tipo<br/>envio</th> <th>unidad</th> <th>Precio<br /> unitario</th> <th>Precio</th> <th>Moneda</th>
 </tr>
   <?php echo $var['orden']; ?>
 </table>

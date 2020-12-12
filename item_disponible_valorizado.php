@@ -24,16 +24,16 @@ $fecha = "'" . $ano_ini . "-" . $mes_ini . "-" . $dia_ini . "'";
 
 //$orderbygrupo = "";
 //if (isset($_POST['orderbygrupo'])) {
-//	$orderbygrupo = " Grupo.grupo, ";
+//	$orderbygrupo = " grupo.grupo, ";
 //}
-$orderbygrupo = " Grupo.grupo, ";
+$orderbygrupo = " grupo.grupo, ";
 
 $id_grupos = isset($_POST['id_grupos']) ? $_POST['id_grupos'] : array();
 //dump($id_grupos);
 
 $grupos_condicion = "";
 if(count($id_grupos) > 0) {
-	$grupos_condicion = " AND Grupo.id_grupo IN (";
+	$grupos_condicion = " AND grupo.id_grupo IN (";
 	foreach ($id_grupos as $id_grupo) {
 		$grupos_condicion .= $id_grupo . ',';
 	}
@@ -46,44 +46,44 @@ if(count($id_grupos) > 0) {
 // Note: Al stock disponible del item al 'current date' se le agregan todos los consumidos y se le restan todos los comprados despues de la fecha seleccionada
 
 $query = "SELECT
-    CONCAT(Categoria.categoria,'<br>',Proveedor.proveedor),
-    Item.codigo_proveedor,
-    (Item.stock_disponible
-    	- COALESCE((SELECT sum(cantidad) from Log where Log.fecha > $fecha and Log.id_item = Item.id_item and Log.id_accion = 1 ),0)
-			+ COALESCE((SELECT sum(cantidad) from Log where Log.fecha > $fecha and Log.id_item = Item.id_item and Log.id_accion = 2 ),0)) AS disponible,
-	(SELECT round(l.precio_fob, 2) FROM logprecios l where l.id_item = Item.id_item and l.insertado < $fecha order by insertado desc limit 1) as precio_fob,
-    (SELECT round(l.precio_nac, 2) FROM logprecios l where l.id_item = Item.id_item and l.insertado < $fecha order by insertado desc limit 1) as precio_nac,
-    Item.id_item,
-    Item.stock_transito,
-    (SELECT round(l.precio_ref, 2) FROM logprecios l where l.id_item = Item.id_item and l.insertado < $fecha order by insertado desc limit 1) as precio_ref,
-    Item.oculto_fob,
-    Item.oculto_nac,
-		CONCAT(Unidad.unidad,'(',Item.factor_unidades,')'),
-		Item.agrupacion_contable,
-		Pais.pais,
-		Grupo.grupo
+    CONCAT(categoria.categoria,'<br>',proveedor.proveedor),
+    item.codigo_proveedor,
+    (item.stock_disponible
+    	- COALESCE((SELECT sum(cantidad) from log where log.fecha > $fecha and log.id_item = item.id_item and log.id_accion = 1 ),0)
+			+ COALESCE((SELECT sum(cantidad) from log where log.fecha > $fecha and log.id_item = item.id_item and log.id_accion = 2 ),0)) AS disponible,
+	(SELECT round(l.precio_fob, 2) FROM logprecios l where l.id_item = item.id_item and l.insertado < $fecha order by insertado desc limit 1) as precio_fob,
+    (SELECT round(l.precio_nac, 2) FROM logprecios l where l.id_item = item.id_item and l.insertado < $fecha order by insertado desc limit 1) as precio_nac,
+    item.id_item,
+    item.stock_transito,
+    (SELECT round(l.precio_ref, 2) FROM logprecios l where l.id_item = item.id_item and l.insertado < $fecha order by insertado desc limit 1) as precio_ref,
+    item.oculto_fob,
+    item.oculto_nac,
+		CONCAT(unidad.unidad,'(',item.factor_unidades,')'),
+		item.agrupacion_contable,
+		pais.pais,
+		grupo.grupo
   FROM
-    Item,
-    Categoria,
-    Proveedor,
-		Unidad,
-		Grupo,
-		Pais
+    item,
+    categoria,
+    proveedor,
+		unidad,
+		grupo,
+		pais
   WHERE
-    (Item.id_categoria = Categoria.id_categoria) AND
-    (Item.id_proveedor = Proveedor.id_proveedor) AND
-		(Unidad.id_unidad = Item.id_unidad_compra) AND
-		(Grupo.id_grupo = Categoria.id_grupo) AND
-		(Proveedor.id_pais = Pais.id_pais)
-		-- AND Item.id_item = 431 
+    (item.id_categoria = categoria.id_categoria) AND
+    (item.id_proveedor = proveedor.id_proveedor) AND
+		(unidad.id_unidad = item.id_unidad_compra) AND
+		(grupo.id_grupo = categoria.id_grupo) AND
+		(proveedor.id_pais = pais.id_pais)
+		-- AND item.id_item = 431 
 		$grupos_condicion
   GROUP BY
-    Item.id_item, Item.id_categoria
+    item.id_item, item.id_categoria
   HAVING
     disponible > 0
   ORDER BY
 		$orderbygrupo
-		Categoria.categoria";
+		categoria.categoria";
 $result = mysql_query($query);
 
 // dump($query);
@@ -99,7 +99,7 @@ while ($row = mysql_fetch_array($result))
 	$precioRef = 0;
 
 	$totalFOB += $row[2] * $row[3];
-	if(tipoProveedor($row[12])=='NAC') {
+	if(tipoproveedor($row[12])=='NAC') {
 		$precioRef = $row[2] * $row[7];
 		$totalRefNac += $row[2] * $row[7];
 	}
@@ -107,7 +107,7 @@ while ($row = mysql_fetch_array($result))
 	$totalStock += $row[2];
 
  	$aux = $aux . "<tr class=\"provlistrow\"><td><a class=\"list\" onclick=\"add_comprar($row[5]);\">$row[0]</a></td>
-              <td>$row[13]</td><td>$row[2]</td><td>$row[10]</td><td>".($row[2] * $row[3])."</td><td>".$precioRef."</td><td>".tipoProveedor($row[12])."</td></tr>\n";
+              <td>$row[13]</td><td>$row[2]</td><td>$row[10]</td><td>".($row[2] * $row[3])."</td><td>".$precioRef."</td><td>".tipoproveedor($row[12])."</td></tr>\n";
 
 
 }
@@ -129,7 +129,7 @@ $var = array("header" => $header,
 eval_html('item_disponible_valorizado.html', $var);
 
 
-function tipoProveedor($pais) {
+function tipoproveedor($pais) {
 
 	if($pais == "ARGENTINA") return "NAC";
 

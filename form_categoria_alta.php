@@ -34,7 +34,7 @@ function insert_categoria(&$mensaje, $categoria, $id_grupo, $scan, $stock_minimo
   //
   $categoria = addslashes(trim(strtoupper($categoria)));
   $stock_minimo = addslashes(trim($stock_minimo));
-  $query = "INSERT INTO Categoria
+  $query = "INSERT INTO categoria
             (categoria, id_grupo, scan, stock_minimo, id_unidad_visual, porc_impuesto, pos_arancelaria)
             VALUES
             (\"$categoria\", $id_grupo, \"$scan\", $stock_minimo, $unidad, $porcentaje, \"$pos_arancelaria\")";

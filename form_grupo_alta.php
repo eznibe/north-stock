@@ -27,7 +27,7 @@ function insert_grupo(&$mensaje, $grupo)
   // Si estan todos los campos requeridos
   //
   $grupo = addslashes(trim(strtoupper($grupo)));
-  $query = "INSERT INTO Grupo 
+  $query = "INSERT INTO grupo 
             (grupo)
             VALUES 
             (\"$grupo\")";

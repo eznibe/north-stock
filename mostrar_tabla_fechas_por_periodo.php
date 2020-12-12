@@ -40,14 +40,14 @@ function mostrar_tabla_fechas_por_periodo($tipo_periodo, $tipo, $opcion, $id_acc
 	if($id_accion == 1){
 		$transac = "Compras";
 		$titulo = $transac;
-		$selecciono = "CONCAT(Unidad.unidad,'(',Item.factor_unidades,')')";
-		$condicion = "Unidad.id_unidad = Item.id_unidad_compra";
+		$selecciono = "CONCAT(unidad.unidad,'(',item.factor_unidades,')')";
+		$condicion = "unidad.id_unidad = item.id_unidad_compra";
 	}
 	else if($id_accion == 2){
 		$transac = "Consumos";
 		$titulo = $transac;
-		$selecciono = "Unidad.unidad";
-		$condicion = "Unidad.id_unidad = Categoria.id_unidad_visual";
+		$selecciono = "unidad.unidad";
+		$condicion = "unidad.id_unidad = categoria.id_unidad_visual";
 	}
 	else {
 		$transac = "Todos";
@@ -63,27 +63,27 @@ function mostrar_tabla_fechas_por_periodo($tipo_periodo, $tipo, $opcion, $id_acc
 			break;
 
 		case 'grupo':
-			$query_fin = " AND (Categoria.id_grupo = $opcion)";
+			$query_fin = " AND (categoria.id_grupo = $opcion)";
 			$titulo = $titulo . " del grupo " . get_group($opcion);
 			break;
 
 		case 'proveedor':
-			$query_fin = " AND (Item.id_proveedor = $opcion)";
+			$query_fin = " AND (item.id_proveedor = $opcion)";
 			$titulo = $titulo . " del proveedor " . get_proveedor($opcion);
 			break;
 
 		case 'categoria':
-			$query_fin = " AND (Item.id_categoria = $opcion)";
+			$query_fin = " AND (item.id_categoria = $opcion)";
 			$titulo = $titulo . " del producto " . get_categoria($opcion);
 			break;
 
 		case 'item':
-			$query_fin = " AND (Item.id_item = $opcion)";
+			$query_fin = " AND (item.id_item = $opcion)";
 			$titulo = $titulo . " del item " . get_item($opcion);
 			break;
 
 		case 'usuario':
-			$query_fin = " AND (Usuario.id_usuario = '".$opcion."')";
+			$query_fin = " AND (usuario.id_usuario = '".$opcion."')";
 			$titulo = $titulo . " ralizadas por usuario " . get_usuario($opcion,2);
 			break;
 
@@ -91,20 +91,20 @@ function mostrar_tabla_fechas_por_periodo($tipo_periodo, $tipo, $opcion, $id_acc
 
 	if($id_accion==1 || $id_accion==2) {
 		
-		$query = "SELECT Log.id_item, CONCAT(categoria,' - ',proveedor), Log.username, sum(cantidad), YEAR(fecha), MONTH(fecha), $selecciono
-				  FROM Categoria, Log, Item, Usuario, Proveedor, Unidad
-				  WHERE 	Log.id_item = Item.id_item AND
-							Item.id_categoria = Categoria.id_categoria AND
-							Usuario.username = Log.username AND
-							Proveedor.id_proveedor = Item.id_proveedor AND
+		$query = "SELECT log.id_item, CONCAT(categoria,' - ',proveedor), log.username, sum(cantidad), YEAR(fecha), MONTH(fecha), $selecciono
+				  FROM categoria, log, item, usuario, proveedor, unidad
+				  WHERE 	log.id_item = item.id_item AND
+							item.id_categoria = categoria.id_categoria AND
+							usuario.username = log.username AND
+							proveedor.id_proveedor = item.id_proveedor AND
 							$condicion AND
 							id_accion = $id_accion AND
 							fecha >= $fecha_ini AND fecha <= $fecha_fin";
 	
 		$query = $query . $query_fin;
 	
-		$query = $query . " GROUP BY Log.id_item, $groupByPeriod
-						    ORDER BY Categoria, Log.id_item, fecha";
+		$query = $query . " GROUP BY log.id_item, $groupByPeriod
+						    ORDER BY categoria, log.id_item, fecha";
 	}
 	else {
 		$query = crearQueryTodosByPeriodo($query_fin, $fecha_ini, $fecha_fin, $groupByPeriod);
@@ -149,14 +149,14 @@ function armar_listado($result,$tipo_periodo)
 
   	$listado = "<table border=0 width=100%>
   				<tr bgcolor='#777777'>
-    			<th width=50% colspan=3><font color=#000000> Item </font></th>
+    			<th width=50% colspan=3><font color=#000000> item </font></th>
     			<th width=50% colspan=3>$categoria</th>
   				</tr>
   				<tr class='provlisthead'>
     			<th width=25%>Mes</th>
     			<th width=25% colspan=2>A�o</th>
     			<th width=25% colspan=2>Cantidad</th>
-    			<th width=25%>Unidad</th>
+    			<th width=25%>unidad</th>
   				</tr>";
 
 	if($tipo_periodo == "MES") $nombre_mes = get_nombre_mes($row[5]);
@@ -199,14 +199,14 @@ function armar_listado($result,$tipo_periodo)
 
   			$listado .= "<table border=0 width=100%>
   						<tr bgcolor='#777777'>
-    					<th width=50% colspan=3><font color=#000000> Item </font></th>
+    					<th width=50% colspan=3><font color=#000000> item </font></th>
     					<th width=50% colspan=3>$categoria</th>
   						</tr>
   						<tr class='provlisthead'>
     					<th width=25%>Mes</th>
     					<th width=25% colspan=2>A�o</th>
     					<th width=25% colspan=2>Cantidad</th>
-    					<th width=25%>Unidad</th>
+    					<th width=25%>unidad</th>
   						</tr>";
 
 			if($tipo_periodo == "MES") $nombre_mes = get_nombre_mes($row[5]);
@@ -258,41 +258,41 @@ function armar_listado($result,$tipo_periodo)
 
 function crearQueryTodosByPeriodo($query_fin, $fecha_ini, $fecha_fin, $groupByPeriod) {
 
-	$selecciono_1 = "CONCAT(Unidad.unidad,'(',Item.factor_unidades,')')";
-	$condicion_1 = "Unidad.id_unidad = Item.id_unidad_compra";
-	$selecciono_2 = "Unidad.unidad";
-	$condicion_2 = "Unidad.id_unidad = Categoria.id_unidad_visual";
+	$selecciono_1 = "CONCAT(unidad.unidad,'(',item.factor_unidades,')')";
+	$condicion_1 = "unidad.id_unidad = item.id_unidad_compra";
+	$selecciono_2 = "unidad.unidad";
+	$condicion_2 = "unidad.id_unidad = categoria.id_unidad_visual";
 	
 	
- 	$query = "(SELECT Log.id_item as iditem, CONCAT(categoria,' - ',proveedor) as cate, Log.username, sum(cantidad), YEAR(fecha), MONTH(fecha), $selecciono_1, fecha, id_accion as accion, Log.fecha as fechaOrdenar
-			  FROM Categoria, Log, Item, Usuario, Proveedor, Unidad
-			  WHERE 	Log.id_item = Item.id_item AND
-						Item.id_categoria = Categoria.id_categoria AND
-						Usuario.username = Log.username AND
-						Proveedor.id_proveedor = Item.id_proveedor AND
+ 	$query = "(SELECT log.id_item as iditem, CONCAT(categoria,' - ',proveedor) as cate, log.username, sum(cantidad), YEAR(fecha), MONTH(fecha), $selecciono_1, fecha, id_accion as accion, log.fecha as fechaordenar
+			  FROM categoria, log, item, usuario, proveedor, unidad
+			  WHERE 	log.id_item = item.id_item AND
+						item.id_categoria = categoria.id_categoria AND
+						usuario.username = log.username AND
+						proveedor.id_proveedor = item.id_proveedor AND
 						$condicion_1 AND
 						id_accion = 1 AND
 						fecha >= $fecha_ini AND fecha <= $fecha_fin";
  	
  	$query .= $query_fin;
 
- 	$query .= " GROUP BY Log.id_item, $groupByPeriod )";
+ 	$query .= " GROUP BY log.id_item, $groupByPeriod )";
  	
  	$query .= " UNION ";
  	
- 	$query .= "(SELECT Log.id_item as iditem, CONCAT(categoria,' - ',proveedor) as cate, Log.username, sum(cantidad), YEAR(fecha), MONTH(fecha), $selecciono_2, fecha, id_accion as accion, Log.fecha as fechaOrdenar
-			   FROM Categoria, Log, Item, Usuario, Proveedor, Unidad
-			   WHERE 	Log.id_item = Item.id_item AND
-						Item.id_categoria = Categoria.id_categoria AND
-						Usuario.username = Log.username AND
-						Proveedor.id_proveedor = Item.id_proveedor AND
+ 	$query .= "(SELECT log.id_item as iditem, CONCAT(categoria,' - ',proveedor) as cate, log.username, sum(cantidad), YEAR(fecha), MONTH(fecha), $selecciono_2, fecha, id_accion as accion, log.fecha as fechaordenar
+			   FROM categoria, log, item, usuario, proveedor, unidad
+			   WHERE 	log.id_item = item.id_item AND
+						item.id_categoria = categoria.id_categoria AND
+						usuario.username = log.username AND
+						proveedor.id_proveedor = item.id_proveedor AND
 						$condicion_2 AND
 						id_accion = 2 AND
 						fecha >= $fecha_ini AND fecha <= $fecha_fin";
  	
  	$query .= $query_fin;
 
- 	$query .= " GROUP BY Log.id_item, $groupByPeriod )";
+ 	$query .= " GROUP BY log.id_item, $groupByPeriod )";
  	
  	$query .= " ORDER BY  cate,iditem,fecha";
  	

@@ -20,12 +20,12 @@ function update_orden($id_orden_item, $cantidad, $precio_fob)
 {
  if ( ($cantidad == 0) or (cantidad == "") )
  {
-  $query = "DELETE FROM OrdenItem WHERE id_orden_item = $id_orden_item";
+  $query = "DELETE FROM ordenitem WHERE id_orden_item = $id_orden_item";
  }
  else
  {
   $query = "UPDATE
- 	OrdenItem
+ 	ordenitem
    SET
  	cantidad = $cantidad,
 	precio_fob = $precio_fob
@@ -40,20 +40,20 @@ if ($formname == "orden_update") update_orden($id_orden_item, $cantidad, $precio
 #####
 
 $query = "SELECT DISTINCT
-	DATE_FORMAT(Orden.fecha, '%d-%m-%Y') AS fech,	
-	Orden.id_orden, 
-	Proveedor.proveedor,  
-	Orden.fecha
+	DATE_FORMAT(orden.fecha, '%d-%m-%Y') AS fech,	
+	orden.id_orden, 
+	proveedor.proveedor,  
+	orden.fecha
   FROM 
-	Orden, 
-	OrdenItem, 
-	Item, 
-	Proveedor 
+	orden, 
+	ordenitem, 
+	item, 
+	proveedor 
   WHERE ( 
-	(Orden.id_status = 0) AND 
-	(OrdenItem.id_orden = Orden.id_orden) AND 
-	(Item.id_item = OrdenItem.id_item) AND 
-	(Proveedor.id_proveedor = Item.id_proveedor) 
+	(orden.id_status = 0) AND 
+	(ordenitem.id_orden = orden.id_orden) AND 
+	(item.id_item = ordenitem.id_item) AND 
+	(proveedor.id_proveedor = item.id_proveedor) 
   ) 
   ORDER BY fecha, proveedor";
 

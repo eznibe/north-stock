@@ -28,7 +28,7 @@ function modify_pais(&$mensaje, $id_pais, $pais)
   // Si estan todos los campos requeridos
   //
   $pais = addslashes(trim(strtoupper($pais)));
-  $query = "UPDATE Pais 
+  $query = "UPDATE pais 
 		SET pais = \"$pais\"
             WHERE id_pais = $id_pais";
   $result = mysql_query($query);

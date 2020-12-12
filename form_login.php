@@ -11,12 +11,12 @@ db_connect();
 $query = "SELECT
 	 nivel, nombre
   FROM
-	Usuario,
-	Tipousr
+	usuario,
+	tipousr
   WHERE (
 	(username LIKE \"$username\") AND
 	(clave LIKE \"$clave\") AND
-	(Tipousr.id_tipousr = Usuario.id_tipousr) )";
+	(tipousr.id_tipousr = usuario.id_tipousr) )";
 
 $result = mysql_query($query);
 $num_results = mysql_num_rows($result);
@@ -35,7 +35,7 @@ if ($num_results != 0)
   eval_html('main_menu2.html', $var);
 }
 else {
-  echo "Usuario o clave invalidos.";
+  echo "usuario o clave invalidos.";
 }
 
 ?>

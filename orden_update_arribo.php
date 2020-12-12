@@ -12,28 +12,28 @@ $id_orden_item = $_GET['id_orden_item'];
 if(obtener_tipo_proveedor($id_orden_item) == "EXTRANJERO")
 {
   $query = "SELECT
-        OrdenItem.id_orden_item,
-        Categoria.categoria,
-		Proveedor.proveedor,
-        OrdenItem.cantidad,
-        Unidad.unidad,
-        OrdenItem.precio_fob,
-        (OrdenItem.cantidad * OrdenItem.precio_fob),
-		OrdenItem.id_orden,
-		Item.factor_unidades,
-		Categoria.id_categoria,
-		OrdenItem.cantidad_pendiente
+        ordenitem.id_orden_item,
+        categoria.categoria,
+		proveedor.proveedor,
+        ordenitem.cantidad,
+        unidad.unidad,
+        ordenitem.precio_fob,
+        (ordenitem.cantidad * ordenitem.precio_fob),
+		ordenitem.id_orden,
+		item.factor_unidades,
+		categoria.id_categoria,
+		ordenitem.cantidad_pendiente
   FROM
-      Categoria, Proveedor, OrdenItem, Item, Unidad
+      categoria, proveedor, ordenitem, item, unidad
   WHERE (
-	(OrdenItem.id_orden_item = $id_orden_item) AND
-        (Item.id_item = OrdenItem.id_item) AND
-        (Categoria.id_categoria = Item.id_categoria) AND
-        (Proveedor.id_proveedor = Item.id_proveedor) AND
-        (Unidad.id_unidad = Item.id_unidad_compra)
+	(ordenitem.id_orden_item = $id_orden_item) AND
+        (item.id_item = ordenitem.id_item) AND
+        (categoria.id_categoria = item.id_categoria) AND
+        (proveedor.id_proveedor = item.id_proveedor) AND
+        (unidad.id_unidad = item.id_unidad_compra)
   )
   ORDER BY
-        Categoria.categoria";
+        categoria.categoria";
 
 	$result = mysql_query($query);
 	$row = mysql_fetch_array($result);
@@ -43,28 +43,28 @@ if(obtener_tipo_proveedor($id_orden_item) == "EXTRANJERO")
 else
 {
 	$query = "SELECT
-        OrdenItem.id_orden_item,
-        Categoria.categoria,
-		Proveedor.proveedor,
-        OrdenItem.cantidad,
-        Unidad.unidad,
-        OrdenItem.precio_ref,
-        (OrdenItem.cantidad * OrdenItem.precio_ref),
-		OrdenItem.id_orden,
-		Item.factor_unidades,
-		Categoria.id_categoria,
-		OrdenItem.cantidad_pendiente
+        ordenitem.id_orden_item,
+        categoria.categoria,
+		proveedor.proveedor,
+        ordenitem.cantidad,
+        unidad.unidad,
+        ordenitem.precio_ref,
+        (ordenitem.cantidad * ordenitem.precio_ref),
+		ordenitem.id_orden,
+		item.factor_unidades,
+		categoria.id_categoria,
+		ordenitem.cantidad_pendiente
   FROM
-      Categoria, Proveedor, OrdenItem, Item, Unidad
+      categoria, proveedor, ordenitem, item, unidad
   WHERE (
-	(OrdenItem.id_orden_item = $id_orden_item) AND
-        (Item.id_item = OrdenItem.id_item) AND
-        (Categoria.id_categoria = Item.id_categoria) AND
-        (Proveedor.id_proveedor = Item.id_proveedor) AND
-        (Unidad.id_unidad = Item.id_unidad_compra)
+	(ordenitem.id_orden_item = $id_orden_item) AND
+        (item.id_item = ordenitem.id_item) AND
+        (categoria.id_categoria = item.id_categoria) AND
+        (proveedor.id_proveedor = item.id_proveedor) AND
+        (unidad.id_unidad = item.id_unidad_compra)
   )
   ORDER BY
-        Categoria.categoria";
+        categoria.categoria";
 
 	$result = mysql_query($query);
 	$row = mysql_fetch_array($result);
@@ -111,7 +111,7 @@ eval_html('orden_update.html', $var);
  * a partir del id_orden_item
  */
 function obtener_tipo_proveedor($id_orden_item){
-	$query = "SELECT pais.pais FROM Pais pais, Proveedor proveedor, Item item, OrdenItem ordenitem
+	$query = "SELECT pais.pais FROM pais pais, proveedor proveedor, item item, ordenitem ordenitem
 		  WHERE pais.id_pais = proveedor.id_pais and
 				proveedor.id_proveedor = item.id_proveedor and
 				ordenitem.id_orden_item = $id_orden_item and

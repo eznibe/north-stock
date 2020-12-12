@@ -12,8 +12,9 @@ $id_item = $_POST['id_item'];
 $cantidad = $_POST['cantidad'];
 $producto = $_POST['producto'];
 $unidad = $_POST['unidad'];
+$numero_orden = $_POST['numero_orden'];
 
-asignar_a_prevision($id_item, $id_prevision, $cantidad);
+asignar_a_prevision($id_item, $id_prevision, $cantidad, $numero_orden);
 
 $prevision = getPrevision($id_prevision);
 
@@ -27,10 +28,12 @@ $var = array("mensaje" => $mensaje,
 eval_html('producto_salida.html', $var);
 
 
-function asignar_a_prevision($id_item, &$id_prevision, $cantidad) {
+function asignar_a_prevision($id_item, &$id_prevision, $cantidad, $numero_orden) {
 
   if ($id_prevision == "-1") {
-    $query = "INSERT INTO prevision () VALUES ()";
+    $numero_orden = isset($numero_orden) && $numero_orden <> "" ? "'$numero_orden'" : 'null';
+
+    $query = "INSERT INTO prevision (numero_orden) VALUES ($numero_orden)";
     $result = mysql_query($query);
 
     $query = "SELECT p.id_prevision

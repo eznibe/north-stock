@@ -5,7 +5,7 @@
   <!-- <link rel="stylesheet" type="text/css" href="css/autocomplete.css" /> -->
 
   <script language="JavaScript" src="include/jquery-1.12.4.min.js"></script>
-  <script src="javascript/autocomplete.js"></script>
+  <!-- <script src="javascript/autocomplete.js"></script> -->
 
 <script type="text/javascript">
 
@@ -61,6 +61,10 @@ function buscaProducto(event) {
 
       if (data.items.length === 1) {
         $("#items").val(getItemValue(data.items[0]));
+        $('#id_item').val(data.items[0].id_item);
+        $('#precio').val(data.items[0].precio);
+        $('#moneda').val(data.items[0].moneda);
+        $('#unidad').text(data.items[0].unidad);
         $('#stock_disponible').text(data.items[0].stock_disponible);
         $('#stock_transito').text(data.items[0].stock_transito);
       }
@@ -87,6 +91,12 @@ function seleccionaItem() {
 function seleccionaPrevision() {
   const prevision_id = $('#previsiones').val();
   $('#id_prevision').val(prevision_id);
+
+  if (prevision_id !== '-1') {
+    $('#row_numero_orden').hide();
+  } else {
+    $('#row_numero_orden').show();
+  }
 }
 
 function loadItems() {
@@ -174,14 +184,22 @@ function loadItems() {
     </td>
   </tr>
   <tr style="<?php echo $var['known_prevision'] == 'true' ? 'display:none;' : '' ?>">
-    <td>
+    <td style="padding-top: 10px;">
       <label for="cantidad">Prevision:</label>
     </td>
-    <td>
+    <td style="padding-top: 10px;">
       <select style="max-width: 450px;" id="previsiones" onchange="seleccionaPrevision()">
         <option value="-1" selected>Nueva prevision</option>
         <?php echo $var['previsiones']; ?>
       </select>
+    </td>
+  </tr>
+  <tr style="<?php echo $var['known_prevision'] == 'true' ? 'display:none;' : '' ?>" id="row_numero_orden">
+    <td>
+      <label for="cantidad">Número orden:</label>
+    </td>
+    <td>
+      <input type="text" size="10" name="numero_orden" id="numero_orden" autocomplete="off">
     </td>
   </tr>
 

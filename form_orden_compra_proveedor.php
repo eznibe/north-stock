@@ -25,7 +25,7 @@ $proveedor = $id_proveedor;
 
 // Inserto nueva orden para proveedor
  $query =  "INSERT INTO
-			Orden
+			orden
 				(fecha,
 				cotizacion_dolar,
 				id_status)
@@ -42,7 +42,7 @@ log_trans($valid_user, 7, 0, 0, $fecha, $last_id[0]);
 if(obtener_tipo_proveedor($proveedor) == "EXTRANJERO")
 {
  $query = "INSERT INTO
-	OrdenItem
+	ordenitem
 	(id_orden,
 	id_item,
 	cantidad,
@@ -52,26 +52,26 @@ if(obtener_tipo_proveedor($proveedor) == "EXTRANJERO")
 	id_tipo_envio)
   SELECT
 	\"$last_id[0]\",
-	ItemComprar.id_item,
-	ItemComprar.cantidad,
-	ItemComprar.cantidad,
-	Item.precio_fob,
+	itemcomprar.id_item,
+	itemcomprar.cantidad,
+	itemcomprar.cantidad,
+	item.precio_fob,
 	'US$',
-	ItemComprar.id_tipo_envio
+	itemcomprar.id_tipo_envio
   FROM
-	ItemComprar,
-	Item
+	itemcomprar,
+	item
   WHERE (
-	(Item.id_item = ItemComprar.id_item) AND
-	(Item.id_proveedor = $proveedor)
+	(item.id_item = itemcomprar.id_item) AND
+	(item.id_proveedor = $proveedor)
   )";
 }
 else
 {
- //Proveedor argentino
+ //proveedor argentino
  //
  $query = "INSERT INTO
-	OrdenItem
+	ordenitem
 	(id_orden,
 	id_item,
 	cantidad,
@@ -81,18 +81,18 @@ else
 	id_tipo_envio)
   SELECT
 	\"$last_id[0]\",
-	ItemComprar.id_item,
-	ItemComprar.cantidad,
-	ItemComprar.cantidad,
-	Item.precio_ref,
+	itemcomprar.id_item,
+	itemcomprar.cantidad,
+	itemcomprar.cantidad,
+	item.precio_ref,
 	'AR$',
-	ItemComprar.id_tipo_envio
+	itemcomprar.id_tipo_envio
   FROM
-	ItemComprar,
-	Item
+	itemcomprar,
+	item
   WHERE (
-	(Item.id_item = ItemComprar.id_item) AND
-	(Item.id_proveedor = $proveedor)
+	(item.id_item = itemcomprar.id_item) AND
+	(item.id_proveedor = $proveedor)
   )";
 }
 
@@ -101,29 +101,29 @@ $result = mysql_query($query);
 
 // Genero archivo para download de datos de compra
  $query_1 = "SELECT
-	ItemComprar.id_item,
-	Proveedor.proveedor,
-	Item.codigo_proveedor,
-	ItemComprar.cantidad,
-	Unidad.unidad,
+	itemcomprar.id_item,
+	proveedor.proveedor,
+	item.codigo_proveedor,
+	itemcomprar.cantidad,
+	unidad.unidad,
 	DATE_FORMAT(NOW(), \"%d-%m-%Y\"),
-	Categoria.categoria
+	categoria.categoria
   FROM
-	ItemComprar,
-	Proveedor,
-	Item,
-	Categoria,
-	Unidad
+	itemcomprar,
+	proveedor,
+	item,
+	categoria,
+	unidad
   WHERE (
-	(Item.id_item = ItemComprar.id_item) AND
-	(Proveedor.id_proveedor = Item.id_proveedor) AND
-	(Item.id_proveedor = $proveedor) AND
-	(Item.id_categoria = Categoria.id_categoria) AND
-	(Unidad.id_unidad = Item.id_unidad_compra)
+	(item.id_item = itemcomprar.id_item) AND
+	(proveedor.id_proveedor = item.id_proveedor) AND
+	(item.id_proveedor = $proveedor) AND
+	(item.id_categoria = categoria.id_categoria) AND
+	(unidad.id_unidad = item.id_unidad_compra)
   )";
  $result_1 = mysql_query($query_1);
  $row_1 = mysql_fetch_array($result_1);
- $pedido = $pedido . "\n\n\nPedido para $row_1[1] $row_1[5] Orden No $last_id[0]\n\n";
+ $pedido = $pedido . "\n\n\nPedido para $row_1[1] $row_1[5] orden No $last_id[0]\n\n";
 
  if($row_1[2]=="")
  	$row_1[2] = obtener_descripcion_categoria($row_1[0]);
@@ -139,10 +139,10 @@ $result = mysql_query($query);
  }
 
 //Borrar items a comprar del proveedor
-$query = "DELETE ItemComprar
-          FROM ItemComprar join Item on Item.id_item = ItemComprar.id_item
- 		           join Proveedor on Proveedor.id_proveedor = Item.id_proveedor
-	  WHERE Proveedor.id_proveedor = $id_proveedor";
+$query = "DELETE itemcomprar
+          FROM itemcomprar join item on item.id_item = itemcomprar.id_item
+ 		           join proveedor on proveedor.id_proveedor = item.id_proveedor
+	  WHERE proveedor.id_proveedor = $id_proveedor";
 $result = mysql_query($query);
 
 $handle = fopen("pedido.txt", "w");
@@ -158,9 +158,9 @@ eval_html('orden_compra_proveedor_fin.html', $var);
 function obtener_descripcion_categoria($id_item)
 {
 	$query_2 = "SELECT categoria
-  				FROM Categoria, Item
-  				WHERE (Item.id_item=$id_item AND
-  					   Item.id_categoria = Categoria.id_categoria)";
+  				FROM categoria, item
+  				WHERE (item.id_item=$id_item AND
+  					   item.id_categoria = categoria.id_categoria)";
 
 	$result_2 = mysql_query($query_2);
 	$row_2 = mysql_fetch_array($result_2);
@@ -170,7 +170,7 @@ function obtener_descripcion_categoria($id_item)
 
 function obtener_precio_dolar()
 {
-	$query = "SELECT precio_dolar from DolarHoy where id_dolar=(SELECT max(id_dolar) FROM DolarHoy)";
+	$query = "SELECT precio_dolar from dolarhoy where id_dolar=(SELECT max(id_dolar) FROM dolarhoy)";
 
 	$result = mysql_query($query);
 	$row = mysql_fetch_array($result);

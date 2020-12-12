@@ -27,7 +27,7 @@ $focus = "forms[0].pais";
 db_connect();
 
 $query = "UPDATE
-	Orden
+	orden
   SET
 	id_status = 1 ,
 	fecha = now()
@@ -43,7 +43,7 @@ $query = "SELECT
         id_item,
         cantidad
   FROM
-        OrdenItem
+        ordenitem
   WHERE
         id_orden = $id_orden";
 
@@ -60,11 +60,11 @@ foreach ($items as $item)
 {
  $cantidad_factor = (get_factor_unidades($item[0])) * $item[1];
  $query = "UPDATE
-        Item
+        item
   SET
-        Item.stock_transito = Item.stock_transito + $cantidad_factor
+        item.stock_transito = item.stock_transito + $cantidad_factor
   WHERE (
-        (Item.id_item = $item[0])
+        (item.id_item = $item[0])
   )";
  $result = mysql_query($query);
 }

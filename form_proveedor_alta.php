@@ -18,7 +18,7 @@ db_connect();
 if (($proveedor != "") and ($id_pais != 0))
 {
  $query = "INSERT INTO 
-	Proveedor 
+	proveedor 
   (
 	proveedor, 
 	direccion, 
@@ -52,7 +52,7 @@ else
  $mensaje = "<em class=\"error\">Error: Debe ingresar el nombre del proveedor y seleccionar un pais.</em>";
 }
 
-$query = "SELECT id_pais, pais FROM Pais";
+$query = "SELECT id_pais, pais FROM pais";
 $result = mysql_query($query);
 
 $aux = "";

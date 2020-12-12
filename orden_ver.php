@@ -26,34 +26,34 @@ if ($formname == "orden_update") {
 
 if(obtener_tipo_proveedor($id_orden) == "EXTRANJERO")
 {
-	//Proveedor extranjero
+	//proveedor extranjero
 	//
 	$query = "SELECT
-	DATE_FORMAT(Orden.fecha, '%d-%m-%Y') AS fech,
-	Proveedor.proveedor,
-	OrdenItem.id_orden_item,
-	Categoria.categoria,
-	OrdenItem.cantidad,
-	CONCAT(Unidad.unidad,'(',Item.factor_unidades,')'),
-	OrdenItem.precio_fob,
-	(OrdenItem.cantidad * OrdenItem.precio_fob),
-	Item.codigo_proveedor,
-	Orden.descripcion,
-	TipoEnvio.tipo_envio,
-	Orden.despacho
+	DATE_FORMAT(orden.fecha, '%d-%m-%Y') AS fech,
+	proveedor.proveedor,
+	ordenitem.id_orden_item,
+	categoria.categoria,
+	ordenitem.cantidad,
+	CONCAT(unidad.unidad,'(',item.factor_unidades,')'),
+	ordenitem.precio_fob,
+	(ordenitem.cantidad * ordenitem.precio_fob),
+	item.codigo_proveedor,
+	orden.descripcion,
+	tipoenvio.tipo_envio,
+	orden.despacho
   FROM
-      Orden, Categoria, Proveedor, OrdenItem, Item, Unidad, TipoEnvio
+      orden, categoria, proveedor, ordenitem, item, unidad, tipoenvio
   WHERE (
-	(Orden.id_orden = $id_orden) AND
-	(OrdenItem.id_orden = Orden.id_orden) AND
-	(Item.id_item = OrdenItem.id_item) AND
-	(Categoria.id_categoria = Item.id_categoria) AND
-	(Proveedor.id_proveedor = Item.id_proveedor) AND
-	(Unidad.id_unidad = Item.id_unidad_compra) AND
-	(OrdenItem.id_tipo_envio = TipoEnvio.id_tipo_envio)
+	(orden.id_orden = $id_orden) AND
+	(ordenitem.id_orden = orden.id_orden) AND
+	(item.id_item = ordenitem.id_item) AND
+	(categoria.id_categoria = item.id_categoria) AND
+	(proveedor.id_proveedor = item.id_proveedor) AND
+	(unidad.id_unidad = item.id_unidad_compra) AND
+	(ordenitem.id_tipo_envio = tipoenvio.id_tipo_envio)
   )
   ORDER BY
-	Categoria.categoria, TipoEnvio.id_tipo_envio";
+	categoria.categoria, tipoenvio.id_tipo_envio";
 
 $count=0; $orden="";
 $result = mysql_query($query);
@@ -77,11 +77,11 @@ while ($row = mysql_fetch_array($result))
 
 //Calculo total en dolares
 $query = "SELECT
-        sum((OrdenItem.cantidad * OrdenItem.precio_fob))
+        sum((ordenitem.cantidad * ordenitem.precio_fob))
   FROM
-      OrdenItem
+      ordenitem
   WHERE (
-        (OrdenItem.id_orden = $id_orden)
+        (ordenitem.id_orden = $id_orden)
   )";
 $result = mysql_query($query);
 $row = mysql_fetch_array($result);
@@ -93,34 +93,34 @@ $total_pesos = $total * obtener_precio_dolar_orden($id_orden);
 
 else
 {
-	//Proveedor argentino
+	//proveedor argentino
 	//
 	$query = "SELECT
-	DATE_FORMAT(Orden.fecha, '%d-%m-%Y') AS fech,
-	Proveedor.proveedor,
-	OrdenItem.id_orden_item,
-	Categoria.categoria,
-	OrdenItem.cantidad,
-	CONCAT(Unidad.unidad,'(',Item.factor_unidades,')'),
-	OrdenItem.precio_ref,
-	(OrdenItem.cantidad * OrdenItem.precio_ref),
-	Item.codigo_proveedor,
-	Orden.descripcion,
-	TipoEnvio.tipo_envio,
-	Orden.despacho
+	DATE_FORMAT(orden.fecha, '%d-%m-%Y') AS fech,
+	proveedor.proveedor,
+	ordenitem.id_orden_item,
+	categoria.categoria,
+	ordenitem.cantidad,
+	CONCAT(unidad.unidad,'(',item.factor_unidades,')'),
+	ordenitem.precio_ref,
+	(ordenitem.cantidad * ordenitem.precio_ref),
+	item.codigo_proveedor,
+	orden.descripcion,
+	tipoenvio.tipo_envio,
+	orden.despacho
   FROM
-      Orden, Categoria, Proveedor, OrdenItem, Item, Unidad, TipoEnvio
+      orden, categoria, proveedor, ordenitem, item, unidad, tipoenvio
   WHERE (
-	(Orden.id_orden = $id_orden) AND
-	(OrdenItem.id_orden = Orden.id_orden) AND
-	(Item.id_item = OrdenItem.id_item) AND
-	(Categoria.id_categoria = Item.id_categoria) AND
-	(Proveedor.id_proveedor = Item.id_proveedor) AND
-	(Unidad.id_unidad = Item.id_unidad_compra) AND
-	(OrdenItem.id_tipo_envio = TipoEnvio.id_tipo_envio)
+	(orden.id_orden = $id_orden) AND
+	(ordenitem.id_orden = orden.id_orden) AND
+	(item.id_item = ordenitem.id_item) AND
+	(categoria.id_categoria = item.id_categoria) AND
+	(proveedor.id_proveedor = item.id_proveedor) AND
+	(unidad.id_unidad = item.id_unidad_compra) AND
+	(ordenitem.id_tipo_envio = tipoenvio.id_tipo_envio)
   )
   ORDER BY
-	Categoria.categoria, TipoEnvio.id_tipo_envio";
+	categoria.categoria, tipoenvio.id_tipo_envio";
 
 $count=0;
 $result = mysql_query($query);
@@ -144,11 +144,11 @@ while ($row = mysql_fetch_array($result))
 
 //Calculo total en pesos
 $query = "SELECT
-        sum((OrdenItem.cantidad * OrdenItem.precio_ref))
+        sum((ordenitem.cantidad * ordenitem.precio_ref))
   FROM
-      OrdenItem
+      ordenitem
   WHERE (
-        (OrdenItem.id_orden = $id_orden)
+        (ordenitem.id_orden = $id_orden)
   )";
 $result = mysql_query($query);
 $row = mysql_fetch_array($result);
@@ -183,7 +183,7 @@ eval_html('orden_ver_ajax.php', $var);
 
 function orden_descripcion($id_orden)
 {
-	$query = "SELECT descripcion FROM Orden WHERE Orden.id_orden = $id_orden";
+	$query = "SELECT descripcion FROM orden WHERE orden.id_orden = $id_orden";
 	$result = mysql_query($query);
 	$row = mysql_fetch_array($result);
 	return $row[0];
@@ -191,7 +191,7 @@ function orden_descripcion($id_orden)
 
 function orden_despacho($id_orden)
 {
-	$query = "SELECT despacho FROM Orden WHERE Orden.id_orden = $id_orden";
+	$query = "SELECT despacho FROM orden WHERE orden.id_orden = $id_orden";
 	$result = mysql_query($query);
 	$row = mysql_fetch_array($result);
 	return $row[0];
@@ -199,7 +199,7 @@ function orden_despacho($id_orden)
 
 function orden_nr_factura($id_orden)
 {
-	$query = "SELECT nr_factura FROM Orden WHERE Orden.id_orden = $id_orden";
+	$query = "SELECT nr_factura FROM orden WHERE orden.id_orden = $id_orden";
 	$result = mysql_query($query);
 	$row = mysql_fetch_array($result);
 	return $row[0];
@@ -213,11 +213,11 @@ function update_orden($id_orden_item, $cantidad, $precio)
 {
  if ( ($cantidad == 0) or ($cantidad == "") )
  {
-  $query = "SELECT id_orden, id_item FROM OrdenItem WHERE id_orden_item = $id_orden_item";
+  $query = "SELECT id_orden, id_item FROM ordenitem WHERE id_orden_item = $id_orden_item";
   $result = mysql_query($query);
   $row = mysql_fetch_array($result);
 
-  $query = "DELETE FROM OrdenItem WHERE id_orden_item = $id_orden_item";
+  $query = "DELETE FROM ordenitem WHERE id_orden_item = $id_orden_item";
 
   // logueo item borrado de la orden (8)
   log_trans($_SESSION['valid_user'], 8, $row[1], 0, date("Y-m-d"), $row[0]);
@@ -229,7 +229,7 @@ function update_orden($id_orden_item, $cantidad, $precio)
   if(obtener_tipo_proveedor_por_orden_item($id_orden_item) == "EXTRANJERO")
   {
   	$query = "UPDATE
-        OrdenItem
+        ordenitem
   	 SET
         cantidad = $cantidad,
         cantidad_pendiente = $cantidad,
@@ -240,7 +240,7 @@ function update_orden($id_orden_item, $cantidad, $precio)
   else
   {
   	$query = "UPDATE
-        OrdenItem
+        ordenitem
   	 SET
         cantidad = $cantidad,
         cantidad_pendiente = $cantidad,
@@ -257,7 +257,7 @@ function update_orden($id_orden_item, $cantidad, $precio)
  * Devuelve si el proveedor es extranjero o nacional para saber como mostrar el listado
  */
 function obtener_tipo_proveedor($id_orden){
-	$query = "SELECT pais.pais FROM Pais pais, Proveedor proveedor, Item item, OrdenItem ordenitem
+	$query = "SELECT pais.pais FROM pais pais, proveedor proveedor, item item, ordenitem ordenitem
 		  WHERE pais.id_pais = proveedor.id_pais and
 				proveedor.id_proveedor = item.id_proveedor and
 				ordenitem.id_orden = $id_orden and
@@ -289,7 +289,7 @@ function obtener_tipo_proveedor_por_orden_item($id_orden_item){
 
 function obtener_precio_dolar_orden($id_orden)
 {
-	$query = "SELECT cotizacion_dolar FROM Orden WHERE id_orden = $id_orden";
+	$query = "SELECT cotizacion_dolar FROM orden WHERE id_orden = $id_orden";
 	$result = mysql_query($query);
 	$row = mysql_fetch_array($result);
 	return $row[0];
@@ -297,7 +297,7 @@ function obtener_precio_dolar_orden($id_orden)
 
 function obtener_fecha_orden($id_orden)
 {
-	$query = "SELECT fecha FROM Orden WHERE id_orden = $id_orden";
+	$query = "SELECT fecha FROM orden WHERE id_orden = $id_orden";
 	$result = mysql_query($query);
 	$row = mysql_fetch_array($result);
 	return $row[0];

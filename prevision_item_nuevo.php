@@ -15,11 +15,11 @@ $cantidad = isset($_GET['cantidad']) ? $_GET['cantidad'] : "";
 //
 $items = "";
 if ($id_item <> "") {
-  $items = getItems($id_item);
+  $items = getitems($id_item);
 }
 
 if ($id_item <> "") {
-  $item = getItem($id_item);
+  $item = getitem($id_item);
   $stock_disponible = $item['stock_disponible'];
   $stock_transito = $item['stock_transito'];
   $producto = $item['producto'];
@@ -68,7 +68,7 @@ function getPrevisiones() {
   return $previsiones;
 }
 
-function getItems($id_item) {
+function getitems($id_item) {
   $query = "SELECT i.id_item, concat(c.categoria, ' - ', pro.proveedor), 
     round(coalesce(i.precio_fob, i.precio_ref), 2) as precio,
     case when pro.id_pais = 1 then 'AR$' when pro.id_pais > 1 then 'US$' end as moneda,
@@ -79,6 +79,8 @@ function getItems($id_item) {
   JOIN proveedor pro on i.id_proveedor = pro.id_proveedor
   JOIN categoria c on i.id_categoria = c.id_categoria
   JOIN unidad u on u.id_unidad = c.id_unidad_visual
+  WHERE 
+    i.id_item = $id_item
   order by c.categoria, pro.proveedor";
 
   $result = mysql_query($query);
@@ -91,7 +93,7 @@ function getItems($id_item) {
   return $items;
 }
 
-function getItem($id_item) {
+function getitem($id_item) {
   $query = "SELECT i.id_item, 
     stock_disponible,
     stock_transito,

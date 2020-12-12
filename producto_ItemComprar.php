@@ -10,15 +10,15 @@ db_connect();
 $id_proveedor = $_GET['id_proveedor'];
 
 $query = "SELECT
-	Categoria.categoria, Proveedor.proveedor, ItemComprar.cantidad, Unidad.unidad
+	categoria.categoria, proveedor.proveedor, itemcomprar.cantidad, unidad.unidad
 	FROM
-	Categoria, Proveedor, ItemComprar, Item, Unidad
+	categoria, proveedor, itemcomprar, item, unidad
 	WHERE (
-	(ItemComprar.id_item = Item.id_item) AND
-	(Item.id_proveedor = Proveedor.id_proveedor) AND
-	(Item.id_proveedor = $id_proveedor) AND
-	(Categoria.id_categoria = Item.id_categoria) AND
-	(Unidad.id_unidad = Categoria.id_unidad_visual)
+	(itemcomprar.id_item = item.id_item) AND
+	(item.id_proveedor = proveedor.id_proveedor) AND
+	(item.id_proveedor = $id_proveedor) AND
+	(categoria.id_categoria = item.id_categoria) AND
+	(unidad.id_unidad = categoria.id_unidad_visual)
 	)";
 
 $result = mysql_query($query);
@@ -30,4 +30,4 @@ while ($row = mysql_fetch_array($result))
 
 $var = array("item" => $item,
 	"rows" => $aux);
-eval_html('producto_ItemComprar.html', $var);
+eval_html('producto_itemcomprar.html', $var);

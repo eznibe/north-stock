@@ -7,7 +7,7 @@ session_start();
 
 db_connect();
 
-$query = "SELECT id_grupo, grupo FROM Grupo ORDER BY grupo";
+$query = "SELECT id_grupo, grupo FROM grupo ORDER BY grupo";
 $result = mysql_query($query);
 
 if (mysql_num_rows($result) > 0)

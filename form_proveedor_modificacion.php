@@ -33,7 +33,7 @@ function get_prov_data(&$data, $id_proveedor)
 	contacto,
 	mail
   FROM
-	Proveedor
+	proveedor
   WHERE (
 	(id_proveedor = $id_proveedor)
   )";
@@ -55,7 +55,7 @@ function update_proveedor(&$mensaje, $id_proveedor, $proveedor, $direccion, $id_
  {
   // Si estan todos los campos requeridos
   //
-  $query = "UPDATE Proveedor SET
+  $query = "UPDATE proveedor SET
 	proveedor = \"$proveedor\",
 	direccion = \"$direccion\",
 	id_pais = $id_pais,
@@ -64,7 +64,7 @@ function update_proveedor(&$mensaje, $id_proveedor, $proveedor, $direccion, $id_
 	contacto = \"$contacto\",
 	mail = \"$mail\"
   WHERE 
-	Proveedor.id_proveedor = $id_proveedor";
+	proveedor.id_proveedor = $id_proveedor";
 
   if (!($result = mysql_query($query)))
   {

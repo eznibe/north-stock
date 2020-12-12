@@ -11,26 +11,26 @@ $id_proveedor = $_GET['id_proveedor'];
 $id_itemcomprar = $_GET['id_itemcomprar'];
 
 $query = "SELECT
-        ItemComprar.id_itemcomprar,
-        Categoria.categoria, 
-	Proveedor.proveedor,
-        ItemComprar.cantidad,
-        Unidad.unidad,
-        Item.precio_fob,
-        (ItemComprar.cantidad * Item.precio_fob),
-	Item.factor_unidades,
-	Categoria.id_categoria
+        itemcomprar.id_itemcomprar,
+        categoria.categoria, 
+	proveedor.proveedor,
+        itemcomprar.cantidad,
+        unidad.unidad,
+        item.precio_fob,
+        (itemcomprar.cantidad * item.precio_fob),
+	item.factor_unidades,
+	categoria.id_categoria
   FROM
-      Categoria, Proveedor, ItemComprar, Item, Unidad
+      categoria, proveedor, itemcomprar, item, unidad
   WHERE (
-	(ItemComprar.id_itemcomprar = $id_itemcomprar) AND
-        (Item.id_item = ItemComprar.id_item) AND
-        (Categoria.id_categoria = Item.id_categoria) AND
-        (Proveedor.id_proveedor = Item.id_proveedor) AND
-        (Unidad.id_unidad = Item.id_unidad_compra)
+	(itemcomprar.id_itemcomprar = $id_itemcomprar) AND
+        (item.id_item = itemcomprar.id_item) AND
+        (categoria.id_categoria = item.id_categoria) AND
+        (proveedor.id_proveedor = item.id_proveedor) AND
+        (unidad.id_unidad = item.id_unidad_compra)
   )
   ORDER BY
-        Categoria.categoria";
+        categoria.categoria";
 
 $result = mysql_query($query);
 $row = mysql_fetch_array($result);

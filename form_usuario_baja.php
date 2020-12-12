@@ -26,7 +26,7 @@ function delete_usuario(&$mensaje, $id_usuario)
  {
   // Si estan todos los campos requeridos
   //
-  $query = "DELETE FROM Usuario 
+  $query = "DELETE FROM usuario 
             WHERE id_usuario = $id_usuario";
 
   $result = mysql_query($query);

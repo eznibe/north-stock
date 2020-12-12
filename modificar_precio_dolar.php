@@ -29,7 +29,7 @@
 
 function modificar_precio_dolar($precio_dolar)
 {
-	$query = "INSERT INTO DolarHoy (precio_dolar) VALUES ($precio_dolar)";
+	$query = "INSERT INTO dolarhoy (precio_dolar) VALUES ($precio_dolar)";
 	if (!($result = mysql_query($query)))
 	   return FALSE;
 
@@ -42,7 +42,7 @@ function modificar_precio_dolar($precio_dolar)
  */
 function actualizar_precios_ref($precio_dolar)
 {
-	$query = "UPDATE Item SET precio_ref = precio_nac * $precio_dolar " .
+	$query = "UPDATE item SET precio_ref = precio_nac * $precio_dolar " .
 			 "WHERE precio_nac IS NOT NULL AND" .
 			 " precio_nac <> 0";
 	$result = mysql_query($query);

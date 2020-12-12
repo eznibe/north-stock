@@ -10,28 +10,28 @@ db_connect();
 $id_item = $_GET['id_item'];
 
 $query = "SELECT
-	Categoria.categoria,
-	Proveedor.proveedor,
-	Unidad.unidad,
-	Item.id_item,
-	Item.factor_unidades,
-	Categoria.id_categoria,
-	Proveedor.id_proveedor
+	categoria.categoria,
+	proveedor.proveedor,
+	unidad.unidad,
+	item.id_item,
+	item.factor_unidades,
+	categoria.id_categoria,
+	proveedor.id_proveedor
   FROM
-	Categoria,
-	Proveedor,
-	Unidad,
-	Item
+	categoria,
+	proveedor,
+	unidad,
+	item
   WHERE (
-	(Item.id_item = $id_item) AND
-	(Item.id_categoria = Categoria.id_categoria) AND
-	(Proveedor.id_proveedor = Item.id_proveedor) AND
-	(Unidad.id_unidad = Item.id_unidad_compra)
+	(item.id_item = $id_item) AND
+	(item.id_categoria = categoria.id_categoria) AND
+	(proveedor.id_proveedor = item.id_proveedor) AND
+	(unidad.id_unidad = item.id_unidad_compra)
   )
   GROUP BY
-	Categoria.categoria
+	categoria.categoria
   ORDER BY
-	Categoria.categoria";
+	categoria.categoria";
 $result = mysql_query($query);
 
 

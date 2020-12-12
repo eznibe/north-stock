@@ -11,7 +11,7 @@ $mensaje = "";
 $focus = "producto";
 
 $query = "SELECT P.id_proveedor, P.proveedor, COUNT(*)
-		FROM ItemComprar IC, Proveedor P, Item I
+		FROM itemcomprar IC, proveedor P, item I
 		WHERE I.id_item = IC.id_item
   		  AND I.id_proveedor = P.id_proveedor
   		GROUP BY P.id_proveedor

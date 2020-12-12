@@ -10,25 +10,25 @@ db_connect();
 $id_categoria = $_GET['id_categoria'];
 
 $query = "SELECT 
-	Categoria.categoria, 
-	Categoria.stock_minimo, 
-	SUM(Item.stock_disponible), 
-	(SUM(Item.stock_disponible)-Categoria.stock_minimo), 
-	Unidad.unidad,
-	SUM(Item.stock_transito),
-	(SUM(Item.stock_disponible)+SUM(Item.stock_transito)-Categoria.stock_minimo),
-	Categoria.pos_arancelaria
+	categoria.categoria, 
+	categoria.stock_minimo, 
+	SUM(item.stock_disponible), 
+	(SUM(item.stock_disponible)-categoria.stock_minimo), 
+	unidad.unidad,
+	SUM(item.stock_transito),
+	(SUM(item.stock_disponible)+SUM(item.stock_transito)-categoria.stock_minimo),
+	categoria.pos_arancelaria
   FROM 
-	Item, Categoria, Unidad 
+	item, categoria, unidad 
   WHERE (
-	(Item.id_categoria = Categoria.id_categoria) AND 
-	(Categoria.id_categoria = $id_categoria) AND 
-	(Unidad.id_unidad = Categoria.id_unidad_visual)
+	(item.id_categoria = categoria.id_categoria) AND 
+	(categoria.id_categoria = $id_categoria) AND 
+	(unidad.id_unidad = categoria.id_unidad_visual)
   ) 
   GROUP BY 
-	Item.id_categoria 
+	item.id_categoria 
   ORDER BY 
-	Categoria.categoria";
+	categoria.categoria";
 $result = mysql_query($query);
 
 
@@ -42,25 +42,25 @@ $producto = htmlspecialchars(stripslashes($row[0]));
 $header = "<tr class=\"provlistrow\"><td>$producto</td><td>$row[2]</td><td>$row[1]</td><td>$row[3]</td><td>$row[5]</td><td>$row[6]</td><td>$unidad</td><td>$row[7]</td></tr>\n";
 
 $query = "SELECT 
-	Proveedor.proveedor, 
-	Item.codigo_proveedor,
-	Item.stock_disponible, 
-	Item.precio_fob, 
-	Item.precio_nac, 
-	Item.id_item,
-	Item.stock_transito,
-	Item.precio_ref,
-	Item.oculto_fob,
-	Item.oculto_nac 
+	proveedor.proveedor, 
+	item.codigo_proveedor,
+	item.stock_disponible, 
+	item.precio_fob, 
+	item.precio_nac, 
+	item.id_item,
+	item.stock_transito,
+	item.precio_ref,
+	item.oculto_fob,
+	item.oculto_nac 
   FROM 
-	Item, 
-	Proveedor  
+	item, 
+	proveedor  
   WHERE (
-	(Item.id_categoria = $id_categoria) AND 
-	(Proveedor.id_proveedor = Item.id_proveedor)
+	(item.id_categoria = $id_categoria) AND 
+	(proveedor.id_proveedor = item.id_proveedor)
   ) 
   ORDER BY 
-	Proveedor.proveedor";
+	proveedor.proveedor";
 $result = mysql_query($query);
 
 

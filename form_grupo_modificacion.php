@@ -29,14 +29,14 @@ function modify_grupo(&$mensaje, $id_grupo, $grupo, $agrupacion)
   // Si estan todos los campos requeridos
   //
   $grupo = addslashes(trim(strtoupper($grupo)));
-  $query = "UPDATE Grupo 
+  $query = "UPDATE grupo 
 			SET grupo = \"$grupo\", agrupacion_contable = \"$agrupacion\" 
             WHERE id_grupo = $id_grupo";
   $result = mysql_query($query);
   
   // Los items del grupo tambien modifican a la nueva agrupacion contable, solo si esta cambio en el grupo
   if($agrupacion != grupo_agrupacion_contable($id_grupo)) {
-	  $query = "UPDATE Item i join Categoria c on i.id_categoria = c.id_categoria join Grupo g on g.id_grupo = c.id_grupo
+	  $query = "UPDATE item i join categoria c on i.id_categoria = c.id_categoria join grupo g on g.id_grupo = c.id_grupo
 				SET i.agrupacion_contable = $agrupacion 
 				WHERE g.id_grupo = $id_grupo";
 	  $result = mysql_query($query);
@@ -49,7 +49,7 @@ function modify_grupo(&$mensaje, $id_grupo, $grupo, $agrupacion)
 
 function grupo_agrupacion_contable($id_grupo) 
 {
-	$query = "SELECT agrupacion_contable FROM Grupo WHERE Grupo_id_grupo = $id_grupo";
+	$query = "SELECT agrupacion_contable FROM grupo WHERE grupo_id_grupo = $id_grupo";
 	$result = mysql_query($query);
 	$row = mysql_fetch_array($result);
 	return $row[0];

@@ -80,15 +80,15 @@ Producto:
 </tr>
 <tr>
 <td>
-Proveedor:
+proveedor:
 </td>
 <td>
 
 
 <select name="proveedor" id="proveedor" class="obligatorio" onchange="mostrar_precio_correcto()">
-    <option value="1" onclicked="mensaje()"> Proveedor 1</option>
-    <option value="2"> Proveedor 2</option>
-    <option value="25">Proveedor 25</option>
+    <option value="1" onclicked="mensaje()"> proveedor 1</option>
+    <option value="2"> proveedor 2</option>
+    <option value="25">proveedor 25</option>
   </select>
 
 </td>
@@ -96,7 +96,7 @@ Proveedor:
 </tr>
 <tr>
 <td>
-Unidad de descarga:
+unidad de descarga:
 </td>
 <td>
 <?php echo $var['unidad_descarga']; ?>
@@ -105,7 +105,7 @@ Unidad de descarga:
 </tr>
 
 <td>
- <label for="unidad">Unidad de compra:</label>
+ <label for="unidad">unidad de compra:</label>
 </td>
 <td>
   <select name="unidad" id="unidad" class="obligatorio">

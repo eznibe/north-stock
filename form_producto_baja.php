@@ -26,7 +26,7 @@ function delete_subproducto(&$mensaje, $id_subproducto)
  {
   // Si estan todos los campos requeridos
   //
-  $query = "DELETE FROM Item 
+  $query = "DELETE FROM item 
             WHERE id_item = $id_subproducto";
 
   $result = mysql_query($query);

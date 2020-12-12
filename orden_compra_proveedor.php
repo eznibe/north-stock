@@ -30,25 +30,25 @@ if ($formname == "orden_comprar_update_cant")
 //Busco los item a comprar a proveedores extranjeros
 //
 $query = "SELECT
-	ItemComprar.id_itemcomprar,
-	concat(Categoria.categoria, \" - \", Proveedor.proveedor),
-	ItemComprar.cantidad,
-	CONCAT(Unidad.unidad,'(',Item.factor_unidades,')'),
-	Item.precio_fob,
-	(ItemComprar.cantidad * Item.precio_fob),
-	Item.codigo_proveedor
+	itemcomprar.id_itemcomprar,
+	concat(categoria.categoria, \" - \", proveedor.proveedor),
+	itemcomprar.cantidad,
+	CONCAT(unidad.unidad,'(',item.factor_unidades,')'),
+	item.precio_fob,
+	(itemcomprar.cantidad * item.precio_fob),
+	item.codigo_proveedor
   FROM
-      Categoria, Proveedor, ItemComprar, Item, Unidad
+      categoria, proveedor, itemcomprar, item, unidad
   WHERE (
-	(Item.id_item = ItemComprar.id_item) AND
-	(Categoria.id_categoria = Item.id_categoria) AND
-	(Proveedor.id_proveedor = Item.id_proveedor) AND
-	(Unidad.id_unidad = Item.id_unidad_compra) AND
-	(Item.id_proveedor IN (SELECT id_proveedor FROM Proveedor, Pais WHERE Proveedor.id_pais = Pais.id_pais AND Pais.pais <> 'ARGENTINA') ) AND
-	Proveedor.id_proveedor = $id_proveedor 
+	(item.id_item = itemcomprar.id_item) AND
+	(categoria.id_categoria = item.id_categoria) AND
+	(proveedor.id_proveedor = item.id_proveedor) AND
+	(unidad.id_unidad = item.id_unidad_compra) AND
+	(item.id_proveedor IN (SELECT id_proveedor FROM proveedor, pais WHERE proveedor.id_pais = pais.id_pais AND pais.pais <> 'ARGENTINA') ) AND
+	proveedor.id_proveedor = $id_proveedor 
   )
   ORDER BY
-	Categoria.categoria";
+	categoria.categoria";
 
 $result = mysql_query($query);
 
@@ -69,25 +69,25 @@ while ($row = mysql_fetch_array($result))
 //Busco los item a comprar a proveedores argentinos
 //
 $query = "SELECT
-	ItemComprar.id_itemcomprar,
-	concat(Categoria.categoria, \" - \", Proveedor.proveedor),
-	ItemComprar.cantidad,
-	CONCAT(Unidad.unidad,'(',Item.factor_unidades,')'),
-	Item.precio_ref,
-	(ItemComprar.cantidad * Item.precio_ref),
-	Item.codigo_proveedor
+	itemcomprar.id_itemcomprar,
+	concat(categoria.categoria, \" - \", proveedor.proveedor),
+	itemcomprar.cantidad,
+	CONCAT(unidad.unidad,'(',item.factor_unidades,')'),
+	item.precio_ref,
+	(itemcomprar.cantidad * item.precio_ref),
+	item.codigo_proveedor
   FROM
-      Categoria, Proveedor, ItemComprar, Item, Unidad
+      categoria, proveedor, itemcomprar, item, unidad
   WHERE (
-	(Item.id_item = ItemComprar.id_item) AND
-	(Categoria.id_categoria = Item.id_categoria) AND
-	(Proveedor.id_proveedor = Item.id_proveedor) AND
-	(Unidad.id_unidad = Item.id_unidad_compra) AND
-	(Item.id_proveedor IN (SELECT id_proveedor FROM Proveedor, Pais WHERE Proveedor.id_pais = Pais.id_pais AND Pais.pais = 'ARGENTINA') ) AND
-	Proveedor.id_proveedor = $id_proveedor
+	(item.id_item = itemcomprar.id_item) AND
+	(categoria.id_categoria = item.id_categoria) AND
+	(proveedor.id_proveedor = item.id_proveedor) AND
+	(unidad.id_unidad = item.id_unidad_compra) AND
+	(item.id_proveedor IN (SELECT id_proveedor FROM proveedor, pais WHERE proveedor.id_pais = pais.id_pais AND pais.pais = 'ARGENTINA') ) AND
+	proveedor.id_proveedor = $id_proveedor
   )
   ORDER BY
-	Categoria.categoria";
+	categoria.categoria";
 
 $result = mysql_query($query);
 
@@ -108,17 +108,17 @@ while ($row = mysql_fetch_array($result))
 //Calculo los totales de la compra en pesos y dolares para proveedores extranjeros
 //
 $query = "SELECT
-        sum((ItemComprar.cantidad * Item.precio_fob)),
-        sum((ItemComprar.cantidad * (Item.precio_fob * (SELECT precio_dolar from DolarHoy where id_dolar=(SELECT max(id_dolar) FROM DolarHoy)))))
+        sum((itemcomprar.cantidad * item.precio_fob)),
+        sum((itemcomprar.cantidad * (item.precio_fob * (SELECT precio_dolar from dolarhoy where id_dolar=(SELECT max(id_dolar) FROM dolarhoy)))))
   FROM
-      Categoria, Proveedor, ItemComprar, Item, Unidad
+      categoria, proveedor, itemcomprar, item, unidad
   WHERE (
-        (Item.id_item = ItemComprar.id_item) AND
-        (Categoria.id_categoria = Item.id_categoria) AND
-        (Proveedor.id_proveedor = Item.id_proveedor) AND
-        (Unidad.id_unidad = Categoria.id_unidad_visual) AND
-        (Item.id_proveedor IN (SELECT id_proveedor FROM Proveedor, Pais WHERE Proveedor.id_pais = Pais.id_pais AND Pais.pais <> 'ARGENTINA') ) AND
-        Proveedor.id_proveedor = $id_proveedor
+        (item.id_item = itemcomprar.id_item) AND
+        (categoria.id_categoria = item.id_categoria) AND
+        (proveedor.id_proveedor = item.id_proveedor) AND
+        (unidad.id_unidad = categoria.id_unidad_visual) AND
+        (item.id_proveedor IN (SELECT id_proveedor FROM proveedor, pais WHERE proveedor.id_pais = pais.id_pais AND pais.pais <> 'ARGENTINA') ) AND
+        proveedor.id_proveedor = $id_proveedor
   )";
 $result = mysql_query($query);
 $row = mysql_fetch_array($result);
@@ -129,17 +129,17 @@ $total_pesos_aux = $row[1];
 //Calculo los totales de la compra en pesos y dolares para proveedores argentinos
 //
 $query = "SELECT
-		sum((ItemComprar.cantidad * (Item.precio_ref / (SELECT precio_dolar from DolarHoy where id_dolar=(SELECT max(id_dolar) FROM DolarHoy))))),
-        sum((ItemComprar.cantidad * Item.precio_ref))
+		sum((itemcomprar.cantidad * (item.precio_ref / (SELECT precio_dolar from dolarhoy where id_dolar=(SELECT max(id_dolar) FROM dolarhoy))))),
+        sum((itemcomprar.cantidad * item.precio_ref))
   FROM
-      Categoria, Proveedor, ItemComprar, Item, Unidad
+      categoria, proveedor, itemcomprar, item, unidad
   WHERE (
-        (Item.id_item = ItemComprar.id_item) AND
-        (Categoria.id_categoria = Item.id_categoria) AND
-        (Proveedor.id_proveedor = Item.id_proveedor) AND
-        (Unidad.id_unidad = Categoria.id_unidad_visual) AND
-        (Item.id_proveedor IN (SELECT id_proveedor FROM Proveedor, Pais WHERE Proveedor.id_pais = Pais.id_pais AND Pais.pais = 'ARGENTINA') ) AND
-        Proveedor.id_proveedor = $id_proveedor
+        (item.id_item = itemcomprar.id_item) AND
+        (categoria.id_categoria = item.id_categoria) AND
+        (proveedor.id_proveedor = item.id_proveedor) AND
+        (unidad.id_unidad = categoria.id_unidad_visual) AND
+        (item.id_proveedor IN (SELECT id_proveedor FROM proveedor, pais WHERE proveedor.id_pais = pais.id_pais AND pais.pais = 'ARGENTINA') ) AND
+        proveedor.id_proveedor = $id_proveedor
   )";
 $result = mysql_query($query);
 $row = mysql_fetch_array($result);
@@ -179,12 +179,12 @@ function update_cantidad($id_itemcomprar, $cantidad)
 {
  if ( ($cantidad == 0) or ($cantidad == "") )
  {
-  $query = "DELETE FROM ItemComprar WHERE id_itemcomprar = $id_itemcomprar";
+  $query = "DELETE FROM itemcomprar WHERE id_itemcomprar = $id_itemcomprar";
  }
  else
  {
   $query = "UPDATE
- 	ItemComprar
+ 	itemcomprar
    SET
  	cantidad = $cantidad
    WHERE

@@ -33,20 +33,20 @@ $fecha_select = armar_select_fechas($dia_ini, $mes_ini, $ano_ini);
 function busca_item(&$mensaje, &$items, $pitem)
 {
  $query = "SELECT 
-	Item.id_item, 
-	Categoria.categoria, 
-	Proveedor.proveedor 
+	item.id_item, 
+	categoria.categoria, 
+	proveedor.proveedor 
   FROM 
-	Categoria, 
-	Proveedor, 
-	Item 
+	categoria, 
+	proveedor, 
+	item 
   WHERE (
-	(Categoria.categoria LIKE \"%$pitem%\") AND 
-	(Categoria.id_categoria = Item.id_categoria) AND 
-	(Proveedor.id_proveedor = Item.id_proveedor)
+	(categoria.categoria LIKE \"%$pitem%\") AND 
+	(categoria.id_categoria = item.id_categoria) AND 
+	(proveedor.id_proveedor = item.id_proveedor)
   ) 
   ORDER BY 
-	Categoria.categoria";
+	categoria.categoria";
 
  $result = mysql_query($query);
 
@@ -73,21 +73,21 @@ function busca_item(&$mensaje, &$items, $pitem)
 function busca_barras(&$mensaje, &$datos, $pitem)
 {
  $query = "SELECT 
-        Item.id_item,
-        Categoria.categoria,
-        Proveedor.proveedor,
-        Item.stock_disponible,
-        Unidad.unidad
+        item.id_item,
+        categoria.categoria,
+        proveedor.proveedor,
+        item.stock_disponible,
+        unidad.unidad
   FROM
-        Categoria,
-        Proveedor,
-        Item,
-        Unidad
+        categoria,
+        proveedor,
+        item,
+        unidad
   WHERE (
-        (Item.codigo_barras LIKE \"$pitem\") AND
-        (Categoria.id_categoria = Item.id_categoria) AND
-        (Proveedor.id_proveedor = Item.id_proveedor) AND
-        (Unidad.id_unidad = Categoria.id_unidad_visual)
+        (item.codigo_barras LIKE \"$pitem\") AND
+        (categoria.id_categoria = item.id_categoria) AND
+        (proveedor.id_proveedor = item.id_proveedor) AND
+        (unidad.id_unidad = categoria.id_unidad_visual)
   )";
  $result = mysql_query($query);
  $num_results = mysql_num_rows($result);
@@ -119,24 +119,24 @@ if ($formname == "busca_producto")
 elseif ($formname == "select_producto")
 {
  $query = "SELECT 
-	Item.id_item, 
-	Categoria.categoria, 
-	Proveedor.proveedor, 
-	Item.stock_disponible, 
-	Unidad.unidad 
+	item.id_item, 
+	categoria.categoria, 
+	proveedor.proveedor, 
+	item.stock_disponible, 
+	unidad.unidad 
   FROM 
-	Categoria, 
-	Proveedor, 
-	Item, 
-	Unidad 
+	categoria, 
+	proveedor, 
+	item, 
+	unidad 
   WHERE (
-	(Item.id_item = $sproducto) AND 
- 	(Categoria.id_categoria = Item.id_categoria) AND 
-	(Proveedor.id_proveedor = Item.id_proveedor) AND 
-	(Unidad.id_unidad = Categoria.id_unidad_visual)
+	(item.id_item = $sproducto) AND 
+ 	(categoria.id_categoria = item.id_categoria) AND 
+	(proveedor.id_proveedor = item.id_proveedor) AND 
+	(unidad.id_unidad = categoria.id_unidad_visual)
   ) 
   ORDER BY 
-	Categoria.categoria";
+	categoria.categoria";
 
  $result = mysql_query($query);
  $row = mysql_fetch_array($result);
@@ -168,11 +168,11 @@ elseif ($formname == "producto_salida")
   else
   {
    $query = "UPDATE 
-	Item 
+	item 
   SET 
-	Item.stock_disponible = (Item.stock_disponible - $cantidad) 
+	item.stock_disponible = (item.stock_disponible - $cantidad) 
   WHERE 
-	Item.id_item = $item";
+	item.id_item = $item";
    $result = mysql_query($query);
    
    //log_trans($valid_user, 2, $item, $cantidad, strftime('%G-%m-%d')); 
@@ -180,7 +180,7 @@ elseif ($formname == "producto_salida")
    
   // nota: el log del egreso se hace con la fecha que ingresa el usuario, por default es el current date
   if ($cantidad < 0) {
-    $id_orden = ingresarOrdenManual($item, $cantidad * -1, $fecha);
+    $id_orden = ingresarordenManual($item, $cantidad * -1, $fecha);
     log_trans($valid_user, 1, $item, $cantidad * -1, $fecha, $id_orden); 
   } else {
     log_trans($valid_user, 2, $item, $cantidad, $fecha); 
@@ -211,12 +211,12 @@ $var = array("items" => $items,
 eval_html('producto_salida.html', $var);
 
 
-function ingresarOrdenManual($id_item, $cantidad, $fecha) {
+function ingresarordenManual($id_item, $cantidad, $fecha) {
 
   $cotiz_dolar = obtener_precio_dolar();
 
   $query = "INSERT INTO orden (fecha,	cotizacion_dolar,	id_status, descripcion) 
-    VALUES ('$fecha', $cotiz_dolar, 2, 'Orden desde descarga manual')";
+    VALUES ('$fecha', $cotiz_dolar, 2, 'orden desde descarga manual')";
 
   $result = mysql_query($query);
   $row = mysql_fetch_array($result);
@@ -253,7 +253,7 @@ function ingresarOrdenManual($id_item, $cantidad, $fecha) {
 
 function obtener_precio_dolar()
 {
-	$query = "SELECT precio_dolar from DolarHoy where id_dolar=(SELECT max(id_dolar) FROM DolarHoy)";
+	$query = "SELECT precio_dolar from dolarhoy where id_dolar=(SELECT max(id_dolar) FROM dolarhoy)";
 
 	$result = mysql_query($query);
 	$row = mysql_fetch_array($result);

@@ -10,7 +10,7 @@ db_connect();
 $id_categoria = $_POST['id_categoria'];
 $reservado = $_POST['reservado'];
 
-$query = "UPDATE Categoria SET reservado = $reservado WHERE id_categoria = $id_categoria";
+$query = "UPDATE categoria SET reservado = $reservado WHERE id_categoria = $id_categoria";
 
 $result = mysql_query($query);
 

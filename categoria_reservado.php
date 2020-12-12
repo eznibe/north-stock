@@ -10,13 +10,13 @@ db_connect();
 $id_categoria = $_GET['id_categoria'];
 
 $query = "SELECT
-	Categoria.id_categoria,
-	Categoria.categoria,
-	Categoria.reservado
+	categoria.id_categoria,
+	categoria.categoria,
+	categoria.reservado
   FROM
-	Categoria
+	categoria
   WHERE
-	Categoria.id_categoria = $id_categoria";
+	categoria.id_categoria = $id_categoria";
 
 $result = mysql_query($query);
 

@@ -6,7 +6,7 @@ create table prevision
    cliente varchar(1024),
    fecha_entrega date,
    descripcion varchar(1024),
-   fecha_creacion datetime DEFAULT CURRENT_TIMESTAMP,
+   fecha_creacion timestamp DEFAULT CURRENT_TIMESTAMP,
    fecha_descarga datetime,
    usuario_descarga varchar(64)
 )
@@ -22,7 +22,7 @@ create table previsionitem
    cantidad int,
    precio_prevision float,
    moneda char(3),
-   fecha_creacion datetime DEFAULT CURRENT_TIMESTAMP
+   fecha_creacion timestamp DEFAULT CURRENT_TIMESTAMP
 )
 engine=MyISAM
 ;

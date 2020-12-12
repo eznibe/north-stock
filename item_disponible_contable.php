@@ -25,9 +25,9 @@ $fecha_hasta = $ano_ini . "-" . $mes_ini . "-" . $dia_ini;
 
 //$orderbygrupo = "";
 //if (isset($_POST['orderbygrupo'])) {
-//	$orderbygrupo = " Grupo.grupo, ";
+//	$orderbygrupo = " grupo.grupo, ";
 //}
-$orderbygrupo = " Grupo.grupo, ";
+$orderbygrupo = " grupo.grupo, ";
 
 $id_grupos = isset($_POST['id_grupos']) ? $_POST['id_grupos'] : array();
 //dump($id_grupos);
@@ -38,7 +38,7 @@ $id_grupos = isset($_POST['id_grupos']) ? $_POST['id_grupos'] : array();
 $grupos_condicion = "";
 if(count($id_grupos) > 0) {
 	
-	$grupos_condicion = " AND Grupo.id_grupo IN (";
+	$grupos_condicion = " AND grupo.id_grupo IN (";
 	foreach ($id_grupos as $id_grupo) {
 		$grupos_condicion .= $id_grupo . ',';
 	}
@@ -51,55 +51,55 @@ if(count($id_grupos) > 0) {
 	// Note: Al stock disponible del item al 'current date' se le agregan todos los consumidos y se le restan todos los comprados despues de la fecha seleccionada
 
 	$query = "SELECT
-		CONCAT(Categoria.categoria,'<br>',Proveedor.proveedor),
-		Item.codigo_proveedor,
-		(Item.stock_disponible
-			- COALESCE((SELECT COALESCE(sum(cantidad), 0) from Log where Log.fecha > $fecha and Log.id_item = Item.id_item and Log.id_accion = 1 ),0)
-				+ COALESCE((SELECT COALESCE(sum(cantidad), 0) from Log where Log.fecha > $fecha and Log.id_item = Item.id_item and Log.id_accion = 2 ),0)) AS disponible,
-		Item.precio_fob,
-		Item.precio_nac,
-		Item.id_item,
-		Item.stock_transito,
-		Item.precio_ref,
-		Item.oculto_fob,
-		Item.oculto_nac,
-			CONCAT(Unidad.unidad,'(',Item.factor_unidades,')'),
-			Item.agrupacion_contable,
-			Pais.pais,
-			Grupo.grupo,
-			Categoria.pos_arancelaria,
+		CONCAT(categoria.categoria,'<br>',proveedor.proveedor),
+		item.codigo_proveedor,
+		(item.stock_disponible
+			- COALESCE((SELECT COALESCE(sum(cantidad), 0) from log where log.fecha > $fecha and log.id_item = item.id_item and log.id_accion = 1 ),0)
+				+ COALESCE((SELECT COALESCE(sum(cantidad), 0) from log where log.fecha > $fecha and log.id_item = item.id_item and log.id_accion = 2 ),0)) AS disponible,
+		item.precio_fob,
+		item.precio_nac,
+		item.id_item,
+		item.stock_transito,
+		item.precio_ref,
+		item.oculto_fob,
+		item.oculto_nac,
+			CONCAT(unidad.unidad,'(',item.factor_unidades,')'),
+			item.agrupacion_contable,
+			pais.pais,
+			grupo.grupo,
+			categoria.pos_arancelaria,
 			COALESCE(orden.cotizacion_dolar, 1),
-			COALESCE(ordenitem.precio_ref, Item.precio_ref),
-			COALESCE(ordenitem.precio_fob, Item.precio_fob),
+			COALESCE(ordenitem.precio_ref, item.precio_ref),
+			COALESCE(ordenitem.precio_fob, item.precio_fob),
 			COALESCE(orden.fecha, '2003-01-01'),
 			orden.nr_factura,
 			orden.despacho,
 			coalesce(ordenitem.cantidad, -1)
 	FROM
-		Item
-		join Categoria on Item.id_categoria = Categoria.id_categoria
-		join Proveedor on Item.id_proveedor = Proveedor.id_proveedor
-		join Unidad on Unidad.id_unidad = Item.id_unidad_compra
-		join Grupo on Grupo.id_grupo = Categoria.id_grupo
-		join Pais on Proveedor.id_pais = Pais.id_pais
-		left join ordenitem on ordenitem.id_item = Item.id_item
+		item
+		join categoria on item.id_categoria = categoria.id_categoria
+		join proveedor on item.id_proveedor = proveedor.id_proveedor
+		join unidad on unidad.id_unidad = item.id_unidad_compra
+		join grupo on grupo.id_grupo = categoria.id_grupo
+		join pais on proveedor.id_pais = pais.id_pais
+		left join ordenitem on ordenitem.id_item = item.id_item
 		left join orden on orden.id_orden = ordenitem.id_orden
 	WHERE 1=1
 		AND (ordenitem.id_item is null or ordenitem.cantidad - ordenitem.cantidad_pendiente > 0)
-		-- AND Categoria.id_categoria = 98
+		-- AND categoria.id_categoria = 98
 			$grupos_condicion
 	ORDER BY
 			$orderbygrupo
-			Categoria.categoria,
-			Item.id_item,
-			Orden.fecha desc";
+			categoria.categoria,
+			item.id_item,
+			orden.fecha desc";
 	$result = mysql_query($query);
 
 	// dump($query);
 
 	$rows = array();
 
-	$lastItem;
+	$lastitem;
 
 	while ($row = mysql_fetch_array($result))
 	{
@@ -107,10 +107,10 @@ if(count($id_grupos) > 0) {
 
 		$cantidad = $row[21];
 
-		if (!isset($lastItem) || $lastItem != $row[5]) {
+		if (!isset($lastitem) || $lastitem != $row[5]) {
 			// nuevo item
 			$disponible = $row[2];
-			$lastItem = $row[5];
+			$lastitem = $row[5];
 
 			if ($disponible > 0) {
 				
@@ -156,7 +156,7 @@ if(count($id_grupos) > 0) {
 		$precioInflacion = number_format($row[2] * $row[17] * $row[15] * (1 + ($pctInflacion/100)), 2); // default FOB
 
 		$totalFOB += $row[2] * $row[17];
-		if(tipoProveedor($row[12])=='NAC') {
+		if(tipoproveedor($row[12])=='NAC') {
 			$precioRef = number_format($row[2] * $row[16], 2);
 			$totalRefNac += $row[2] * $row[16];
 
@@ -172,7 +172,7 @@ if(count($id_grupos) > 0) {
 				<td>$row[13]</td><td>$row[14]</td><td>$row[19]</td><td>$row[20]</td><td nowrap>$fechaArribo</td><td>$row[2]</td>
 				<td>".number_format($row[2] * $row[17], 2)."</td><td>".$precioRef."</td>
 				<td>$dolarArribo</td><td>$precioInflacion</td>
-				<td>".tipoProveedor($row[12])."</td></tr>\n";
+				<td>".tipoproveedor($row[12])."</td></tr>\n";
 
 	}
 }
@@ -275,7 +275,7 @@ function obtener_pct_anio_mes($anio, $mes, $result_inflacion) {
     return -1;
 }
 
-function tipoProveedor($pais) {
+function tipoproveedor($pais) {
 
 	if($pais == "ARGENTINA") return "NAC";
 

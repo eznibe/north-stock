@@ -72,7 +72,7 @@ function insert_producto(&$mensaje, $categoria, $proveedor, $scan, $codigo_prove
   		if ($precio_nac == "") $precio_nac = 'NULL';
   		if ($precio_ref == "") $precio_ref = 'NULL';
 
-  		$query = "INSERT INTO Item
+  		$query = "INSERT INTO item
             	(id_categoria, id_proveedor, codigo_proveedor, codigo_barras, precio_fob, precio_nac, precio_ref, oculto_fob, oculto_nac, id_unidad_compra, factor_unidades, agrupacion_contable)
             	VALUES
             	($categoria, $proveedor,\"$codigo_proveedor\", $codigo_barras, $precio, $precio_nac, $precio_ref, $precio, $precio_nac, $unidad, $factor_unidades, $agrup_contable)";
@@ -83,7 +83,7 @@ function insert_producto(&$mensaje, $categoria, $proveedor, $scan, $codigo_prove
   		$precio_nac = 'NULL';
   		$precio_fob = 'NULL';
 
-  		$query = "INSERT INTO Item
+  		$query = "INSERT INTO item
             	(id_categoria, id_proveedor, codigo_proveedor, codigo_barras, precio_fob, precio_nac, precio_ref, oculto_fob, oculto_nac, id_unidad_compra, factor_unidades, agrupacion_contable)
             	VALUES
             	($categoria, $proveedor,\"$codigo_proveedor\", $codigo_barras, $precio_fob, $precio_nac, $precio, $precio_fob, $precio_nac, $unidad, $factor_unidades, $agrup_contable)";
@@ -102,7 +102,7 @@ function insert_producto(&$mensaje, $categoria, $proveedor, $scan, $codigo_prove
    		{
     		$result = mysql_query("SELECT LAST_INSERT_ID()");
     		$row = mysql_fetch_array($result);
-    		$query = "UPDATE Item
+    		$query = "UPDATE item
 				SET codigo_barras = \"NSSA$row[0]\"
 				WHERE id_item = $row[0]";
     		$result = mysql_query($query);
@@ -128,7 +128,7 @@ function busca_proveedores(&$proveedores, &$mensaje, $proveedor)
  else
  {
   $query = "SELECT id_proveedor, proveedor
-           FROM Proveedor
+           FROM proveedor
            WHERE proveedor LIKE \"%$proveedor%\"
 	ORDER BY proveedor";
   $result = mysql_query($query);
@@ -163,7 +163,7 @@ function busca_categoria(&$categoria, &$mensaje, $pcategoria)
  else
  {
   $query = "SELECT id_categoria, categoria
-           FROM Categoria
+           FROM categoria
            WHERE categoria LIKE \"%$pcategoria%\"
 	ORDER BY categoria";
   $result = mysql_query($query);
@@ -201,7 +201,7 @@ function get_name($tabla, $columna, $valor)
 function get_scan($valor)
 {
  $query = "SELECT scan
-           FROM Categoria
+           FROM categoria
            WHERE id_categoria = $valor";
  $result = mysql_query($query);
  $row = mysql_fetch_array($result);
@@ -211,7 +211,7 @@ function get_scan($valor)
 
 function porcentaje_impuesto_categoria($id_categoria)
 {
-	$query = "SELECT porc_impuesto FROM Categoria WHERE id_categoria=$id_categoria";
+	$query = "SELECT porc_impuesto FROM categoria WHERE id_categoria=$id_categoria";
 	$result = mysql_query($query);
  	$row = mysql_fetch_array($result);
  	return $row[0];
@@ -219,7 +219,7 @@ function porcentaje_impuesto_categoria($id_categoria)
 
 function precio_dolar()
 {
-	$query = "SELECT precio_dolar FROM DolarHoy WHERE id_dolar=(SELECT MAX(id_dolar) FROM DolarHoy)";
+	$query = "SELECT precio_dolar FROM dolarhoy WHERE id_dolar=(SELECT MAX(id_dolar) FROM dolarhoy)";
 	$result = mysql_query($query);
  	$row = mysql_fetch_array($result);
  	return $row[0];
@@ -227,9 +227,9 @@ function precio_dolar()
 
 function get_moneda_proveedor($id_proveedor)
 {
-	$query = "SELECT pais FROM Pais, Proveedor
-			  WHERE Pais.id_pais = Proveedor.id_pais AND
-					Proveedor.id_proveedor = $id_proveedor";
+	$query = "SELECT pais FROM pais, proveedor
+			  WHERE pais.id_pais = proveedor.id_pais AND
+					proveedor.id_proveedor = $id_proveedor";
 	$result = mysql_query($query);
 	$row = mysql_fetch_array($result);
 	if($row[0] == "ARGENTINA") return "AR$";
@@ -278,7 +278,7 @@ elseif ( ($formname == "scategoria") )
  if ( ($categoria != 0) )
  {
   $_SESSION["catval"] = $categoria;
-  $_SESSION["catname"] = get_name("Categoria", "categoria", $categoria);
+  $_SESSION["catname"] = get_name("categoria", "categoria", $categoria);
   $_SESSION["categoria"] = TRUE;
   if (!$_SESSION["proveedor"]) $focus = "forms[1].proveedor";
   else $focus = "forms[2].unidad";
@@ -298,7 +298,7 @@ elseif ( ($formname == "sproveedor") )
  if ( ($proveedores != 0) )
  {
   $_SESSION["provval"] = $proveedores;
-  $_SESSION["provname"] = get_name("Proveedor", "proveedor", $proveedores);
+  $_SESSION["provname"] = get_name("proveedor", "proveedor", $proveedores);
   $_SESSION["proveedor"] = TRUE;
   $focus = "forms[2].unidad";
 

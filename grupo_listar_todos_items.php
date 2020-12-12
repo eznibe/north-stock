@@ -18,37 +18,37 @@ function obtener_grupo($id_grupo)
 }
 
 $query = "SELECT
-	Categoria.categoria,
-	Item.id_categoria,
-	Item.id_proveedor,
-	Proveedor.proveedor,
-	Item.stock_disponible,
-	Categoria.stock_minimo,
-	Item.stock_disponible - Categoria.stock_minimo,
-	Unidad.unidad,
-	Item.stock_transito,
-	Item.stock_disponible + Item.stock_transito - Categoria.stock_minimo - (coalesce(sum(pi.cantidad), 0)),
-	Item.codigo_proveedor,
-	Item.id_item,
-	round(Item.precio_fob, 2),
-	round(Item.precio_nac, 2),
-	round(Item.precio_ref, 2),
-	Categoria.reservado,
+	categoria.categoria,
+	item.id_categoria,
+	item.id_proveedor,
+	proveedor.proveedor,
+	item.stock_disponible,
+	categoria.stock_minimo,
+	item.stock_disponible - categoria.stock_minimo,
+	unidad.unidad,
+	item.stock_transito,
+	item.stock_disponible + item.stock_transito - categoria.stock_minimo - (coalesce(sum(pi.cantidad), 0)),
+	item.codigo_proveedor,
+	item.id_item,
+	round(item.precio_fob, 2),
+	round(item.precio_nac, 2),
+	round(item.precio_ref, 2),
+	categoria.reservado,
   	coalesce(sum(pi.cantidad), 0) as prevision
   FROM
-    Item  
-    JOIN Categoria on Item.id_categoria = Categoria.id_categoria
-    JOIN Unidad on Unidad.id_unidad = Categoria.id_unidad_visual
-    JOIN Proveedor on Proveedor.id_proveedor = Item.id_proveedor
-    LEFT JOIN previsionitem pi on pi.id_item = Item.id_item
+    item  
+    JOIN categoria on item.id_categoria = categoria.id_categoria
+    JOIN unidad on unidad.id_unidad = categoria.id_unidad_visual
+    JOIN proveedor on proveedor.id_proveedor = item.id_proveedor
+    LEFT JOIN previsionitem pi on pi.id_item = item.id_item
     LEFT JOIN prevision p on p.id_prevision = pi.id_prevision
   WHERE
-	  Categoria.id_grupo = $id_grupo
+	  categoria.id_grupo = $id_grupo
 	  AND p.fecha_descarga is null
   GROUP BY 
-    Item.id_item
+    item.id_item
   ORDER BY
-	  Categoria.categoria";
+	  categoria.categoria";
 $result = mysql_query($query);
 
 $aux = "";

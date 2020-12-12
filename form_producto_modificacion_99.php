@@ -30,8 +30,8 @@ db_connect();
 function get_item_data(&$data, $id_item)
 {
  $query = "SELECT
-	Categoria.categoria,
-	Proveedor.proveedor,
+	categoria.categoria,
+	proveedor.proveedor,
 	codigo_proveedor,
 	codigo_barras,
 	stock_disponible,
@@ -42,13 +42,13 @@ function get_item_data(&$data, $id_item)
 	oculto_fob,
 	oculto_nac
   FROM
-	Item,
-	Categoria,
-	Proveedor
+	item,
+	categoria,
+	proveedor
   WHERE (
 	(id_item = $id_item) AND
-	(Categoria.id_categoria = Item.id_categoria) AND
-	(Proveedor.id_proveedor = Item.id_proveedor)
+	(categoria.id_categoria = item.id_categoria) AND
+	(proveedor.id_proveedor = item.id_proveedor)
   )";
  $result = mysql_query($query);
  $data = mysql_fetch_array($result);
@@ -57,13 +57,13 @@ function get_item_data(&$data, $id_item)
 function item_scan_oblig($id_item)
 {
  $query = "SELECT
-	Categoria.scan
+	categoria.scan
   FROM
-	Categoria,
-	Item
+	categoria,
+	item
   WHERE (
-	(Item.id_categoria = Categoria.id_categoria) AND
-	(Item.id_item = $id_item)
+	(item.id_categoria = categoria.id_categoria) AND
+	(item.id_item = $id_item)
   )";
  $result = mysql_query($query);
  $row = mysql_fetch_array($result);
@@ -120,7 +120,7 @@ function update_item(&$mensaje, $id_item, $codigo_proveedor, $codigo_barras, $st
   
   log_modificacion_item($id_item, $precio_fob, $precio_nac, $precio_ref, $datos[4], $stock_disponible);
   
-  $query = "UPDATE Item SET
+  $query = "UPDATE item SET
 	codigo_proveedor = \"$codigo_proveedor\",
 	codigo_barras = $codigo_barras,
 	stock_disponible = $stock_disponible,
@@ -133,7 +133,7 @@ function update_item(&$mensaje, $id_item, $codigo_proveedor, $codigo_barras, $st
 	id_proveedor = $id_proveedor,
 	agrupacion_contable = $agrupacion
   WHERE
-	Item.id_item = $id_item";
+	item.id_item = $id_item";
 
   if (!($result = mysql_query($query)))
   {
@@ -154,7 +154,7 @@ function update_item(&$mensaje, $id_item, $codigo_proveedor, $codigo_barras, $st
 
 function porcentaje_impuesto_categoria($id_categoria)
 {
-	$query = "SELECT porc_impuesto FROM Categoria WHERE id_categoria=$id_categoria";
+	$query = "SELECT porc_impuesto FROM categoria WHERE id_categoria=$id_categoria";
 	$result = mysql_query($query);
  	$row = mysql_fetch_array($result);
  	return $row[0];
@@ -162,7 +162,7 @@ function porcentaje_impuesto_categoria($id_categoria)
 
 function precio_dolar()
 {
-	$query = "SELECT precio_dolar FROM DolarHoy WHERE id_dolar=(SELECT MAX(id_dolar) FROM DolarHoy)";
+	$query = "SELECT precio_dolar FROM dolarhoy WHERE id_dolar=(SELECT MAX(id_dolar) FROM dolarhoy)";
 	$result = mysql_query($query);
  	$row = mysql_fetch_array($result);
  	return $row[0];
@@ -170,7 +170,7 @@ function precio_dolar()
 
 function obtener_categoria($id_item)
 {
-	$query = "SELECT id_categoria FROM Item WHERE id_item=$id_item";
+	$query = "SELECT id_categoria FROM item WHERE id_item=$id_item";
 	$result = mysql_query($query);
  	$row = mysql_fetch_array($result);
  	return $row[0];
@@ -178,7 +178,7 @@ function obtener_categoria($id_item)
 
 function obtener_proveedores($provname)
 {
-	$query = "SELECT id_proveedor, proveedor FROM Proveedor ORDER BY proveedor";
+	$query = "SELECT id_proveedor, proveedor FROM proveedor ORDER BY proveedor";
 	$result = mysql_query($query);
 
 	$opcionesprov="";
@@ -192,7 +192,7 @@ function obtener_proveedores($provname)
 
 function obtener_id_proveedor($provname)
 {
-	$query = "SELECT id_proveedor FROM Proveedor " .
+	$query = "SELECT id_proveedor FROM proveedor " .
 			"WHERE proveedor = '$provname'";
 	$result = mysql_query($query);
 	$row = mysql_fetch_array($result);

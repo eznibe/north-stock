@@ -33,7 +33,7 @@ function get_cat_data(&$data, $id_categoria)
 	porc_impuesto,
   pos_arancelaria
   FROM
-	Categoria
+	categoria
   WHERE (
 	(id_categoria = $id_categoria)
   )";
@@ -58,7 +58,7 @@ function update_categoria(&$mensaje, $categoria, $id_grupo, $scan, $stock_minimo
   $stock_minimo = addslashes(trim($stock_minimo));
 
   //Actalizo la categoria
-  $query = "UPDATE Categoria SET
+  $query = "UPDATE categoria SET
 	categoria = \"$categoria\",
 	id_grupo = $id_grupo,
 	scan = \"$scan\",
@@ -67,7 +67,7 @@ function update_categoria(&$mensaje, $categoria, $id_grupo, $scan, $stock_minimo
   	porc_impuesto = $porcentaje,
     pos_arancelaria = \"$pos_arancelaria\"
   WHERE
-	Categoria.id_categoria = $id_categoria";
+	categoria.id_categoria = $id_categoria";
 
   if (!($result = mysql_query($query)))
   {
@@ -86,14 +86,14 @@ function update_categoria(&$mensaje, $categoria, $id_grupo, $scan, $stock_minimo
    //
    $precio_dolar = obtener_precio_dolar();
 
-   $query = "SELECT id_item, precio_fob FROM Item WHERE id_categoria = $id_categoria and precio_fob IS NOT NULL";
+   $query = "SELECT id_item, precio_fob FROM item WHERE id_categoria = $id_categoria and precio_fob IS NOT NULL";
    $result = mysql_query($query);
    while($row = mysql_fetch_array($result))
    {
    		$precio_nac = $row[1] + ($row[1] * $porcentaje / 100);
    		$precio_ref = $precio_nac * $precio_dolar;
 
-   		$query = "UPDATE Item SET precio_nac = $precio_nac, precio_ref = $precio_ref WHERE id_item = $row[0]";
+   		$query = "UPDATE item SET precio_nac = $precio_nac, precio_ref = $precio_ref WHERE id_item = $row[0]";
    		$result2 = mysql_query($query);
    }
 
@@ -104,7 +104,7 @@ function update_categoria(&$mensaje, $categoria, $id_grupo, $scan, $stock_minimo
 
 function obtener_precio_dolar()
 {
-	$query = "SELECT precio_dolar from DolarHoy where id_dolar=(SELECT max(id_dolar) FROM DolarHoy)";
+	$query = "SELECT precio_dolar from dolarhoy where id_dolar=(SELECT max(id_dolar) FROM dolarhoy)";
 
 	$result = mysql_query($query);
 	$row = mysql_fetch_array($result);

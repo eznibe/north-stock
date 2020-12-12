@@ -78,31 +78,31 @@ $opciones = "<select name=\"opcion\" id=\"opcion\" class=\"obligatorio\">\n";
 switch ($tipo)
 {
 case 'todos':
-	$query_fin = ") ORDER BY Categoria.categoria";
+	$query_fin = ") ORDER BY categoria.categoria";
 	break;
 
 case 'grupo':
-	$query_fin = "AND (Categoria.id_grupo = $opcion) ) ORDER BY Categoria.categoria";
+	$query_fin = "AND (categoria.id_grupo = $opcion) ) ORDER BY categoria.categoria";
 	if (isset($opcion)) $titulo = $titulo . " por grupo " . get_group($opcion);
 	break;
 
 case 'proveedor':
-	$query_fin = "AND (Item.id_proveedor = $opcion) ) ORDER BY Categoria.categoria";
+	$query_fin = "AND (item.id_proveedor = $opcion) ) ORDER BY categoria.categoria";
 	if (isset($opcion)) $titulo = $titulo . " del proveedor " . get_proveedor($opcion);
 	break;
 
 case 'categoria':
-	$query_fin = "AND (Item.id_categoria = $opcion) ) ORDER BY Categoria.categoria";
+	$query_fin = "AND (item.id_categoria = $opcion) ) ORDER BY categoria.categoria";
 	if (isset($opcion)) $titulo = $titulo . " del producto " . get_categoria($opcion);
 	break;
 
 case 'item':
-	$query_fin = "AND (Item.id_item = $opcion) ) ORDER BY Categoria.categoria";
+	$query_fin = "AND (item.id_item = $opcion) ) ORDER BY categoria.categoria";
 	if (isset($opcion)) $titulo = $titulo . " del item " . get_item($opcion);
 	break;
 
 case 'usuario':
-	if (isset($opcion)) $query_fin = "AND (Log.username = '".get_usuario($opcion,1)."') ) ORDER BY Categoria.categoria";
+	if (isset($opcion)) $query_fin = "AND (log.username = '".get_usuario($opcion,1)."') ) ORDER BY categoria.categoria";
 	if (isset($opcion)) $titulo = $titulo . " ralizadas por usuario " . get_usuario($opcion,2);
 	break;
 
@@ -123,50 +123,50 @@ case 'usuario':
 	 //
 	 if ($transac == 'Consumos') {
 	  $query = "SELECT
-		CONCAT(Categoria.categoria, \" - \", Proveedor.proveedor) AS articulo,
-		DATE_FORMAT(Log.fecha, '%d-%m-%Y') AS fech,
-		Log.cantidad,
-		Unidad.unidad,
+		CONCAT(categoria.categoria, \" - \", proveedor.proveedor) AS articulo,
+		DATE_FORMAT(log.fecha, '%d-%m-%Y') AS fech,
+		log.cantidad,
+		unidad.unidad,
 		$id_accion as accion
 	  FROM
-		Log,
-		Item,
-		Categoria,
-		Proveedor,
-		Unidad
+		log,
+		item,
+		categoria,
+		proveedor,
+		unidad
 	  WHERE (
-		(Item.id_item = Log.id_item) AND
-		(Log.id_accion = $id_accion) AND
-		(Categoria.id_categoria = Item.id_categoria) AND
-		(Proveedor.id_proveedor = Item.id_proveedor) AND
-		(Unidad.id_unidad = Categoria.id_unidad_visual) AND
-		(Log.fecha >= $fecha_ini) AND
-		(Log.fecha <= $fecha_fin)
+		(item.id_item = log.id_item) AND
+		(log.id_accion = $id_accion) AND
+		(categoria.id_categoria = item.id_categoria) AND
+		(proveedor.id_proveedor = item.id_proveedor) AND
+		(unidad.id_unidad = categoria.id_unidad_visual) AND
+		(log.fecha >= $fecha_ini) AND
+		(log.fecha <= $fecha_fin)
 	    ";
 	  
 	  $query = $query . $query_fin;
 	 }
 	 if ($transac == 'Compras') {
 	  $query = "SELECT
-		CONCAT(Categoria.categoria, \" - \", Proveedor.proveedor) AS articulo,
-		DATE_FORMAT(Log.fecha, '%d-%m-%Y') AS fech,
-		Log.cantidad,
-		CONCAT(Unidad.unidad,'(',Item.factor_unidades,')'),
+		CONCAT(categoria.categoria, \" - \", proveedor.proveedor) AS articulo,
+		DATE_FORMAT(log.fecha, '%d-%m-%Y') AS fech,
+		log.cantidad,
+		CONCAT(unidad.unidad,'(',item.factor_unidades,')'),
 		$id_accion as accion
 	  FROM
-		Log,
-		Item,
-		Categoria,
-		Proveedor,
-		Unidad
+		log,
+		item,
+		categoria,
+		proveedor,
+		unidad
 	  WHERE (
-		(Item.id_item = Log.id_item) AND
-		(Log.id_accion = $id_accion) AND
-		(Categoria.id_categoria = Item.id_categoria) AND
-		(Proveedor.id_proveedor = Item.id_proveedor) AND
-		(Unidad.id_unidad = Item.id_unidad_compra) AND
-		(Log.fecha >= $fecha_ini) AND
-		(Log.fecha <= $fecha_fin)
+		(item.id_item = log.id_item) AND
+		(log.id_accion = $id_accion) AND
+		(categoria.id_categoria = item.id_categoria) AND
+		(proveedor.id_proveedor = item.id_proveedor) AND
+		(unidad.id_unidad = item.id_unidad_compra) AND
+		(log.fecha >= $fecha_ini) AND
+		(log.fecha <= $fecha_fin)
 	    ";
 	  
 	  $query = $query . $query_fin;
@@ -209,25 +209,25 @@ case 'usuario':
  function crearQueryTodos($query_fin, $fecha_ini, $fecha_fin) {
  	
  	$query = "(SELECT
-				CONCAT(Categoria.categoria, \" - \", Proveedor.proveedor) AS articulo,
-				DATE_FORMAT(Log.fecha, '%d-%m-%Y') AS fech,
-				Log.cantidad,
-				Unidad.unidad,
-				'2' as accion, Categoria.categoria as cate, Log.fecha as fechaOrdenar
+				CONCAT(categoria.categoria, \" - \", proveedor.proveedor) AS articulo,
+				DATE_FORMAT(log.fecha, '%d-%m-%Y') AS fech,
+				log.cantidad,
+				unidad.unidad,
+				'2' as accion, categoria.categoria as cate, log.fecha as fechaordenar
 			  FROM
-				Log,
-				Item,
-				Categoria,
-				Proveedor,
-				Unidad
+				log,
+				item,
+				categoria,
+				proveedor,
+				unidad
 			  WHERE (
-				(Item.id_item = Log.id_item) AND
-				(Log.id_accion = 2) AND
-				(Categoria.id_categoria = Item.id_categoria) AND
-				(Proveedor.id_proveedor = Item.id_proveedor) AND
-				(Unidad.id_unidad = Categoria.id_unidad_visual) AND
-				(Log.fecha >= $fecha_ini) AND
-				(Log.fecha <= $fecha_fin)
+				(item.id_item = log.id_item) AND
+				(log.id_accion = 2) AND
+				(categoria.id_categoria = item.id_categoria) AND
+				(proveedor.id_proveedor = item.id_proveedor) AND
+				(unidad.id_unidad = categoria.id_unidad_visual) AND
+				(log.fecha >= $fecha_ini) AND
+				(log.fecha <= $fecha_fin)
 			    ";
  	
  	$query .= $query_fin . ")";
@@ -235,30 +235,30 @@ case 'usuario':
  	$query .= " UNION ";
  	
  	$query .= "(SELECT
-				CONCAT(Categoria.categoria, \" - \", Proveedor.proveedor) AS articulo,
-				DATE_FORMAT(Log.fecha, '%d-%m-%Y') AS fech,
-				Log.cantidad,
-				CONCAT(Unidad.unidad,'(',Item.factor_unidades,')'),
-				'1' as accion, Categoria.categoria as cate, Log.fecha as fechaOrdenar
+				CONCAT(categoria.categoria, \" - \", proveedor.proveedor) AS articulo,
+				DATE_FORMAT(log.fecha, '%d-%m-%Y') AS fech,
+				log.cantidad,
+				CONCAT(unidad.unidad,'(',item.factor_unidades,')'),
+				'1' as accion, categoria.categoria as cate, log.fecha as fechaordenar
 			  FROM
-				Log,
-				Item,
-				Categoria,
-				Proveedor,
-				Unidad
+				log,
+				item,
+				categoria,
+				proveedor,
+				unidad
 			  WHERE (
-				(Item.id_item = Log.id_item) AND
-				(Log.id_accion = 1) AND
-				(Categoria.id_categoria = Item.id_categoria) AND
-				(Proveedor.id_proveedor = Item.id_proveedor) AND
-				(Unidad.id_unidad = Item.id_unidad_compra) AND
-				(Log.fecha >= $fecha_ini) AND
-				(Log.fecha <= $fecha_fin)
+				(item.id_item = log.id_item) AND
+				(log.id_accion = 1) AND
+				(categoria.id_categoria = item.id_categoria) AND
+				(proveedor.id_proveedor = item.id_proveedor) AND
+				(unidad.id_unidad = item.id_unidad_compra) AND
+				(log.fecha >= $fecha_ini) AND
+				(log.fecha <= $fecha_fin)
 			    ";
  	
  	$query .= $query_fin . ")";
  	
- 	$query .= " ORDER BY cate, fechaOrdenar";
+ 	$query .= " ORDER BY cate, fechaordenar";
  	
  	return $query;
  }

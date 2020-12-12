@@ -7,20 +7,20 @@ session_start();
 
 db_connect();
 $query = "SELECT 
-	Proveedor.id_proveedor, 
-	Proveedor.proveedor, 
-	Proveedor.direccion, 
-	Pais.pais, 
-	Proveedor.telefono, 
-	Proveedor.contacto 
+	proveedor.id_proveedor, 
+	proveedor.proveedor, 
+	proveedor.direccion, 
+	pais.pais, 
+	proveedor.telefono, 
+	proveedor.contacto 
   FROM 
-	Proveedor 
+	proveedor 
   LEFT JOIN 
-	Pais 
+	pais 
   USING 
 	(id_pais)
   ORDER BY
-	Proveedor.proveedor";
+	proveedor.proveedor";
 $result = mysql_query($query);
 
 /*echo $query . "<br />";

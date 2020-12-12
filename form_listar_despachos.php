@@ -48,45 +48,45 @@ $titulo .= " entre $dia_ini-$mes_ini-$ano_ini y $dia_fin-$mes_fin-$ano_fin";
 $query_condiciones = " AND fecha >= $fecha_ini AND fecha <= $fecha_fin";
 
 if(isset($despacho) && $despacho!="") {
-	$query_condiciones .= " AND Orden.despacho = '$despacho'";
+	$query_condiciones .= " AND orden.despacho = '$despacho'";
 }
 
 if(isset($id_orden) && $id_orden!="") {
-	$query_condiciones .= " AND Orden.id_orden = $id_orden";
+	$query_condiciones .= " AND orden.id_orden = $id_orden";
 } else {
-	$query_condiciones .= " AND Orden.despacho is not null AND Orden.despacho != ''";
+	$query_condiciones .= " AND orden.despacho is not null AND orden.despacho != ''";
 }
 
 
 	  $query = "SELECT
-		Orden.id_orden,
-		Orden.despacho,
-		OrdenItem.cantidad,
-		OrdenItem.precio_fob,
-		OrdenItem.precio_ref,
-		OrdenItem.moneda,
-		Categoria.categoria,
-		Proveedor.id_proveedor,
-		Proveedor.proveedor,
-		CONCAT(Unidad.unidad,'(',Item.factor_unidades,')'),
-		DATE_FORMAT(Orden.fecha, '%d-%m-%Y')
+		orden.id_orden,
+		orden.despacho,
+		ordenitem.cantidad,
+		ordenitem.precio_fob,
+		ordenitem.precio_ref,
+		ordenitem.moneda,
+		categoria.categoria,
+		proveedor.id_proveedor,
+		proveedor.proveedor,
+		CONCAT(unidad.unidad,'(',item.factor_unidades,')'),
+		DATE_FORMAT(orden.fecha, '%d-%m-%Y')
 	  FROM
-		OrdenItem,
-		Orden,
-		Item,
-		Categoria,
-		Proveedor,
-		Unidad
-	  WHERE OrdenItem.id_orden = Orden.id_orden AND
-		Item.id_item = OrdenItem.id_item AND
-		Categoria.id_categoria = Item.id_categoria AND
-		Proveedor.id_proveedor = Item.id_proveedor AND
-		Unidad.id_unidad = Item.id_unidad_compra
+		ordenitem,
+		orden,
+		item,
+		categoria,
+		proveedor,
+		unidad
+	  WHERE ordenitem.id_orden = orden.id_orden AND
+		item.id_item = ordenitem.id_item AND
+		categoria.id_categoria = item.id_categoria AND
+		proveedor.id_proveedor = item.id_proveedor AND
+		unidad.id_unidad = item.id_unidad_compra
 	    ";
 
 	  $query = $query . $query_condiciones;
 
-		$query .= " ORDER BY Orden.despacho, Orden.fecha desc, Orden.id_orden";
+		$query .= " ORDER BY orden.despacho, orden.fecha desc, orden.id_orden";
 
 	//  dump($query);
 

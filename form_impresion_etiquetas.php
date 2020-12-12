@@ -9,13 +9,13 @@ db_connect();
 
 $id_item = $_GET['id_item'];
 
-//$query = "SELECT codigo_barras FROM Item WHERE id_item = $id_item";
+//$query = "SELECT codigo_barras FROM item WHERE id_item = $id_item";
 $query = "SELECT 
 	CONCAT('*',codigo_barras,'*'), 
 	CONCAT('<br>',categoria,'<br>',proveedor,' (',codigo_proveedor,')') 
 	FROM 
-	Item a LEFT JOIN Categoria b ON a.id_categoria=b.id_categoria
-	LEFT JOIN Proveedor c ON a.id_proveedor=c.id_proveedor
+	item a LEFT JOIN categoria b ON a.id_categoria=b.id_categoria
+	LEFT JOIN proveedor c ON a.id_proveedor=c.id_proveedor
 	WHERE id_item = $id_item";
 $result = mysql_query($query);
 

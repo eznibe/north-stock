@@ -8,8 +8,8 @@ session_start();
 db_connect();
 
 
-if(isset($_GET['allItems'])) {
-	$value = allItems();
+if(isset($_GET['allitems'])) {
+	$value = allitems();
 }
 else if(isset($_GET['guardarPrevision'])) {
 	$value = guardarPrevision($_GET['id_prevision'], $_GET['numero_orden'], $_GET['cliente'], $_GET['fecha_entrega'], $_GET['descripcion']);
@@ -18,11 +18,11 @@ else if(isset($_GET['guardarPrevision'])) {
 //return JSON array
 exit(json_encode($value));
 
-function allItems() {
+function allitems() {
 
   $obj->success = true;
 
-  $query = "UPDATE Orden SET despacho = '$despacho' WHERE id_orden = $id_orden";
+  $query = "UPDATE orden SET despacho = '$despacho' WHERE id_orden = $id_orden";
 	if(!mysql_query($query)) {
     $obj->success = false;
   }

@@ -27,7 +27,7 @@ function insert_pais(&$mensaje, $pais)
   // Si estan todos los campos requeridos
   //
   $pais = addslashes(trim(strtoupper($pais)));
-  $query = "INSERT INTO Pais 
+  $query = "INSERT INTO pais 
             (pais)
             VALUES 
             (\"$pais\")";

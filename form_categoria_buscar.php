@@ -11,7 +11,7 @@ $focus = "forms[0].producto";
 $mensaje = "";
 $categoria = $_POST['categoria'];
 
-$query = "SELECT Categoria.categoria, Categoria.scan, Categoria.stock_minimo, Unidad.unidad FROM Categoria, Unidad WHERE ((Unidad.id_unidad = Categoria.id_unidad_visual) AND (Categoria.categoria LIKE \"%$categoria%\")) ORDER BY Categoria.categoria";
+$query = "SELECT categoria.categoria, categoria.scan, categoria.stock_minimo, unidad.unidad FROM categoria, unidad WHERE ((unidad.id_unidad = categoria.id_unidad_visual) AND (categoria.categoria LIKE \"%$categoria%\")) ORDER BY categoria.categoria";
 $result = mysql_query($query);
 
 $aux = "";

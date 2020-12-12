@@ -26,7 +26,7 @@ function get_usuario_data(&$data, $id_usuario)
 	username,
 	id_tipousr
   FROM
-	Usuario
+	usuario
   WHERE (
 	(id_usuario = $id_usuario)
   )";
@@ -48,13 +48,13 @@ function update_usuario(&$mensaje, $id_usuario, $nombre, $username, $clave, $id_
  {
   // Si estan todos los campos requeridos
   //
-  $query = "UPDATE Usuario SET
+  $query = "UPDATE usuario SET
 	nombre = \"$nombre\",
 	username = \"$username\",
 	clave = \"$clave\",
 	id_tipousr = $id_tipo
   WHERE 
-	Usuario.id_usuario = $id_usuario";
+	usuario.id_usuario = $id_usuario";
 
   if (!($result = mysql_query($query)))
   {

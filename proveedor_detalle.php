@@ -10,21 +10,21 @@ db_connect();
 $id_proveedor = $_GET['id_proveedor'];
 
 $query = "SELECT 
-        Proveedor.proveedor,
-        Proveedor.direccion,
-        Pais.pais,
-        Proveedor.telefono,
-        Proveedor.fax,
-        Proveedor.contacto,
-        Proveedor.mail
+        proveedor.proveedor,
+        proveedor.direccion,
+        pais.pais,
+        proveedor.telefono,
+        proveedor.fax,
+        proveedor.contacto,
+        proveedor.mail
   FROM
-        Proveedor
+        proveedor
   LEFT JOIN
-        Pais
+        pais
   USING
         (id_pais)
   WHERE
-	Proveedor.id_proveedor = $id_proveedor";
+	proveedor.id_proveedor = $id_proveedor";
 
 $result = mysql_query($query);
 

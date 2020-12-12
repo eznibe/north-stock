@@ -15,7 +15,7 @@
 
 function obtener_precio_dolar()
 {
-	$query = "SELECT precio_dolar, fecha FROM DolarHoy WHERE id_dolar=(SELECT MAX(id_dolar) FROM DolarHoy)";
+	$query = "SELECT precio_dolar, fecha FROM dolarhoy WHERE id_dolar=(SELECT MAX(id_dolar) FROM dolarhoy)";
 	$result = mysql_query($query);
  	$row = mysql_fetch_array($result);
  	return $row;

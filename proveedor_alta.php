@@ -6,7 +6,7 @@ include 'dbutils.php';
 session_start();
 
 db_connect();
-$query = "SELECT id_pais, pais FROM Pais";
+$query = "SELECT id_pais, pais FROM pais";
 $result = mysql_query($query);
 
 /*echo $query . "<br />";

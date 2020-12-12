@@ -25,7 +25,7 @@ if (get_orden_status($id_orden) == 1)
         cantidad,
         cantidad_pendiente
   FROM
-        OrdenItem
+        ordenitem
   WHERE
         id_orden = $id_orden";
 
@@ -40,11 +40,11 @@ if (get_orden_status($id_orden) == 1)
  foreach ($items as $item)
  {
   $cantidad_factor = (get_factor_unidades($item[0])) * $item[1];
-  $query = "UPDATE Item
+  $query = "UPDATE item
 	SET
-	Item.stock_transito = Item.stock_transito - $cantidad_factor
+	item.stock_transito = item.stock_transito - $cantidad_factor
 	WHERE (
-        (Item.id_item = $item[0])
+        (item.id_item = $item[0])
    )";
   $result = mysql_query($query);
  }
@@ -52,7 +52,7 @@ if (get_orden_status($id_orden) == 1)
 
 // En todos los casos la paso a status 5
 $query = "UPDATE
-        Orden
+        orden
   SET
         id_status = 5
   WHERE (

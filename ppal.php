@@ -9,27 +9,27 @@ $clave = isset($_POST['password']) ? $_POST['password'] : "";
 db_connect();
 
 $query = "SELECT 
-			Categoria.categoria, 
-			Categoria.stock_minimo, 
-			SUM(Item.stock_disponible), 
-			Item.id_categoria, 
-			(SUM(Item.stock_disponible)-Categoria.stock_minimo), 
-			Unidad.unidad,
-			SUM(Item.stock_transito),
-			(SUM(Item.stock_disponible)+SUM(Item.stock_transito)-Categoria.stock_minimo) 
+			categoria.categoria, 
+			categoria.stock_minimo, 
+			SUM(item.stock_disponible), 
+			item.id_categoria, 
+			(SUM(item.stock_disponible)-categoria.stock_minimo), 
+			unidad.unidad,
+			SUM(item.stock_transito),
+			(SUM(item.stock_disponible)+SUM(item.stock_transito)-categoria.stock_minimo) 
 		  FROM 
-			Item, 
-			Categoria, 
-			Unidad 
+			item, 
+			categoria, 
+			unidad 
 		  WHERE (
-			(Item.id_categoria = Categoria.id_categoria) AND 
-			(Unidad.id_unidad = Categoria.id_unidad_visual) AND
-			Item.stock_transito < 0
+			(item.id_categoria = categoria.id_categoria) AND 
+			(unidad.id_unidad = categoria.id_unidad_visual) AND
+			item.stock_transito < 0
 		  ) 
 		  GROUP BY 
-			Item.id_categoria 
+			item.id_categoria 
 		  ORDER BY 
-			Categoria.categoria";
+			categoria.categoria";
 
 $result = mysql_query($query);
 $num_results = mysql_num_rows($result);

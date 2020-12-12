@@ -26,7 +26,7 @@ function delete_categoria(&$mensaje, $id_categoria)
  {
   // Si estan todos los campos requeridos
   //
-  $query = "DELETE FROM Categoria 
+  $query = "DELETE FROM categoria 
             WHERE id_categoria = $id_categoria";
 
   $result = mysql_query($query);

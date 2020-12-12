@@ -16,45 +16,45 @@ $id_grupo="";
 $condition = "";
 if (isset($_GET['id_grupo']) && !empty($_GET['id_grupo'])) {
 	$id_grupo = $_GET['id_grupo'];
-	$condition = " AND (Grupo.id_grupo = $id_grupo)";
+	$condition = " AND (grupo.id_grupo = $id_grupo)";
 }
 
 $orderbygrupo = "";
 if (isset($_GET['orderbygrupo'])) {
-	$orderbygrupo = " Grupo.id_grupo, ";
+	$orderbygrupo = " grupo.id_grupo, ";
 }
 
 $query = "SELECT
-    Categoria.categoria,
-    Categoria.stock_minimo,
-    SUM(Item.stock_disponible),
-    Item.id_categoria,
-    (SUM(Item.stock_disponible)-Categoria.stock_minimo - (coalesce(sum(en_prevision.cantidad), 0))) AS saldo,
-    Unidad.unidad,
-    SUM(Item.stock_transito),
-    (SUM(Item.stock_disponible)+SUM(Item.stock_transito)-Categoria.stock_minimo - (coalesce(sum(en_prevision.cantidad), 0))) ,
-    Categoria.reservado,
+    categoria.categoria,
+    categoria.stock_minimo,
+    SUM(item.stock_disponible),
+    item.id_categoria,
+    (SUM(item.stock_disponible)-categoria.stock_minimo - (coalesce(sum(en_prevision.cantidad), 0))) AS saldo,
+    unidad.unidad,
+    SUM(item.stock_transito),
+    (SUM(item.stock_disponible)+SUM(item.stock_transito)-categoria.stock_minimo - (coalesce(sum(en_prevision.cantidad), 0))) ,
+    categoria.reservado,
     coalesce(sum(en_prevision.cantidad), 0) as prevision
   FROM
-    Item  
-    JOIN Categoria on Item.id_categoria = Categoria.id_categoria
-    JOIN Unidad on Unidad.id_unidad = Categoria.id_unidad_visual
-    JOIN Grupo on Categoria.id_grupo = Grupo.id_grupo
+    item  
+    JOIN categoria on item.id_categoria = categoria.id_categoria
+    JOIN unidad on unidad.id_unidad = categoria.id_unidad_visual
+    JOIN grupo on categoria.id_grupo = grupo.id_grupo
     LEFT JOIN (
     	SELECT pi.id_item, sum(pi.cantidad) as cantidad
     	FROM prevision p
     	JOIN previsionitem pi on pi.id_prevision = p.id_prevision
     	where p.fecha_descarga is null
     	group by pi.id_item
-    ) en_prevision on en_prevision.id_item = Item.id_item
+    ) en_prevision on en_prevision.id_item = item.id_item
   WHERE 1=1
     $condition
   GROUP BY
-	  Item.id_categoria
+	  item.id_categoria
   HAVING
 	  saldo < 0
   ORDER BY
-	  $orderbygrupo Categoria.categoria";
+	  $orderbygrupo categoria.categoria";
 $result = mysql_query($query);
 
 $aux = "";
