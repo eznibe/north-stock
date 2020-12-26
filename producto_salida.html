@@ -4,16 +4,28 @@
   <link rel="stylesheet" type="text/css" href="north.css" />
   <script language="JavaScript" src="include/jquery-1.12.4.min.js"></script>
 
+  <script src="https://cdn.lr-ingest.io/LogRocket.min.js" crossorigin="anonymous"></script>
+  <script>window.LogRocket && window.LogRocket.init('nxe6lb/north-stock-hw');</script>
+
 <script type="text/javascript">
+
+const username = "<?php echo $var['username'];?>";
+if (username) {
+	LogRocket.identify(username, {
+		name: username
+	});
+}
+
 
 function setfocus()
 { 
-document.<?php echo $var['focus']; ?>.focus()
+	const focusId = "<?php echo $var['focusId'];?>";
+	$('#'+focusId).focus();
 }
 
 function asignarPrevision(id_item) {
   const cantidad = $('#cantidad').val();
-  const url=`prevision_item_nuevo.php?id_item=${id_item}&cantidad=${cantidad}`;
+  const url='prevision_item_nuevo.php?id_item='+id_item+'&cantidad='+cantidad;
   window.open(url,"producto_item_nuevo","toolbar=no, location=no, directories=no, status=yes, menubar=no, scrollbars=yes, resizable=yes, width=750, height=300");
 }
 </script>

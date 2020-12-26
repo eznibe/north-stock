@@ -9,6 +9,7 @@ $valid_user = $_SESSION['valid_user'];
 db_connect();
 
 $focus = "forms[0].pproducto";
+$focusId = "pproducto";
 $mensaje = "";
 $hits_mensaje = "";
 $items = "";
@@ -106,6 +107,7 @@ if ($formname == "busca_producto")
   $stock_disponible = "$row[3]";
   $unidad = "(<em>" . strtoupper($row[4]) . "</em>)";
   $focus = "forms[2].cantidad";
+  $focusId = "cantidad";
  }
  elseif (busca_item($hits_mensaje, $items, $pproducto))
  {
@@ -114,6 +116,7 @@ if ($formname == "busca_producto")
   $stock_disponible = "";
   $unidad = "";
   $focus = "forms[1].sproducto";
+  $focusId = "sproducto";
  }
 }
 elseif ($formname == "select_producto")
@@ -146,6 +149,7 @@ elseif ($formname == "select_producto")
  $stock_disponible = "$row[3]";
  $unidad = "(<em>" . strtoupper($row[4]) . "</em>)";
  $focus = "forms[2].cantidad";
+ $focusId = "cantidad";
 }
 elseif ($formname == "producto_salida")
 {
@@ -153,6 +157,7 @@ elseif ($formname == "producto_salida")
  {
   $mensaje = "<em class=\"error\">Error: Debe ingresar los items marcados con *.</em>";
   $focus = "forms[2].cantidad";
+  $focusId = "cantidad";
  }
  else
  {
@@ -164,6 +169,7 @@ elseif ($formname == "producto_salida")
    $stock_disponible = "";
    $unidad = "";
    $focus = "forms[0].pproducto";
+   $focusId = "pproducto";
   }
   else
   {
@@ -189,6 +195,7 @@ elseif ($formname == "producto_salida")
    $item = "";
 //   $stock_disponible = "";
    $focus = "forms[0].pproducto";
+   $focusId = "pproducto";
    $mensaje = "Acaba de retirar $cantidad $unidad $producto."."<br>Quedan disponibles ".($stock_disponible - $cantidad)." $unidad<p>\n";
    $stock_disponible = "";
    $producto = "";
@@ -207,7 +214,8 @@ $var = array("items" => $items,
         "stock_disponible" => $stock_disponible,
         "unidad" => $unidad,
 		    "fecha" => $fecha_select,
-        "focus" => $focus);
+        "focus" => $focus,
+        "focusId" => $focusId);
 eval_html('producto_salida.html', $var);
 
 

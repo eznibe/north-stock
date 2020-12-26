@@ -7,6 +7,8 @@ check_session();
 
 db_connect();
 
+$username = $_SESSION['valid_user'];
+
 $id_prevision = $_POST['id_prevision'];
 $id_item = $_POST['id_item'];
 $cantidad = $_POST['cantidad'];
@@ -23,7 +25,8 @@ $focus = "forms[0].pproducto";
 $producto = "";
 
 $var = array("mensaje" => $mensaje,
-  "focus" => $focus); 
+  "focus" => $focus,
+  "username" => $username); 
 
 eval_html('producto_salida.html', $var);
 

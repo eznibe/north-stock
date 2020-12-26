@@ -15,6 +15,8 @@ $query = "SELECT p.id_prevision
 	FROM prevision p
   WHERE 
     p.numero_orden = '$numero_orden'
+    OR
+    p.id_prevision = '$numero_orden'
   LIMIT 1";
 
 // dump($query);
