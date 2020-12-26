@@ -3,7 +3,8 @@
 include 'main.php';
 include 'dbutils.php';
 
-session_start();
+check_session();
+$username = $_SESSION['valid_user'];
 
 db_connect();
 
@@ -52,7 +53,8 @@ $var = array("focus" => $focus,
 		"unidad" => $unidad,
 		"stock_disponible" => $stock_disponible,
 		"stock_transito" => $stock_transito,
-        "id_prevision_item" => $id_prevision_item,
+		"id_prevision_item" => $id_prevision_item,
+		"username" => $username,
         "submitto" => "prevision_ver.php",
         "id_prevision" => $id_prevision);
 

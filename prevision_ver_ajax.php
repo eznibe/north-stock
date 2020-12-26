@@ -18,7 +18,17 @@ db_connect();
   <script language="JavaScript" src="javascript/jsGral.js?"<?php echo $var['date']; ?>></script>
   <script language="JavaScript" src="include/jquery-1.12.4.min.js"></script>
 
+  <script src="https://cdn.lr-ingest.io/LogRocket.min.js" crossorigin="anonymous"></script>
+  <script>window.LogRocket && window.LogRocket.init('nxe6lb/north-stock-hw');</script>
+
 <script type="text/javascript">
+
+const username = "<?php echo $var['username'];?>";
+if (username) {
+	LogRocket.identify(username, {
+		name: username
+	});
+}
 
 function update_prevision(id_prevision_item)
 {
@@ -74,7 +84,7 @@ function guardarPrevision() {
   const mes = $('#mes').val();
   const anio = $('#ano').val();
   if (dia !== '0' && mes !== '0' && anio !== '0') {
-    fechaEntrega = `${anio}-${mes}-${dia}`;
+    fechaEntrega = anio+'-'+mes+'-'+dia;
   }
 
   $.ajax({

@@ -3,7 +3,17 @@
   <title>North Sails - Sistema de Control de Stock</title>
   <link rel="stylesheet" type="text/css" href="north.css" />
 
+  <script src="https://cdn.lr-ingest.io/LogRocket.min.js" crossorigin="anonymous"></script>
+  <script>window.LogRocket && window.LogRocket.init('nxe6lb/north-stock-hw');</script>
+
 <script type="text/javascript">
+
+const username = "<?php echo $var['username'];?>";
+if (username) {
+	LogRocket.identify(username, {
+		name: username
+	});
+}
 
 let eliminandoItem;
 

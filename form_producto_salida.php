@@ -215,7 +215,8 @@ $var = array("items" => $items,
         "unidad" => $unidad,
 		    "fecha" => $fecha_select,
         "focus" => $focus,
-        "focusId" => $focusId);
+        "focusId" => $focusId,
+        "username" => $valid_user);
 eval_html('producto_salida.html', $var);
 
 
@@ -227,7 +228,6 @@ function ingresarordenManual($id_item, $cantidad, $fecha) {
     VALUES ('$fecha', $cotiz_dolar, 2, 'orden desde descarga manual')";
 
   $result = mysql_query($query);
-  $row = mysql_fetch_array($result);
   
   // id ultima orden ingresada
   $query = "SELECT id_orden FROM orden ORDER BY id_orden desc LIMIT 1";

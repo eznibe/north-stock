@@ -4,6 +4,8 @@ include 'main.php';
 include 'dbutils.php';
 
 // session_start();
+check_session();
+$username = $_SESSION['valid_user'];
 
 db_connect();
 
@@ -44,6 +46,7 @@ $var = array("focus" => $focus,
         "stock_transito" => isset($stock_transito) ? $stock_transito : "-",
         "items" => $items,
         "previsiones" => $previsiones,
+        "username" => $username,
         "submitto" => $id_prevision <> "" ? "prevision_ver.php" : "producto_asignar_prevision.php");
 
 eval_html('prevision_item_nuevo.html', $var);

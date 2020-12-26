@@ -6,12 +6,21 @@
 
   <script language="JavaScript" src="include/jquery-1.12.4.min.js"></script>
   <!-- <script src="javascript/autocomplete.js"></script> -->
+  <script src="https://cdn.lr-ingest.io/LogRocket.min.js" crossorigin="anonymous"></script>
+  <script>window.LogRocket && window.LogRocket.init('nxe6lb/north-stock-hw');</script>
 
 <script type="text/javascript">
 
-function setfocus()
+const username = "<?php echo $var['username'];?>";
+if (username) {
+	LogRocket.identify(username, {
+		name: username
+	});
+}
+
+function setfocus(id)
 {
-  // document.<?php echo $var['focus']; ?>.focus()
+  $('#'+id).focus();
 }
 
 function agregar()
@@ -37,12 +46,12 @@ function agregar()
 }
 
 function getItemValue(item) {
-  return `${item.id_item},${item.precio},${item.moneda},${item.unidad},${item.stock_disponible},${item.stock_transito}`;
+  return item.id_item+','+item.precio+','+item.moneda+','+item.unidad+','+item.stock_disponible+','+item.stock_transito;
 }
 
 function buscaProducto(event) {
   if (event.keyCode==13) {
-    const producto = $('#producto').val();
+    const producto = $('#sproducto').val();
     console.log('Search:', producto);
     $.ajax({
     url:'api/items.php?search_categoria=' + producto,
@@ -56,7 +65,7 @@ function buscaProducto(event) {
         $el.append($("<option></option>").attr("value", '-').text('selecciona item'));
       }
       data.items.forEach(item => {
-        $el.append($("<option></option>").attr("value", getItemValue(item)).text(`${item.categoria} - ${item.proveedor}`));
+        $el.append($("<option></option>").attr("value", getItemValue(item)).text(item.categoria+' - '+item.proveedor));
       });
 
       if (data.items.length === 1) {
@@ -83,6 +92,7 @@ function seleccionaItem() {
     $('#unidad').text(values[3]);
     $('#stock_disponible').text(values[4]);
     $('#stock_transito').text(values[5]);
+    setfocus('cantidad');
   } else {
     $('#unidad').text('');
   }
@@ -107,6 +117,7 @@ function loadItems() {
       // autocomplete(document.getElementById("myInput"), data);
     }
   });
+  setfocus('sproducto');
 }
 
 </script>
@@ -121,7 +132,7 @@ function loadItems() {
       Búsqueda de producto:
     </td>
     <td>
-      <input type="text" value="" size="20" name="producto" id="producto" class="obligatorio" onkeypress="buscaProducto(event)" > (Presione ENTER para buscar)
+      <input type="text" value="" size="20" name="producto" id="sproducto" class="obligatorio" onkeypress="buscaProducto(event)" > (Presione ENTER para buscar)
     </td>
   </tr>
 

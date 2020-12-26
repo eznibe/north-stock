@@ -3,7 +3,7 @@
 include_once 'main.php';
 include_once 'dbutils.php';
 
-session_start();
+check_session();
 
 db_connect();
 
@@ -38,6 +38,8 @@ else if ($formname == "prevision_item_nuevo") {
 showPrevisionDetailsScreen($id_prevision);
 
 function showPrevisionDetailsScreen($id_prevision) {
+  $username = $_SESSION['valid_user'];
+  
   $focus = "numero_orden";
 
   // Datos prevision
@@ -148,6 +150,7 @@ function showPrevisionDetailsScreen($id_prevision) {
     "mes" => $mesopc,
     "ano" => $anoopc,
     "descargada" => $descargada,
+    "username" => $username,
     "focus" => $focus);
   
   eval_html('prevision_ver_ajax.php', $var);
