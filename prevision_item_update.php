@@ -21,7 +21,8 @@ $query = "SELECT
 		CONCAT(u.unidad,'(',i.factor_unidades,')'),
 		i.codigo_proveedor,
 		i.stock_disponible,
-		i.stock_transito
+		i.stock_transito,
+		pi.descargado
 	FROM previsionitem pi
 		JOIN item i on i.id_item = pi.id_item
 		JOIN categoria c on c.id_categoria = i.id_categoria
@@ -41,6 +42,7 @@ $proveedor = $row[3];
 $categoria = $row[4];
 $stock_disponible = $row[7];
 $stock_transito = $row[8];
+$item_descargado = $row[9];
 
 $unidad = "<em>" . strtoupper($row[5]) . "</em>";
 $id_prevision_item = $row[0];
@@ -55,7 +57,8 @@ $var = array("focus" => $focus,
 		"stock_transito" => $stock_transito,
 		"id_prevision_item" => $id_prevision_item,
 		"username" => $username,
-        "submitto" => "prevision_ver.php",
+		"submitto" => "prevision_ver.php",
+		"item_descargado" => $item_descargado,
         "id_prevision" => $id_prevision);
 
 

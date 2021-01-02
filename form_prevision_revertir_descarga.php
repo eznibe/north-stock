@@ -44,6 +44,11 @@ $query = "UPDATE prevision SET fecha_descarga = null, usuario_descarga = null WH
 
 $result = mysql_query($query);
 
+// actualizar prevision items
+$query = "UPDATE previsionitem SET descargado = false WHERE id_prevision = $id_prevision";
+
+$result = mysql_query($query);
+
 log_trans($valid_user, 27, 0, 0, $fecha, 'NULL', $id_prevision);
 
 $var = array(

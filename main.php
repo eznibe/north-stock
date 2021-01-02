@@ -191,7 +191,7 @@ function get_usuario_opt($id_usuario)
 function log_trans($username, $id_accion, $id_item, $cantidad, $fecha, $id_orden='NULL', $id_prevision='NULL')
 {
  // id_accion: 1 ingreso 2 egreso (manual y desde descarga prevision) 3 update 4 confirma orden 5 elimina orden 6 orden arribada completa 8 elimina item de orden
- // id_accion: 21 agrego item - 23 update prevision item - 24 ? - 25 elimina prevision - 26 prevision descargada - 27 prevision revertida - 28 elimina item de prevision
+ // id_accion: 21 agrego item - 23 update prevision item - 24 descarga item - 25 elimina prevision - 26 prevision descargada - 27 prevision revertida - 28 elimina item de prevision
  $query = "INSERT INTO log
 	(username, id_accion, id_item, cantidad, fecha, id_orden, id_prevision)
   VALUES

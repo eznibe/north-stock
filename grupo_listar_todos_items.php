@@ -44,7 +44,7 @@ $query = "SELECT
     LEFT JOIN prevision p on p.id_prevision = pi.id_prevision
   WHERE
 	  categoria.id_grupo = $id_grupo
-	  AND p.fecha_descarga is null
+	  AND p.fecha_descarga is null and pi.descargado = false
   GROUP BY 
     item.id_item
   ORDER BY

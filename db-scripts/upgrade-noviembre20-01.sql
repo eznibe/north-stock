@@ -28,3 +28,11 @@ engine=MyISAM
 ;
 
 alter table log add column id_prevision integer;
+
+
+
+alter table previsionitem add column descargado boolean default false;
+
+update previsionitem, prevision set descargado = true
+where previsionitem.id_prevision = prevision.id_prevision
+and fecha_descarga is not null;

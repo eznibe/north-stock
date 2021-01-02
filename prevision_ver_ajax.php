@@ -123,7 +123,7 @@ function despachoKeyPress() {
   <table width="100%" id="orden_table">
 
      <tr class="provlisthead">
-       <th>item</th> <th>Cod. producto</th> <th>Cantidad</th> <th>unidad</th> <th>Precio<br /> unitario</th> <th>Precio</th> <th>Moneda</th>
+       <th>item</th> <th>Cod. producto</th> <th>Cantidad</th> <th>unidad</th> <th>Precio<br /> unitario</th> <th>Precio</th> <th>Moneda</th> <th>Descargado</th>
       </tr>
       <?php echo $var['previsionitems']; ?>
   </table>

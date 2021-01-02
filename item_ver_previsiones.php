@@ -34,7 +34,7 @@ function getPrevisiones($id_item) {
     pi.cantidad
   FROM prevision p 
   JOIN previsionitem pi on p.id_prevision = pi.id_prevision
-  WHERE p.fecha_descarga is null 
+  WHERE p.fecha_descarga is null and pi.descargado = false 
     AND pi.id_item = $id_item
   GROUP BY p.id_prevision
 	ORDER BY p.fecha_entrega, p.numero_orden, p.id_prevision";

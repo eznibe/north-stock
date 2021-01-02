@@ -44,7 +44,7 @@ $query = "SELECT
     	SELECT pi.id_item, sum(pi.cantidad) as cantidad
     	FROM prevision p
     	JOIN previsionitem pi on pi.id_prevision = p.id_prevision
-    	where p.fecha_descarga is null
+    	where p.fecha_descarga is null and pi.descargado = false
     	group by pi.id_item
     ) en_prevision on en_prevision.id_item = item.id_item
   WHERE 1=1

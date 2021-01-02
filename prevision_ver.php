@@ -23,9 +23,10 @@ $mensaje = "";
 
 if ($formname == "prevision_update") {
   $id_prevision_item = $_POST['id_prevision_item'];
-	$cantidad = $_POST['cantidad'];
+  $cantidad = $_POST['cantidad'];
+  $descargando_item = $_POST['descargando'];
   
-	update_prevision($id_prevision_item, $cantidad);
+	update_prevision($id_prevision_item, $cantidad, $descargando_item);
 }
 else if ($formname == "prevision_item_nuevo") {
   $id_item = $_POST['id_item'];
@@ -77,7 +78,8 @@ function showPrevisionDetailsScreen($id_prevision) {
     round((pi.cantidad * coalesce(i.precio_fob, i.precio_ref)), 2) as total,
     case when pro.id_pais = 1 then 'AR$' when pro.id_pais > 1 then 'US$' end as moneda,
     i.codigo_proveedor,
-    (i.stock_disponible - pi.cantidad) as stock_despues_descarga
+    (i.stock_disponible - pi.cantidad) as stock_despues_descarga,
+    pi.descargado
   FROM prevision p 
     JOIN previsionitem pi on p.id_prevision = pi.id_prevision
     JOIN item i on i.id_item = pi.id_item
@@ -107,6 +109,9 @@ function showPrevisionDetailsScreen($id_prevision) {
       <td class=\"centrado\">$row[6]</td>
       <td class=\"centrado\">$row[7]</td>
       <td class=\"centrado\">$row[8]</td>
+      <td class=\"centrado\">"
+      .($row[11] === "1" ? "X" : "").
+      "</td>
       </tr>\n";
 
     if (+$row[10] < 0) {
@@ -174,17 +179,23 @@ function formEliminaritem($id_prevision, $id_prevision_item) {
  * Actualiza la cantidad (y cant pendiente) y le precio del item de la compra pasado
  * como parametro
  */
-function update_prevision($id_prevision_item, $cantidad) {
+function update_prevision($id_prevision_item, $cantidad, $descargando_item) {
 	$query = "SELECT id_prevision, id_item FROM previsionitem WHERE id_prevision_item = $id_prevision_item";
 	$result = mysql_query($query);
 	$row = mysql_fetch_array($result);
 
- 	if ( ($cantidad == 0) or ($cantidad == "") )
+  if ($descargando_item === "true") {
+    $query = "UPDATE previsionitem SET descargado = true WHERE id_prevision_item = $id_prevision_item";
+
+    // logueo item descargado de la prevision (24)
+    log_trans($_SESSION['valid_user'], 24, $row[1], 0, date("Y-m-d"), 'NULL', $row[0]);
+  }
+ 	else if ( ($cantidad == 0) or ($cantidad == "") )
  	{
     $query = "DELETE FROM previsionitem WHERE id_prevision_item = $id_prevision_item";
 
     // logueo item borrado de la prevision (28)
-    log_trans($_SESSION['valid_user'], 28, $row[1], 0, date("Y-m-d"), $row[0]);
+    log_trans($_SESSION['valid_user'], 28, $row[1], 0, date("Y-m-d"), 'NULL', $row[0]);
  	}
  	else
  	{
@@ -195,7 +206,7 @@ function update_prevision($id_prevision_item, $cantidad) {
     WHERE
         id_prevision_item = $id_prevision_item";
 
-    log_trans($_SESSION['valid_user'], 23, $row[1], $cantidad, date("Y-m-d"), $row[0]);
+    log_trans($_SESSION['valid_user'], 23, $row[1], $cantidad, date("Y-m-d"), 'NULL', $row[0]);
  	}
   $result = mysql_query($query);
 }

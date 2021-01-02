@@ -46,6 +46,11 @@ function eliminarItem() {
   eliminandoItem = true;
 }
 
+function descargarItem() {
+  document.getElementById('descargando').value = 'true';
+  descargandoItem = true;
+}
+
 </script>
 
 </head>
@@ -93,6 +98,7 @@ Stock tránsito:
 	<input type="hidden" value="prevision_update" size="10" name="formname" id="formname">
 	<input type="hidden" value="<?php echo $var['id_prevision_item']; ?>" size="10" name="id_prevision_item" id="id_prevision_item">
 	<input type="hidden" value="<?php echo $var['id_prevision']; ?>" size="10" name="id_prevision" id="id_prevision">
+	<input type="hidden" value="false" size="10" name="descargando" id="descargando">
 
 	<tr>
 	<td>
@@ -106,8 +112,9 @@ Stock tránsito:
 	</table>
 	<center>
 		<br />Los casilleros marcados con * son obligatorios.<br />
-		<button type="submit" name="enviar" value="enviar" style="margin-right: 50px;">Actualizar</button>
-    <button type="submit" name="enviar" value="enviar" onclick="eliminarItem()">Eliminar item</button>
+		<button type="submit" name="enviar" value="enviar" style="margin-right: 70px;">Actualizar</button>
+		<button type="submit" name="enviar" value="enviar" style="margin-right: 20px;" <?php echo $var['item_descargado'] == '1' ? 'disabled' : '' ?> onclick="descargarItem()">Descargar item</button>
+    	<button type="submit" name="enviar" value="enviar" onclick="eliminarItem()">Eliminar item</button>
  	</center>
 </form>
 
