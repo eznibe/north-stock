@@ -21,6 +21,7 @@ $stock_disponible = isset($_POST['stock_disponible']) ? $_POST['stock_disponible
 $producto = isset($_POST['producto']) ? $_POST['producto'] : "";
 $unidad = isset($_POST['unidad']) ? $_POST['unidad'] : "";
 $formname = $_POST['formname'];
+$num_results = 0;
 
 // setear la fecha por default (current date si no hay nada seleccionado por el usuario)
 $dia_ini = isset($_POST['dia_ini']) ? $_POST['dia_ini'] : sprintf("%02d", date("d"));
@@ -31,20 +32,24 @@ $fecha = $ano_ini . "-" . $mes_ini . "-" . $dia_ini;
 $fecha_select = armar_select_fechas($dia_ini, $mes_ini, $ano_ini);
 
 
-function busca_item(&$mensaje, &$items, $pitem)
+function busca_item(&$mensaje, &$items, $pitem, &$num_results)
 {
  $query = "SELECT 
 	item.id_item, 
 	categoria.categoria, 
-	proveedor.proveedor 
+	proveedor.proveedor, 
+  item.stock_disponible,
+  unidad.unidad
   FROM 
 	categoria, 
 	proveedor, 
-	item 
+	item,
+  unidad
   WHERE (
 	(categoria.categoria LIKE \"%$pitem%\") AND 
 	(categoria.id_categoria = item.id_categoria) AND 
-	(proveedor.id_proveedor = item.id_proveedor)
+	(proveedor.id_proveedor = item.id_proveedor) AND
+  (unidad.id_unidad = categoria.id_unidad_visual)
   ) 
   ORDER BY 
 	categoria.categoria";
@@ -64,9 +69,13 @@ function busca_item(&$mensaje, &$items, $pitem)
  }
  else $mensaje = "Se encontraron $num_results coincidencias.";
 
- while ($row = mysql_fetch_array($result))
- {
-  $items = $items . "<option value=\"" . $row[0] . "\">" . htmlspecialchars(stripslashes($row[1])) . "-" . htmlspecialchars(stripslashes($row[2])) ."</option>\n";
+ if ($num_results > 1) {
+   while ($row = mysql_fetch_array($result))
+   {
+    $items = $items . "<option value=\"" . $row[0] . "\">" . htmlspecialchars(stripslashes($row[1])) . "-" . htmlspecialchars(stripslashes($row[2])) ."</option>\n";
+   }
+ } else {
+  $items = mysql_fetch_array($result);
  }
  return TRUE;
 }
@@ -109,14 +118,23 @@ if ($formname == "busca_producto")
   $focus = "forms[2].cantidad";
   $focusId = "cantidad";
  }
- elseif (busca_item($hits_mensaje, $items, $pproducto))
+ elseif (busca_item($hits_mensaje, $items, $pproducto, $num_results))
  {
-  $item = "";
-  $producto = "";
-  $stock_disponible = "";
-  $unidad = "";
-  $focus = "forms[1].sproducto";
-  $focusId = "sproducto";
+   if ($num_results > 1) {
+     $item = "";
+     $producto = "";
+     $stock_disponible = "$num_results";
+     $unidad = "";
+     $focus = "forms[1].sproducto";
+     $focusId = "sproducto";
+   } else {
+     $item = $items[0];
+     $producto = $items[1] . " - " . $items[2];
+     $stock_disponible = "$items[3]";
+     $unidad = "(<em>" . strtoupper($items[4]) . "</em>)";
+     $focus = "forms[2].cantidad";
+     $focusId = "cantidad";
+   }
  }
 }
 elseif ($formname == "select_producto")
