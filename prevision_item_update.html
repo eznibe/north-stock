@@ -2,6 +2,8 @@
 <head>
   <title>North Sails - Sistema de Control de Stock</title>
   <link rel="stylesheet" type="text/css" href="north.css" />
+  
+  <script language="JavaScript" src="include/jquery-1.12.4.min.js"></script>
 
   <script src="https://cdn.lr-ingest.io/LogRocket.min.js" crossorigin="anonymous"></script>
   <script>window.LogRocket && window.LogRocket.init('nxe6lb/north-stock-hw');</script>
@@ -16,6 +18,7 @@ if (username) {
 }
 
 let eliminandoItem;
+let descargandoItem;
 
 function setfocus()
 {
@@ -24,9 +27,17 @@ function setfocus()
 
 function update()
 {
-  // alert('Update item ' + document.getElementById('cantidad').value);
-	var cantidad = document.getElementById('cantidad').value;
-	if((cantidad==0 || cantidad=="") && !eliminandoItem) {
+  // alert('Update item ' + document.getElementById('cantidad').value + ' - ' + descargandoItem);
+	let cantidad = $('#cantidad').val();
+  if (true) {
+    // validar que haya stock disponible para poder descargar item
+    const stock_disponible = $('#stock_disponible').val();
+    if (+cantidad > +stock_disponible) {
+      alert("No se puede realizar la descarga, el item tiene con stock disponible insuficiente.");
+      return false;
+    }
+  }
+	else if((cantidad==0 || cantidad=="") && !eliminandoItem) {
 		var agree = confirm("Esta accion (cantidad a comprar=0) eliminara el item de la orden, desea continuar?");
 		if(!agree)
 			return false;
@@ -49,6 +60,12 @@ function eliminarItem() {
 function descargarItem() {
   document.getElementById('descargando').value = 'true';
   descargandoItem = true;
+}
+
+function actualizarItem() {
+  document.getElementById('descargando').value = 'false';
+  descargandoItem = false;
+  eliminandoItem = false;
 }
 
 </script>
@@ -81,7 +98,8 @@ Proveedor:
 Stock disponible:
 </td>
 <td>
-<?php echo $var['stock_disponible']; ?>
+  <?php echo $var['stock_disponible']; ?>
+  <input type="hidden" id="stock_disponible" value="<?php echo $var['stock_disponible']; ?>">
 </td>
 </tr>
 
@@ -112,7 +130,7 @@ Stock tránsito:
 	</table>
 	<center>
 		<br />Los casilleros marcados con * son obligatorios.<br />
-		<button type="submit" name="enviar" value="enviar" style="margin-right: 70px;">Actualizar</button>
+		<button type="submit" name="enviar" value="enviar" style="margin-right: 70px;" <?php echo $var['item_descargado'] == '1' ? 'disabled' : '' ?> onclick="actualizarItem()">Actualizar</button>
 		<button type="submit" name="enviar" value="enviar" style="margin-right: 20px;" <?php echo $var['item_descargado'] == '1' ? 'disabled' : '' ?> onclick="descargarItem()">Descargar item</button>
     	<button type="submit" name="enviar" value="enviar" onclick="eliminarItem()">Eliminar item</button>
  	</center>

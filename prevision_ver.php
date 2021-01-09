@@ -114,7 +114,7 @@ function showPrevisionDetailsScreen($id_prevision) {
       "</td>
       </tr>\n";
 
-    if (+$row[10] < 0) {
+    if (+$row[10] < 0 && $row[11] === "0") {
       $stock_suficiente = 'false';
     }
 
@@ -182,8 +182,8 @@ function formEliminaritem($id_prevision, $id_prevision_item) {
 function update_prevision($id_prevision_item, $cantidad, $descargando_item) {
 	$query = "SELECT id_prevision, id_item FROM previsionitem WHERE id_prevision_item = $id_prevision_item";
 	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
-
+  $row = mysql_fetch_array($result);
+  
   if ($descargando_item === "true") {
     $query = "UPDATE previsionitem SET descargado = true WHERE id_prevision_item = $id_prevision_item";
 
@@ -209,6 +209,30 @@ function update_prevision($id_prevision_item, $cantidad, $descargando_item) {
     log_trans($_SESSION['valid_user'], 23, $row[1], $cantidad, date("Y-m-d"), 'NULL', $row[0]);
  	}
   $result = mysql_query($query);
+
+  descargar_prevision_por_items_descargados(get_prevision_id($id_prevision_item));
+}
+
+// si todos los items estam descargados, marcar prevision como descargada tambien
+function descargar_prevision_por_items_descargados($id_prevision) {
+  $username = $_SESSION['valid_user'];
+  $fecha = date("Y-m-d");
+  
+  $query = "SELECT * FROM previsionitem WHERE descargado = false AND id_prevision = $id_prevision";
+
+  $result = mysql_query($query);
+
+  if (mysql_num_rows($result) == 0) {
+    $updatePrevision = "UPDATE prevision SET fecha_descarga = '$fecha', usuario_descarga = '$username' WHERE id_prevision = $id_prevision";
+    $result = mysql_query($updatePrevision);
+  }
+}
+
+function get_prevision_id($id_prevision_item) {
+  $query = "SELECT id_prevision FROM previsionitem WHERE id_prevision_item = $id_prevision_item";
+  $result = mysql_query($query);
+  $row = mysql_fetch_array($result);
+  return $row['id_prevision'];
 }
 
 /**
