@@ -28,6 +28,11 @@ function asignarPrevision(id_item) {
   const url='prevision_item_nuevo.php?id_item='+id_item+'&cantidad='+cantidad;
   window.open(url,"producto_item_nuevo","toolbar=no, location=no, directories=no, status=yes, menubar=no, scrollbars=yes, resizable=yes, width=750, height=300");
 }
+
+function disable() {
+	$('#ingresar').attr("disabled", true);
+	return true;
+}
 </script>
 
 </head>
@@ -75,7 +80,7 @@ function asignarPrevision(id_item) {
 			</tr>
 		</table>
 	</form>
-	<form action="form_producto_salida.php" method="post" target="_self" name="producto_salida">
+	<form action="form_producto_salida.php" method="post" target="_self" name="producto_salida" onsubmit="return disable()">
 		<input type="hidden" value="producto_salida" name="formname" id="formname"> 
 		<input type="hidden" value="<?php echo $var['item']; ?>" name="item" id="item"> 
 		<input type="hidden" value="<?php echo $var['stock_disponible']; ?>" name="stock_disponible" id="stock_disponible"> 
@@ -122,7 +127,7 @@ function asignarPrevision(id_item) {
 			<center>
 				<br />Los casilleros marcados con * son obligatorios.<br />
 				<div style="margin-top: 20px;">
-					<button type="submit" name="enviar" value="enviar" style="margin-right: 40px;">Ingresar</button>
+					<button type="submit" name="enviar" value="enviar" style="margin-right: 40px;" id="ingresar">Ingresar</button>
 					<button type="button" name="asignar" value="asignar" onclick="asignarPrevision(<?php echo (isset($var['item']) ? $var['item'] : ''); ?>)" <?php echo (isset($var['item']) && $var['item'] <> "" ? '' : 'disabled');?> >Asignar prevision</button>
 				</div>
 			</center>
