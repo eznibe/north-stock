@@ -63,10 +63,10 @@ else{
     (SUM(item.stock_disponible)-categoria.stock_minimo),
     unidad.unidad,
     SUM(item.stock_transito),
-    (SUM(item.stock_disponible)+SUM(item.stock_transito)-categoria.stock_minimo-(coalesce(sum(pi.cantidad), 0))),
+    (SUM(item.stock_disponible)+SUM(item.stock_transito)-categoria.stock_minimo-(coalesce(sum(en_prevision.cantidad), 0))),
     grupo.grupo,
     categoria.reservado,
-    coalesce(sum(pi.cantidad), 0) as prevision
+    coalesce(sum(en_prevision.cantidad), 0) as prevision
   FROM
     item  
     JOIN categoria on item.id_categoria = categoria.id_categoria
@@ -74,12 +74,16 @@ else{
     JOIN grupo on categoria.id_grupo = grupo.id_grupo
     JOIN proveedor on proveedor.id_proveedor = item.id_proveedor
     JOIN pais on pais.id_pais = proveedor.id_pais
-    LEFT JOIN previsionitem pi on pi.id_item = item.id_item
-    LEFT JOIN prevision p on p.id_prevision = pi.id_prevision
+    LEFT JOIN (
+    	SELECT pi.id_item, sum(pi.cantidad) as cantidad
+    	FROM prevision p
+    	JOIN previsionitem pi on pi.id_prevision = p.id_prevision
+    	where p.fecha_descarga is null and pi.descargado = false
+    	group by pi.id_item
+      ) en_prevision on en_prevision.id_item = item.id_item
   WHERE 
     grupo.id_grupo = $id_grupo AND
     pais.id_pais $condicion
-	AND p.fecha_descarga is null and pi.descargado = false
   GROUP BY
 	  item.id_categoria
   ORDER BY
