@@ -255,7 +255,7 @@ function ingresarordenManual($id_item, $cantidad, $fecha) {
   $id_orden = $row[0];
 
   // datos item
-  $query = "SELECT round(precio_fob, 2), round(precio_ref, 2),
+  $query = "SELECT coalesce(round(precio_fob, 2), 'null'), coalesce(round(precio_ref, 2), 'null'),
     case when pro.id_pais = 1 then 'AR$' when pro.id_pais > 1 then 'US$' end as moneda 
     FROM item i 
     JOIN proveedor pro on pro.id_proveedor = i.id_proveedor
