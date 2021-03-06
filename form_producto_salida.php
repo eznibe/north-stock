@@ -39,11 +39,14 @@ function busca_item(&$mensaje, &$items, $pitem, &$num_results)
 	categoria.categoria, 
 	proveedor.proveedor, 
   item.stock_disponible,
-  unidad.unidad
+  unidad.unidad,
+  coalesce(pi.cantidad, 0) en_prevision
   FROM 
 	categoria, 
 	proveedor, 
-	item,
+	item LEFT JOIN (
+    SELECT id_item, sum(cantidad) cantidad FROM previsionitem where descargado = false group by id_item
+  ) pi on pi.id_item = item.id_item,
   unidad
   WHERE (
 	(categoria.categoria LIKE \"%$pitem%\") AND 
@@ -87,11 +90,14 @@ function busca_barras(&$mensaje, &$datos, $pitem)
         categoria.categoria,
         proveedor.proveedor,
         item.stock_disponible,
-        unidad.unidad
+        unidad.unidad,
+        coalesce(pi.cantidad, 0) en_prevision
   FROM
         categoria,
         proveedor,
-        item,
+        item LEFT JOIN (
+        	SELECT id_item, sum(cantidad) cantidad FROM previsionitem where descargado = false group by id_item
+        ) pi on pi.id_item = item.id_item,
         unidad
   WHERE (
         (item.codigo_barras LIKE \"$pitem\") AND
@@ -117,6 +123,7 @@ if ($formname == "busca_producto")
   $unidad = "(<em>" . strtoupper($row[4]) . "</em>)";
   $focus = "forms[2].cantidad";
   $focusId = "cantidad";
+  $cantidad_en_prevision = $row[5];
  }
  elseif (busca_item($hits_mensaje, $items, $pproducto, $num_results))
  {
@@ -134,6 +141,7 @@ if ($formname == "busca_producto")
      $unidad = "(<em>" . strtoupper($items[4]) . "</em>)";
      $focus = "forms[2].cantidad";
      $focusId = "cantidad";
+     $cantidad_en_prevision = $items[5];
    }
  }
 }
@@ -144,11 +152,14 @@ elseif ($formname == "select_producto")
 	categoria.categoria, 
 	proveedor.proveedor, 
 	item.stock_disponible, 
-	unidad.unidad 
+	unidad.unidad,
+  coalesce(pi.cantidad, 0) en_prevision
   FROM 
 	categoria, 
 	proveedor, 
-	item, 
+	item LEFT JOIN (
+    SELECT id_item, sum(cantidad) cantidad FROM previsionitem where descargado = false group by id_item
+  ) pi on pi.id_item = item.id_item,
 	unidad 
   WHERE (
 	(item.id_item = $sproducto) AND 
@@ -168,6 +179,7 @@ elseif ($formname == "select_producto")
  $unidad = "(<em>" . strtoupper($row[4]) . "</em>)";
  $focus = "forms[2].cantidad";
  $focusId = "cantidad";
+ $cantidad_en_prevision = $row[5];
 }
 elseif ($formname == "producto_salida")
 {
@@ -211,7 +223,7 @@ elseif ($formname == "producto_salida")
   }
   
    $item = "";
-//   $stock_disponible = "";
+  //   $stock_disponible = "";
    $focus = "forms[0].pproducto";
    $focusId = "pproducto";
    $mensaje = "Acaba de retirar $cantidad $unidad $producto."."<br>Quedan disponibles ".($stock_disponible - $cantidad)." $unidad<p>\n";
@@ -234,6 +246,7 @@ $var = array("items" => $items,
 		    "fecha" => $fecha_select,
         "focus" => $focus,
         "focusId" => $focusId,
+        "cantidad_en_prevision" => $cantidad_en_prevision,
         "username" => $valid_user);
 eval_html('producto_salida.html', $var);
 

@@ -5,6 +5,8 @@ include_once 'dbutils.php';
 
 check_session();
 
+$valid_user = $_SESSION['valid_user'];
+
 db_connect();
 
 if ( isset($_GET['id_prevision']) ) {
@@ -25,8 +27,9 @@ if ($formname == "prevision_update") {
   $id_prevision_item = $_POST['id_prevision_item'];
   $cantidad = $_POST['cantidad'];
   $descargando_item = $_POST['descargando'];
+  $revirtiendo_item = $_POST['revirtiendo'];
   
-	update_prevision($id_prevision_item, $cantidad, $descargando_item);
+	update_prevision($id_prevision_item, $cantidad, $descargando_item, $revirtiendo_item);
 }
 else if ($formname == "prevision_item_nuevo") {
   $id_item = $_POST['id_item'];
@@ -39,7 +42,8 @@ else if ($formname == "prevision_item_nuevo") {
 showPrevisionDetailsScreen($id_prevision);
 
 function showPrevisionDetailsScreen($id_prevision) {
-  $username = $_SESSION['valid_user'];
+  global $valid_user;
+  $username = $valid_user;
   
   $focus = "numero_orden";
 
@@ -79,13 +83,21 @@ function showPrevisionDetailsScreen($id_prevision) {
     case when pro.id_pais = 1 then 'AR$' when pro.id_pais > 1 then 'US$' end as moneda,
     i.codigo_proveedor,
     (i.stock_disponible - pi.cantidad) as stock_despues_descarga,
-    pi.descargado
+    pi.descargado,
+    lg.fecha_sistema, 
+    lg.username
   FROM prevision p 
     JOIN previsionitem pi on p.id_prevision = pi.id_prevision
     JOIN item i on i.id_item = pi.id_item
     JOIN categoria c on c.id_categoria = i.id_categoria
     JOIN unidad u on u.id_unidad = i.id_unidad_compra
     JOIN proveedor pro on pro.id_proveedor = i.id_proveedor
+    LEFT JOIN (
+    	SELECT l.id_item, l.id_prevision, max(fecha_sistema) fecha_sistema, max(username) username 
+    	FROM log l 
+      where id_accion = 2 and id_prevision is not null
+      group by l.id_item, l.id_prevision
+    ) lg on lg.id_item = i.id_item and lg.id_prevision = p.id_prevision and pi.descargado = true
   WHERE 
     p.id_prevision = $id_prevision
   ORDER BY
@@ -109,7 +121,7 @@ function showPrevisionDetailsScreen($id_prevision) {
       <td class=\"centrado\">$row[6]</td>
       <td class=\"centrado\">$row[7]</td>
       <td class=\"centrado\">$row[8]</td>
-      <td class=\"centrado\">"
+      <td class=\"centrado\" title=\"fecha: $row[12] usuario: $row[13]\">"
       .($row[11] === "1" ? "X" : "").
       "</td>
       </tr>\n";
@@ -134,18 +146,11 @@ function showPrevisionDetailsScreen($id_prevision) {
     $anoopc = opciones_ano(null, true, true);
   }
   
-  // totales_dos_decimales($total_dolar,$total_pesos);
-  
-  // $cotizacion_dolar = obtener_precio_dolar_orden($id_prevision);
-  // $cotizacion_fecha = obtener_fecha_orden($id_prevision);
-  
   $var = array(
     "header" => $header,
     "previsionitems" => $previsionitems,
     "cant_filas" => $count,
     "id_prevision" => $id_prevision,
-    // "cotiz_dolar" => $cotizacion_dolar,
-    // "cotiz_fecha" => $cotizacion_fecha,
     "fecha_entrega" => $fecha_entrega,
     "cliente" => $cliente,
     "numero_orden" =>  $numero_orden,
@@ -179,8 +184,10 @@ function formEliminaritem($id_prevision, $id_prevision_item) {
  * Actualiza la cantidad (y cant pendiente) y le precio del item de la compra pasado
  * como parametro
  */
-function update_prevision($id_prevision_item, $cantidad, $descargando_item) {
-	$query = "SELECT id_prevision, id_item FROM previsionitem WHERE id_prevision_item = $id_prevision_item";
+function update_prevision($id_prevision_item, $cantidad, $descargando_item, $revirtiendo_item) {
+  global $valid_user;
+
+	$query = "SELECT id_prevision, id_item, cantidad FROM previsionitem WHERE id_prevision_item = $id_prevision_item";
 	$result = mysql_query($query);
   $row = mysql_fetch_array($result);
   
@@ -188,14 +195,36 @@ function update_prevision($id_prevision_item, $cantidad, $descargando_item) {
     $query = "UPDATE previsionitem SET descargado = true WHERE id_prevision_item = $id_prevision_item";
 
     // logueo item descargado de la prevision (24)
-    log_trans($_SESSION['valid_user'], 24, $row[1], 0, date("Y-m-d"), 'NULL', $row[0]);
+    log_trans($valid_user, 24, $row[1], $row[2], date("Y-m-d"), 'NULL', $row[0]);
+
+    // descarga automatica de stock fisico del item al hacer descarga en prevision
+    $cantidad_factor = (get_factor_unidades($row[1])) * $row[2];
+    $query2 = "UPDATE item i 
+      SET	i.stock_disponible = i.stock_disponible - $cantidad_factor
+      WHERE i.id_item = $row[1]";
+
+    log_trans($valid_user, 2, $row[1], $row[2], date("Y-m-d"), 'NULL', $row[0]);
+  }
+  else if ($revirtiendo_item === "true") {
+    $query = "UPDATE previsionitem SET descargado = false WHERE id_prevision_item = $id_prevision_item";
+
+    // logueo item descarga revertida de la prevision (29)
+    log_trans($valid_user, 29, $row[1], $row[2], date("Y-m-d"), 'NULL', $row[0]);
+
+    // descarga automatica de stock fisico del item al hacer descarga en prevision
+    $cantidad_factor = (get_factor_unidades($row[1])) * $row[2];
+    $query2 = "UPDATE item i 
+      SET	i.stock_disponible = i.stock_disponible + $cantidad_factor
+      WHERE i.id_item = $row[1]";
+
+    log_trans($valid_user, 1, $row[1], $row[2], date("Y-m-d"), 'NULL', $row[0]);
   }
  	else if ( ($cantidad == 0) or ($cantidad == "") )
  	{
     $query = "DELETE FROM previsionitem WHERE id_prevision_item = $id_prevision_item";
 
     // logueo item borrado de la prevision (28)
-    log_trans($_SESSION['valid_user'], 28, $row[1], 0, date("Y-m-d"), 'NULL', $row[0]);
+    log_trans($valid_user, 28, $row[1], 0, date("Y-m-d"), 'NULL', $row[0]);
  	}
  	else
  	{
@@ -206,16 +235,21 @@ function update_prevision($id_prevision_item, $cantidad, $descargando_item) {
     WHERE
         id_prevision_item = $id_prevision_item";
 
-    log_trans($_SESSION['valid_user'], 23, $row[1], $cantidad, date("Y-m-d"), 'NULL', $row[0]);
+    log_trans($valid_user, 23, $row[1], $cantidad, date("Y-m-d"), 'NULL', $row[0]);
  	}
   $result = mysql_query($query);
+
+  if (isset($query2)) {
+    $result = mysql_query($query2);
+  }
 
   descargar_prevision_por_items_descargados(get_prevision_id($id_prevision_item));
 }
 
 // si todos los items estam descargados, marcar prevision como descargada tambien
 function descargar_prevision_por_items_descargados($id_prevision) {
-  $username = $_SESSION['valid_user'];
+  global $valid_user;
+  $username = $valid_user;
   $fecha = date("Y-m-d");
   
   $query = "SELECT * FROM previsionitem WHERE descargado = false AND id_prevision = $id_prevision";
@@ -244,7 +278,7 @@ function agregar_prevision_item($id_prevision, $id_item, $cantidad, $precio, $mo
     VALUES ($id_prevision, $id_item, $cantidad, '$moneda')";
   $result = mysql_query($insert);
 
-  log_trans($_SESSION['valid_user'], 21, $id_item, $cantidad, date("Y-m-d"), $id_prevision);
+  log_trans($valid_user, 21, $id_item, $cantidad, date("Y-m-d"), 'NULL', $id_prevision);
 }
 
 

@@ -54,7 +54,7 @@ function asignar_a_prevision($id_item, &$id_prevision, $cantidad, $numero_orden)
     VALUES ($id_prevision, $id_item, $cantidad)";
   $result = mysql_query($insert);
   
-  log_trans($_SESSION['valid_user'], 21, $id_item, $cantidad, date("Y-m-d"), $id_prevision);
+  log_trans($_SESSION['valid_user'], 21, $id_item, $cantidad, date("Y-m-d"), 'NULL', $id_prevision);
 }
 
 function getPrevision($id_prevision) {

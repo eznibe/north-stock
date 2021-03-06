@@ -29,9 +29,18 @@ function asignarPrevision(id_item) {
   window.open(url,"producto_item_nuevo","toolbar=no, location=no, directories=no, status=yes, menubar=no, scrollbars=yes, resizable=yes, width=750, height=300");
 }
 
-function disable() {
-	$('#ingresar').attr("disabled", true);
-	return true;
+function ingresarSubmit() {
+	const cantEnPrevision = +$('#cantidad_en_prevision').val();
+	let continuar = true;
+	if (cantEnPrevision > 0) {
+		const msg = "Hay cantidad en prevision: " + cantEnPrevision + ". Desea continuar con la descarga manual?";
+		const resp = confirm(msg);
+		continuar = resp;
+	}
+	if (continuar) {
+		$('#ingresar').attr("disabled", true);
+	}
+	return continuar;
 }
 </script>
 
@@ -80,12 +89,13 @@ function disable() {
 			</tr>
 		</table>
 	</form>
-	<form action="form_producto_salida.php" method="post" target="_self" name="producto_salida" onsubmit="return disable()">
+	<form action="form_producto_salida.php" method="post" target="_self" name="producto_salida" onsubmit="return ingresarSubmit()">
 		<input type="hidden" value="producto_salida" name="formname" id="formname"> 
 		<input type="hidden" value="<?php echo $var['item']; ?>" name="item" id="item"> 
 		<input type="hidden" value="<?php echo $var['stock_disponible']; ?>" name="stock_disponible" id="stock_disponible"> 
 		<input type="hidden" value="<?php echo $var['producto']; ?>" name="producto" id="producto"> 
 		<input type="hidden" value="<?php echo $var['unidad']; ?>" name="unidad" id="unidad"> 
+		<input type="hidden" value="<?php echo $var['cantidad_en_prevision']; ?>" name="cantidad_en_prevision" id="cantidad_en_prevision"> 
 		
 		<table>
 			<tr>

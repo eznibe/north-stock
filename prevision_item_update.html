@@ -19,6 +19,7 @@ if (username) {
 
 let eliminandoItem;
 let descargandoItem;
+let revirtiendoItem;
 
 function setfocus()
 {
@@ -29,16 +30,22 @@ function update()
 {
   // alert('Update item ' + document.getElementById('cantidad').value + ' - ' + descargandoItem);
 	let cantidad = $('#cantidad').val();
-  if (true) {
-    // validar que haya stock disponible para poder descargar item
-    const stock_disponible = $('#stock_disponible').val();
-    if (+cantidad > +stock_disponible) {
-      alert("No se puede realizar la descarga, el item tiene con stock disponible insuficiente.");
-      return false;
-    }
-  }
+	if (descargandoItem) {
+		// validar que haya stock disponible para poder descargar item
+		const stock_disponible = $('#stock_disponible').val();
+		if (+cantidad > +stock_disponible) {
+		alert("No se puede realizar la descarga, el item tiene con stock disponible insuficiente.");
+		return false;
+		}
+	}
+	else if (revirtiendoItem) {
+		var agree = confirm("Desea revertir la descarga del item?");
+		if (!agree) {
+			return false;
+		}
+	}
 	else if((cantidad==0 || cantidad=="") && !eliminandoItem) {
-		var agree = confirm("Esta accion (cantidad a comprar=0) eliminara el item de la orden, desea continuar?");
+		var agree = confirm("Esta accion (cantidad = 0) eliminara el item de la orden, desea continuar?");
 		if(!agree)
 			return false;
 	}
@@ -62,9 +69,17 @@ function descargarItem() {
   descargandoItem = true;
 }
 
+function revertirDescargaItem() {
+  document.getElementById('revirtiendo').value = 'true';
+  revirtiendoItem = true;
+}
+
+
 function actualizarItem() {
   document.getElementById('descargando').value = 'false';
+  document.getElementById('revirtiendo').value = 'false';
   descargandoItem = false;
+  revirtiendoItem = false;
   eliminandoItem = false;
 }
 
@@ -117,6 +132,7 @@ Stock tránsito:
 	<input type="hidden" value="<?php echo $var['id_prevision_item']; ?>" size="10" name="id_prevision_item" id="id_prevision_item">
 	<input type="hidden" value="<?php echo $var['id_prevision']; ?>" size="10" name="id_prevision" id="id_prevision">
 	<input type="hidden" value="false" size="10" name="descargando" id="descargando">
+	<input type="hidden" value="false" size="10" name="revirtiendo" id="revirtiendo">
 
 	<tr>
 	<td>
@@ -131,7 +147,8 @@ Stock tránsito:
 	<center>
 		<br />Los casilleros marcados con * son obligatorios.<br />
 		<button type="submit" name="enviar" value="enviar" style="margin-right: 70px;" <?php echo $var['item_descargado'] == '1' ? 'disabled' : '' ?> onclick="actualizarItem()">Actualizar</button>
-		<button type="submit" name="enviar" value="enviar" style="margin-right: 20px;" <?php echo $var['item_descargado'] == '1' ? 'disabled' : '' ?> onclick="descargarItem()">Descargar item</button>
+		<button type="submit" name="enviar" value="enviar" style="margin-right: 20px; display: <?php echo $var['item_descargado'] == '1' ? 'none;' : 'inline-block;' ?>" onclick="descargarItem()">Descargar item</button>
+		<button type="submit" name="enviar" value="enviar" style="margin-right: 20px; display: <?php echo $var['item_descargado'] == '1' ? 'inline-block;' : 'none;' ?>" onclick="revertirDescargaItem()">Revertir descarga</button>
     	<button type="submit" name="enviar" value="enviar" onclick="eliminarItem()">Eliminar item</button>
  	</center>
 </form>

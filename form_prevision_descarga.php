@@ -22,7 +22,7 @@ $fecha = date("Y-m-d");
 $query = "SELECT pi.id_prevision_item, pi.id_item, pi.cantidad
   FROM prevision p 
   JOIN previsionitem pi on pi.id_prevision = p.id_prevision
-  WHERE p.id_prevision = $id_prevision";
+  WHERE p.id_prevision = $id_prevision and pi.descargado = false";
 
 
 $result = mysql_query($query);
