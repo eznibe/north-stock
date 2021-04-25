@@ -59,6 +59,10 @@ while ($row = mysql_fetch_array($result))
 foreach ($items as $item)
 {
  $cantidad_factor = (get_factor_unidades($item[0])) * $item[1];
+
+ // log para debug de items que quedan con transito negativo
+ log_stock_transito_negativo($valid_user, $item[0], $id_orden, get_stock_transito($item[0]), (get_stock_transito($item[0]) + $cantidad_factor), $item[1], $item[1], 'auto-confirma-orden');
+
  $query = "UPDATE
         item
   SET

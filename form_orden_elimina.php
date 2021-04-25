@@ -5,6 +5,8 @@ include 'dbutils.php';
 
 session_start();
 
+$valid_user = $_SESSION['valid_user'];
+
 $id_orden = $_POST['id_orden'];
 
 $formname = $_POST['formname'];
@@ -40,6 +42,10 @@ if (get_orden_status($id_orden) == 1)
  foreach ($items as $item)
  {
   $cantidad_factor = (get_factor_unidades($item[0])) * $item[1];
+  
+  // log para debug de items que quedan con transito negativo
+  log_stock_transito_negativo($valid_user, $item[0], $id_orden, get_stock_transito($item[0]), (get_stock_transito($item[0])-$cantidad_factor), 0, 0, 'auto-elimina-orden');
+
   $query = "UPDATE item
 	SET
 	item.stock_transito = item.stock_transito - $cantidad_factor

@@ -45,7 +45,8 @@ if(obtener_tipo_proveedor($id_orden) == "EXTRANJERO")
 		item.codigo_proveedor,
 		ordenitem.cantidad_pendiente,
 		ordenitem.id_item,
-		tipoenvio.tipo_envio
+		tipoenvio.tipo_envio,
+		orden.id_status
 	  FROM
 	      orden, categoria, proveedor, ordenitem, item, unidad, tipoenvio
 	  WHERE (
@@ -88,6 +89,7 @@ if(obtener_tipo_proveedor($id_orden) == "EXTRANJERO")
 	   </tr>\n";
 
 	 $cant_filas = $cant_filas+1;
+	 $orden_status = $row[12];
 	}
 
 	$query = "SELECT
@@ -121,7 +123,8 @@ else
 	item.codigo_proveedor,
 	ordenitem.cantidad_pendiente,
 	ordenitem.id_item,
-	tipoenvio.tipo_envio
+	tipoenvio.tipo_envio,
+	orden.id_status
   FROM
       orden, categoria, proveedor, ordenitem, item, unidad, tipoenvio
   WHERE (
@@ -162,6 +165,7 @@ else
 	   </tr>\n";
 
 	 $cant_filas = $cant_filas+1;
+	 $orden_status = $row[12];
 	}
 
 	  $query = "SELECT
@@ -199,6 +203,7 @@ $var = array(
   "header" => $header,
   "orden" => $orden,
   "id_orden" => $id_orden,
+  "orden_status" => $orden_status,
   "total_dolar" => $total_dolar,
   "total_pesos" => $total_pesos,
   "cotiz_dolar" => $cotiz_dolar,
