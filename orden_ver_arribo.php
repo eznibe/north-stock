@@ -199,6 +199,8 @@ $anoopc = opciones_ano();
 
 $date = date("F j, Y, g:i a");
 
+$orden_data = obtener_orden($id_orden);
+
 $var = array(
   "header" => $header,
   "orden" => $orden,
@@ -215,8 +217,10 @@ $var = array(
   "cant_filas" => $cant_filas,
   "date" => $date,
   "descripcion" => orden_descripcion($id_orden),
-	"despacho" => orden_despacho($id_orden),
-	"nr_factura" => orden_nr_factura($id_orden),
+  "despacho" => orden_despacho($id_orden),
+  "nr_factura" => orden_nr_factura($id_orden),
+  "factura_AR" => $orden_data['factura_AR'],
+  "proveedor_AR" => $orden_data['proveedor_AR'],
   "mensaje" => $mensaje);
 
 //eval_html('orden_ver_arribo.html', $var);
@@ -451,6 +455,14 @@ function obtener_fecha_orden($id_orden)
 	$result = mysql_query($query);
 	$row = mysql_fetch_array($result);
 	return $row[0];
+}
+
+function obtener_orden($id_orden)
+{
+	$query = "SELECT * FROM orden WHERE id_orden = $id_orden";
+	$result = mysql_query($query);
+	$row = mysql_fetch_array($result);
+	return $row;
 }
 
 function totales_dos_decimales(&$total_dolar,&$total_pesos)

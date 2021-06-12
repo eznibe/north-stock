@@ -163,6 +163,8 @@ totales_dos_decimales($total_dolar,$total_pesos);
 $cotizacion_dolar = obtener_precio_dolar_orden($id_orden);
 $cotizacion_fecha = obtener_fecha_orden($id_orden);
 
+$orden_data = obtener_orden($id_orden);
+
 $var = array(
   "header" => $header,
   "orden" => $orden,
@@ -173,8 +175,10 @@ $var = array(
   "cotiz_dolar" => $cotizacion_dolar,
   "cotiz_fecha" => $cotizacion_fecha,
   "descripcion" => orden_descripcion($id_orden),
-	"despacho" => orden_despacho($id_orden),
-	"nr_factura" =>  orden_nr_factura($id_orden),
+  "despacho" => orden_despacho($id_orden),
+  "nr_factura" =>  orden_nr_factura($id_orden),
+  "factura_AR" => $orden_data['factura_AR'],
+  "proveedor_AR" => $orden_data['proveedor_AR'],
   "focus" => $focus);
 
 //eval_html('orden_ver.html', $var);
@@ -301,6 +305,14 @@ function obtener_fecha_orden($id_orden)
 	$result = mysql_query($query);
 	$row = mysql_fetch_array($result);
 	return $row[0];
+}
+
+function obtener_orden($id_orden)
+{
+	$query = "SELECT * FROM orden WHERE id_orden = $id_orden";
+	$result = mysql_query($query);
+	$row = mysql_fetch_array($result);
+	return $row;
 }
 
 function totales_dos_decimales(&$total_dolar,&$total_pesos)

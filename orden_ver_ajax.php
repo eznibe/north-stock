@@ -85,6 +85,22 @@ function guardarDespacho() {
       $('#label_despacho').text('Guardado');
     }
   })
+
+  $.ajax({
+    url:'api/ordenes.php?guardarFacturaAR=true&id_orden='+$('#id_orden').val()+'&factura_AR='+$('#factura_AR').val(),
+    success: function(data, status){
+      //console.log("Data: " + data + "\nStatus: " + status);
+      $('#label_despacho').text('Guardado');
+    }
+  })
+
+  $.ajax({
+    url:'api/ordenes.php?guardarProveedorAR=true&id_orden='+$('#id_orden').val()+'&proveedor_AR='+$('#proveedor_AR').val(),
+    success: function(data, status){
+      //console.log("Data: " + data + "\nStatus: " + status);
+      $('#label_despacho').text('Guardado');
+    }
+  })
 }
 
 function despachoKeyPress() {
@@ -141,7 +157,7 @@ function despachoKeyPress() {
  <tr>
  <td>
    <div style="margin-bottom: 10px;">
-     <label>Despacho:</label>
+     <label class="ordenData">Despacho:</label>
      <input type="text" value="<?php echo $var['despacho']; ?>" size="20" name="despacho" id="despacho" onkeypress="despachoKeyPress();">
      <!-- <button name="guardar" value="guardar" style="margin-left: 20px;" onclick="guardarDespacho();"><label id="label_despacho">Guardar</label></button> -->
    </div>
@@ -151,8 +167,26 @@ function despachoKeyPress() {
  <tr>
  <td>
    <div style="margin-bottom: 10px;">
-     <label>Nr. factura:</label>
+     <label class="ordenData">Nr. factura:</label>
      <input type="text" value="<?php echo $var['nr_factura']; ?>" size="20" name="nr_factura" id="nr_factura" onkeypress="despachoKeyPress();">
+   </div>
+ </td>
+ </tr>
+
+ <tr>
+ <td>
+   <div style="margin-bottom: 10px;">
+     <label class="ordenData">Factura AR:</label>
+     <input type="text" value="<?php echo $var['factura_AR']; ?>" size="20" name="factura_AR" id="factura_AR" onkeypress="despachoKeyPress();">
+   </div>
+ </td>
+ </tr>
+
+ <tr>
+ <td>
+   <div style="margin-bottom: 10px;">
+     <label class="ordenData">Proveedor AR:</label>
+     <input type="text" value="<?php echo $var['proveedor_AR']; ?>" size="20" name="proveedor_AR" id="proveedor_AR" onkeypress="despachoKeyPress();">
      <button name="guardar" value="guardar" style="margin-left: 20px;" onclick="guardarDespacho();"><label id="label_nr_factura">Guardar</label></button>
    </div>
  </td>
