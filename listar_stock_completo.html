@@ -1,0 +1,52 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+  <script language="JavaScript" src="javascript/jsGral.js"></script>
+
+<script type="text/javascript">
+
+function setfocus()
+{
+window.focus()
+}
+
+function add_comprar(ID_ITEM)
+{
+ var url="producto_addcomprar.php?id_item=" + ID_ITEM;
+ window.open(url,"producto_detalle","toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=600, height=300");
+}
+
+
+</script>
+
+</head>
+<body class="ppal">
+
+<div>
+	<div class="selectfecha">
+		<form action="listar_stock_completo.php" method="post" target="_self">
+      <div id="filtro_" class="form_filtro_">
+        <span style="width:135px; display: inline-block;">Ordenar por grupo: </span><input type="checkbox" name="orderbygrupo"></input><br>
+        <span style="width:135px; display: inline-block;">Filtrar por grupos: </span>
+        <span><select multiple rows="6" name="id_grupos[]" style="height: 100px;"><?php echo $var['grupos']; ?></select></span><p>
+        <input type="submit" value="Listar"></input>
+      </div>
+		</form>
+	</div>
+	<?php echo $var['imprimir']; ?>
+</div>
+
+<center class="fechas_center">
+<em class="titulo"><?php echo $var['titulo']; ?></em>
+</center>
+
+<table style="width: 100%;">
+<tr class="provlisthead">
+<th>Item</th><th>Codigo <br />proveedor</th><th>Stock</th>
+</tr>
+   <?php echo $var['rows']; ?>
+</table>
+
+</body>
+</html>
