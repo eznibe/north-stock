@@ -74,7 +74,8 @@ if(count($id_grupos) > 0) {
 			COALESCE(orden.fecha, '2003-01-01'),
 			orden.nr_factura,
 			orden.despacho,
-			coalesce(ordenitem.cantidad, -1)
+			coalesce(ordenitem.cantidad, -1),
+			orden.factura_AR
 	FROM
 		item
 		join categoria on item.id_categoria = categoria.id_categoria
@@ -169,7 +170,7 @@ if(count($id_grupos) > 0) {
 		$totalStock += $row[2];
 
 		$aux = $aux . "<tr class=\"provlistrow\"><td><a class=\"list\" onclick=\"add_comprar($row[5]);\">$row[0]</a></td>
-				<td>$row[13]</td><td>$row[14]</td><td>$row[19]</td><td>$row[20]</td><td nowrap>$fechaArribo</td><td>$row[2]</td>
+				<td>$row[13]</td><td>$row[14]</td><td>$row[19]</td><td>$row[22]</td><td>$row[20]</td><td nowrap>$fechaArribo</td><td>$row[2]</td>
 				<td>".number_format($row[2] * $row[17], 2)."</td><td>".$precioRef."</td>
 				<td>$dolarArribo</td><td>$precioInflacion</td>
 				<td>".tipoproveedor($row[12])."</td></tr>\n";

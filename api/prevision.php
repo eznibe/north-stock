@@ -12,7 +12,7 @@ if(isset($_GET['allitems'])) {
 	$value = allitems();
 }
 else if(isset($_GET['guardarPrevision'])) {
-	$value = guardarPrevision($_GET['id_prevision'], $_GET['numero_orden'], $_GET['cliente'], $_GET['fecha_entrega'], $_GET['descripcion']);
+	$value = guardarPrevision($_GET['id_prevision'], isset($_GET['numero_orden']) ? $_GET['numero_orden'] : null, $_GET['cliente'], isset($_GET['fecha_entrega']) ? $_GET['fecha_entrega'] : null, isset($_GET['descripcion']) ? $_GET['descripcion'] : null);
 }
 
 //return JSON array
@@ -30,7 +30,7 @@ function allitems() {
   return $obj;
 }
 
-function guardarPrevision($id_prevision, $numero_orden, $cliente, $fecha_entrega, $descripcion) {
+function guardarPrevision($id_prevision, $numero_orden, $cliente, $fecha_entrega = null, $descripcion = null) {
 
   $obj = new stdClass();
   $obj->success = true;
@@ -48,7 +48,7 @@ function guardarPrevision($id_prevision, $numero_orden, $cliente, $fecha_entrega
       fecha_entrega = $fecha_entrega
     WHERE id_prevision = $id_prevision";
 
-  echo $query;
+  //echo $query;
 
 	if(!mysql_query($query)) {
     $obj->success = false;
