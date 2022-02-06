@@ -156,7 +156,7 @@ function despachoKeyPress() {
   <input type="hidden" value="orden_confirma_arribo" size="10" name="formname" id="formname">
   <input type="hidden" value="<?php echo $var['id_orden']; ?>" size="10" name="id_orden" id="id_orden">
   <input type="hidden" value="<?php echo $var['orden_status']; ?>" size="10" name="orden_status" id="status">
-  <button type="submit" name="enviar" value="enviar" <?php echo $var['orden_status'] == '5' ? 'disabled' : '' ?>>Confirmar arribo</button>
+  <button type="submit" onclick="this.disabled=true; if(validar_tabla())this.form.submit();" name="enviar" value="enviar" <?php echo $var['orden_status'] == '5' ? 'disabled' : '' ?>>Confirmar arribo</button>
 </div>
 
 </form>
