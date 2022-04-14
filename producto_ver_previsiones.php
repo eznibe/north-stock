@@ -30,7 +30,7 @@ function getPrevisiones($id_categoria) {
     p.id_prevision, 
     coalesce(numero_orden, concat('(', p.id_prevision, ')')),
     coalesce(DATE_FORMAT(p.fecha_entrega, '%d-%m-%Y'), '-') AS fecha_entrega, 
-    pi.cantidad
+    sum(pi.cantidad)
   FROM prevision p 
   JOIN previsionitem pi on p.id_prevision = pi.id_prevision
   JOIN item i on i.id_item = pi.id_item
