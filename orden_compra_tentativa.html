@@ -1,0 +1,58 @@
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+  
+<script type="text/javascript">
+
+function setfocus()
+{
+document.<?php echo $var['focus']; ?>.focus()
+}
+
+function update_cantidad_item(ID_ITEMCOMPRAR, ID_PROVEEDOR)
+{
+ var url="orden_compra_update_cant.php?id_itemcomprar=" + ID_ITEMCOMPRAR + "&id_proveedor=" + ID_PROVEEDOR;
+ window.open(url,"producto_detalle","toolbar=no, location=no, directories=no, status=yes, menubar=no, scrollbars=yes, resizable=yes, width=600, height=300");
+}
+
+function confirma()
+{
+var envio = confirm("Desea eliminar el subproducto seleccionado?")
+if (envio == true)
+ {
+  document.forms[0].submit();
+ }
+}
+
+</script>
+
+</head>
+<body class="ppal" >
+
+<div class="altas">
+<fieldset>
+ <legend>Generacion de orden de pedido</legend>
+   <?php echo $var['mensaje']; ?>
+<table width="100%" id="orden_table">
+
+<tr class="provlisthead">
+  <th>Item</th>  <th>Cod. producto</th> <th>Cantidad</th> <th>Unidad</th> <th>Precio<br /> unitario</th> <th>Precio</th> <th>Moneda</th>
+</tr>
+  <?php echo $var['compra']; ?>
+</table>
+ <center>
+ <br />Total de la compra: US$ <?php echo $var['total_dolar']; ?> &nbsp;=&nbsp; $ <?php echo $var['total_pesos']; ?><br /><br />
+<form action="form_orden_compra_tentativa.php" method="post" target="_self" name="orden_compra">
+  <input type="hidden" value="orden_compra" size="10" name="formname" id="formname">
+  <input type="hidden" value="<?php echo $var['id_proveedor']; ?>" size="10" name="id_proveedor" id="id_proveedor">
+ <button type="submit" name="enviar" value="enviar">Generar pedido</button>
+
+</form>
+ </center>
+</fieldset>
+</div>
+
+
+</body>
+</html>

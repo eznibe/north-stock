@@ -42,6 +42,7 @@ function validar_tabla()
 {
 	 
 	var error = 0;
+	var cantidad_en_cero = 0;
 	
 	var tabla = document.getElementById("orden_table");
 		
@@ -52,9 +53,15 @@ function validar_tabla()
 		
 		if(td1.style.backgroundColor == 'red')
 			error++;
+
+		if (td1.value == "0") {
+			cantidad_en_cero++;
+		}	
 	}
-	
-	if(error > 0){
+
+	console.log("cantidad en cero: ", cantidad_en_cero, tabla.rows.length - 1);
+
+	if(error > 0 || (tabla.rows.length -1 ) == cantidad_en_cero){
 		mostrar_error();
 		return false;
 	}

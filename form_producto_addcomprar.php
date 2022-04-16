@@ -34,7 +34,7 @@ if(isset($id_orden) && !empty($id_orden)) {
 }
 else {
 	// se inserta el item en la lista de items a comprar
-	$query = "INSERT INTO itemcomprar (id_item, cantidad, id_tipo_envio) VALUES ($id_item, $cantidad, $tipoenvio)";
+	$query = "INSERT INTO itemcomprar (id_item, cantidad, id_tipo_envio, cantidad_pendiente) VALUES ($id_item, $cantidad, $tipoenvio, $cantidad)";
 }
 
 $result = mysql_query($query);

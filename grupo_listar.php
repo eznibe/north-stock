@@ -27,10 +27,11 @@ if($tipo_producto==1){
 		(SUM(item.stock_disponible)-categoria.stock_minimo),
 		unidad.unidad,
 		SUM(item.stock_transito),
-		(SUM(item.stock_disponible)+SUM(item.stock_transito)-categoria.stock_minimo-(coalesce(sum(en_prevision.cantidad), 0))),
+		(SUM(item.stock_disponible)+SUM(item.stock_transito)+coalesce(itemcomprar.cantidad_pendiente, 0)-categoria.stock_minimo-(coalesce(sum(en_prevision.cantidad), 0))),
 		grupo.grupo,
 		categoria.reservado,
-		coalesce(sum(en_prevision.cantidad), 0) as prevision
+		coalesce(sum(en_prevision.cantidad), 0) as prevision,
+		coalesce(itemcomprar.cantidad_pendiente, 0) as compras
 	  FROM
       item  
       JOIN categoria on item.id_categoria = categoria.id_categoria
@@ -43,6 +44,7 @@ if($tipo_producto==1){
     	where p.fecha_descarga is null and pi.descargado = false
     	group by pi.id_item
       ) en_prevision on en_prevision.id_item = item.id_item
+	  LEFT JOIN itemcomprar on (itemcomprar.id_item = item.id_item and itemcomprar.tentativo = false)
 	  WHERE 
 		grupo.id_grupo = $id_grupo
 	  GROUP BY
@@ -63,10 +65,11 @@ else{
     (SUM(item.stock_disponible)-categoria.stock_minimo),
     unidad.unidad,
     SUM(item.stock_transito),
-    (SUM(item.stock_disponible)+SUM(item.stock_transito)-categoria.stock_minimo-(coalesce(sum(en_prevision.cantidad), 0))),
+    (SUM(item.stock_disponible)+SUM(item.stock_transito)+coalesce(itemcomprar.cantidad_pendiente, 0)-categoria.stock_minimo-(coalesce(sum(en_prevision.cantidad), 0))),
     grupo.grupo,
     categoria.reservado,
-    coalesce(sum(en_prevision.cantidad), 0) as prevision
+    coalesce(sum(en_prevision.cantidad), 0) as prevision,
+	coalesce(itemcomprar.cantidad_pendiente, 0) as compras
   FROM
     item  
     JOIN categoria on item.id_categoria = categoria.id_categoria
@@ -81,6 +84,7 @@ else{
     	where p.fecha_descarga is null and pi.descargado = false
     	group by pi.id_item
       ) en_prevision on en_prevision.id_item = item.id_item
+	LEFT JOIN itemcomprar on (itemcomprar.id_item = item.id_item and itemcomprar.tentativo = false)  
   WHERE 
     grupo.id_grupo = $id_grupo AND
     pais.id_pais $condicion
@@ -101,7 +105,7 @@ while ($row = mysql_fetch_array($result))
  if ($row[7] < 0) $row[7] = "<em>$row[7]</em>";
  $producto = htmlspecialchars(stripslashes($row[0]));
  $aux = $aux . "<tr class=\"provlistrow\"><td><a class=\"list\" onclick=\"show_detail($row[3]);\">$producto</a></td>
-	  <td>$row[2]</td><td>$row[1]</td><td>$row[4]</td>"
+	  <td>$row[2]</td><td>$row[1]</td><td>$row[4]</td><td>$row[11]</td>"
 	  . desglose_transito_por_tipo_envio($row[3]) 
 	  . ($row[10] > 0 ? "<td><a class=\"list\" onclick=\"show_detail_previsiones($row[3]);\">$row[10]</a></td>" : "<td>$row[10]</td>").
 	  "<td>$row[7]</td><td>$row[5]</td></tr>\n";

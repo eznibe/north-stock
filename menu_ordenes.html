@@ -6,6 +6,7 @@
 <script type="text/javascript">
   function resaltar(BOTON)
   {
+    document.getElementById('orden_tentativa').style.background="#000099";
     document.getElementById('orden_compra').style.background="#000099";
     document.getElementById('orden_confirma').style.background="#000099";
     document.getElementById('orden_arribo').style.background="#000099";
@@ -27,6 +28,7 @@
 <div class="menu">
  <center>
 <!--  <a name="orden_compra" id="orden_compra" onclick="resaltar('orden_compra');" href="orden_compra.php" target="ppal" class="menu_link">Compra</a><br /><br />-->
+  <a name="orden_tentativa" id="orden_tentativa" onclick="resaltar('orden_tentativa');" href="orden_compra_tentativa_listar.php" target="ppal" class="menu_link">Compra tentativa</a><br /><br />  
   <a name="orden_compra" id="orden_compra" onclick="resaltar('orden_compra');" href="orden_compra_listar.php" target="ppal" class="menu_link">Compra</a><br /><br />
   <a name="orden_confirma" id="orden_confirma" onclick="resaltar('orden_confirma');" href="orden_confirma.php" target="ppal" class="menu_link">Ordenes a confirmar</a><br /><br />
   <a name="orden_arribo" id="orden_arribo" onclick="resaltar('orden_arribo');" href="orden_arribo.php" target="ppal" class="menu_link">Ordenes en transito</a><br /><br />
