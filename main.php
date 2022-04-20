@@ -414,7 +414,7 @@ function get_item_agrupacion_contable($id_item)
 
 function get_tipos_de_envio() {
 
- $query = "SELECT * FROM tipoenvio ORDER BY id_tipo_envio";
+ $query = "SELECT * FROM tipoenvio ORDER BY tipo_envio, id_tipo_envio";
  $result = mysql_query($query);
 
  return $result;
