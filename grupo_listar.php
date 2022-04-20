@@ -157,10 +157,10 @@ function desglose_transito_por_tipo_envio($id_categoria) {
 	$cant_tipo_envios = $row[0];
 
 	$query = "SELECT oi.id_tipo_envio, sum(oi.cantidad_pendiente) as pendiente
-		FROM ordenitem oi join item i on oi.id_item = i.id_item join orden o on o.id_orden = oi.id_orden
+		FROM ordenitem oi join item i on oi.id_item = i.id_item join orden o on o.id_orden = oi.id_orden join tipoenvio te on te.id_tipo_envio = oi.id_tipo_envio
 		WHERE i.id_categoria = $id_categoria and o.id_status = 1 and oi.cantidad_pendiente > 0
 		GROUP BY oi.id_tipo_envio
-		ORDER BY oi.id_tipo_envio";
+		ORDER BY te.orden, oi.id_tipo_envio";
 	$result = mysql_query($query);
 
 	$count=0;

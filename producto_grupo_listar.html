@@ -40,6 +40,14 @@ function edit_reservado(ID_CATEGORIA)
 
 </script>
 
+<style>
+	.mainhead th {
+		position: sticky;
+    	top: 0;
+		background-color: #aaaaaa;
+	}
+</style>
+
 </head>
 <body class="ppal">
 
@@ -108,10 +116,10 @@ Seleccione el producto para mas informacion.
 
 <table style="clear:both;">
 <tr class="provlisthead">
-<th colspan="5"></th><th colspan="6">En transito</th><th colspan="3"></th>
+<th colspan="5"></th><th colspan="7">En transito</th><th colspan="3"></th>
 </tr>
-<tr class="provlisthead">
-<th>Producto</th><th>Stock</th><th title='Stock minimo'>Stock min</th><th>Delta fisico</th><th>Compras</th><th>Nac.</th><th>Courier</th><th>Aer.1</th><th>Aer.2</th><th>Mar.</th><th><div style="width:30px;">?</div></th><th>Prevision</th><th>Delta total</th><th>Unidad</th>
+<tr class="provlisthead mainhead">
+<th>Producto</th><th>Stock</th><th title='Stock minimo'>Stock min</th><th>Delta fisico</th><th>Compras</th><th>Nac.</th><th>Courier</th><th>Cour.2</th><th>Aer.1</th><th>Aer.2</th><th>Mar.</th><th><div style="width:30px;">?</div></th><th>Prevision</th><th>Delta total</th><th>Unidad</th>
 </tr>
    <?php echo $var['rows']; ?>
 </table>
