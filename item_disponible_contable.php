@@ -87,6 +87,7 @@ if(count($id_grupos) > 0) {
 		left join orden on orden.id_orden = ordenitem.id_orden
 	WHERE 1=1
 		AND (ordenitem.id_item is null or ordenitem.cantidad - ordenitem.cantidad_pendiente > 0)
+		AND (orden.fecha <= $fecha or orden.id_orden is null)
 		-- AND categoria.id_categoria = 98
 			$grupos_condicion
 	ORDER BY
@@ -183,7 +184,7 @@ $titulo = "Existencias disponibles";
 $fecha_select = armar_select_fechas($dia_ini, $mes_ini, $ano_ini);
 
 
-$var = array("header" => $header,
+$var = array("header" => "",
 		  "imprimir" => $imprimir,
 		  "titulo" => $titulo,
 	 	  "fecha" => $fecha_select,

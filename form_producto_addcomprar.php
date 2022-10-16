@@ -22,7 +22,7 @@ if(isset($id_orden) && !empty($id_orden)) {
 	// se inserta el item directo en la orden ya existente seleccionada
 	if(es_proveedor_nacional($id_proveedor, 'ARGENTINA'))
 	{
-	  $query = "INSERT INTO	ordenitem (id_orden, id_item, cantidad,	cantidad_pendiente, precio_ref,	moneda, id_tipo_envio)
+	  $query = "INSERT INTO ordenitem (id_orden, id_item, cantidad,	cantidad_pendiente, precio_ref,	moneda, id_tipo_envio)
 		    SELECT $id_orden, $id_item, $cantidad, $cantidad, item.precio_ref, 'AR$', $tipoenvio  FROM  item  WHERE item.id_item = $id_item";
 	}
 	else
