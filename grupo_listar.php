@@ -27,7 +27,7 @@ if($tipo_producto==1){
 		(SUM(item.stock_disponible)-categoria.stock_minimo),
 		unidad.unidad,
 		SUM(item.stock_transito),
-		(SUM(item.stock_disponible)+SUM(item.stock_transito)+coalesce(sum(icgby.cantidad_pendiente), 0)-categoria.stock_minimo-(coalesce(sum(en_prevision.cantidad), 0))),
+		(SUM(item.stock_disponible)+SUM(coalesce(ist.cantidad_pendiente, 0))+coalesce(sum(icgby.cantidad_pendiente), 0)-categoria.stock_minimo-(coalesce(sum(en_prevision.cantidad), 0))),
 		grupo.grupo,
 		categoria.reservado,
 		coalesce(sum(en_prevision.cantidad), 0) as prevision,
@@ -46,6 +46,7 @@ if($tipo_producto==1){
       ) en_prevision on en_prevision.id_item = item.id_item
 	  LEFT JOIN (SELECT id_item, sum(cantidad_pendiente) as cantidad_pendiente FROM itemcomprar where tentativo = false group by itemcomprar.id_item) icgby
 	  	 on (icgby.id_item = item.id_item)
+	  LEFT JOIN v_items_stock_transito ist on ist.id_item = item.id_item	 
 	  WHERE 
 		grupo.id_grupo = $id_grupo
 	  GROUP BY
@@ -66,7 +67,7 @@ else{
     (SUM(item.stock_disponible)-categoria.stock_minimo),
     unidad.unidad,
     SUM(item.stock_transito),
-    (SUM(item.stock_disponible)+SUM(item.stock_transito)+coalesce(sum(icgby.cantidad_pendiente), 0)-categoria.stock_minimo-(coalesce(sum(en_prevision.cantidad), 0))),
+    (SUM(item.stock_disponible)+SUM(coalesce(ist.cantidad_pendiente, 0))+coalesce(sum(icgby.cantidad_pendiente), 0)-categoria.stock_minimo-(coalesce(sum(en_prevision.cantidad), 0))),
     grupo.grupo,
     categoria.reservado,
     coalesce(sum(en_prevision.cantidad), 0) as prevision,
@@ -87,6 +88,7 @@ else{
       ) en_prevision on en_prevision.id_item = item.id_item
 	LEFT JOIN (SELECT id_item, sum(cantidad_pendiente) as cantidad_pendiente FROM itemcomprar where tentativo = false group by itemcomprar.id_item) icgby
 	  	 on (icgby.id_item = item.id_item)
+	LEFT JOIN v_items_stock_transito ist on ist.id_item = item.id_item	 
   WHERE 
     grupo.id_grupo = $id_grupo AND
     pais.id_pais $condicion
