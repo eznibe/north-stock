@@ -165,6 +165,7 @@ text-decoration: none;
 
 div.imprimir {
 	float: right;
+	margin-right: 15px;
 }
 
 div.volver {

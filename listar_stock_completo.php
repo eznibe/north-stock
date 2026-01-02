@@ -12,6 +12,11 @@ else $imprimir = "<div class=\"imprimir\">
 		        	<a class=\"imprimir\" onclick=\"self.print();\">Imprimir</a>
 		          </div>";
 
+if ($_SESSION['user_level'] < 11) $excel = "";
+else $excel = "<div class=\"imprimir\">
+					<a class=\"imprimir\" target=”_blank” href=\"reports/stock_items.php\">Excel</a>
+				</div>";
+
 
 
 $dia_ini = isset($_POST['dia_ini']) ? $_POST['dia_ini'] : sprintf("%02d", date("d"));
@@ -97,6 +102,7 @@ $header = "";
 
  $var = array("header" => $header,
 			  "imprimir" => $imprimir,
+			  "excel" => $excel,
 			  "titulo" => $titulo,
 		 	  "fecha" => $fecha_select,
 				"grupos" => armar_select_grupos(),
