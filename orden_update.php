@@ -36,8 +36,8 @@ if(obtener_tipo_proveedor($id_orden_item) == "EXTRANJERO")
   ORDER BY
         categoria.categoria";
 
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 
 	$moneda = "US$";
 }
@@ -69,8 +69,8 @@ else
   ORDER BY
         categoria.categoria";
 
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 
 	$moneda = "AR$";
 }
@@ -119,8 +119,8 @@ function obtener_tipo_proveedor($id_orden_item){
 				proveedor.id_proveedor = item.id_proveedor and
 				ordenitem.id_orden_item = $id_orden_item and
 				ordenitem.id_item = item.id_item";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	if($row[0] == "ARGENTINA") return "NACIONAL";
 
 	return "EXTRANJERO";

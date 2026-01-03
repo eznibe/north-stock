@@ -6,6 +6,7 @@ include 'dbutils.php';
 session_start();
 
 db_connect();
+$pdo = get_db_connection();
 
 $id_orden_item = $_POST['id_orden_item'];
 $cantidad = $_POST['cantidad'];
@@ -18,6 +19,7 @@ $focus = "producto";
 
 function update_orden($id_orden_item, $cantidad, $precio_fob)
 {
+ global $pdo;
  if ( ($cantidad == 0) or (cantidad == "") )
  {
   $query = "DELETE FROM ordenitem WHERE id_orden_item = $id_orden_item";
@@ -32,7 +34,7 @@ function update_orden($id_orden_item, $cantidad, $precio_fob)
    WHERE
  	id_orden_item = $id_orden_item";
  }
- $result = mysql_query($query);
+ $result = $pdo->query($query);
 }
 
 
@@ -56,8 +58,8 @@ $query = "SELECT DISTINCT
   ) 
   ORDER BY fecha, proveedor";
  
-$result = mysql_query($query);
-while ($row = mysql_fetch_array($result))
+$result = $pdo->query($query);
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
  $orden = $orden .  "<tr class=\"provlistrow\">
 	<td>$row[0]</td> 

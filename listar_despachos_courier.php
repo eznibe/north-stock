@@ -19,10 +19,10 @@ $query = "SELECT o.despacho , count(*) items, max(o.factura_AR) facturaAR, sum(o
   WHERE o.despacho like '%PART%'
   GROUP BY o.despacho
   ORDER BY o.fecha desc";
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 $aux = "";
-while ($row = mysql_fetch_array($result))
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
  $aux = $aux . "<tr class=\"provlistrow\"><td>$row[0]<td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td>$row[5]</td><td>$row[6]</td></tr>\n";
 }

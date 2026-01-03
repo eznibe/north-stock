@@ -29,7 +29,7 @@ function delete_proveedor(&$mensaje, $id_proveedor)
   $query = "DELETE FROM proveedor 
             WHERE id_proveedor = $id_proveedor";
 
-  $result = mysql_query($query);
+  $result = $pdo->query($query);
   $mensaje = "El proveedor seleccionado ha sido eliminado.";
   return TRUE;
  }

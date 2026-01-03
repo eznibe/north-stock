@@ -39,10 +39,10 @@ function getPrevisiones($id_item) {
   GROUP BY p.id_prevision
 	ORDER BY p.fecha_entrega, p.numero_orden, p.id_prevision";
 
-  $result = mysql_query($query);
+  $result = $pdo->query($query);
 
   $previsiones = "";
-  while ($row = mysql_fetch_array($result))
+  while ($row = $result->fetch(PDO::FETCH_NUM))
   {
     $previsiones = $previsiones . "<tr class=\"provlistrow\">
       <td><a class=\"list\" href=\"prevision_ver.php?id_prevision=$row[0]\">$row[1]</a></td>

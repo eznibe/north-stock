@@ -23,9 +23,9 @@ $query = "select DISTINCT
       (proveedor.id_pais != 1)
      )";
 
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
-while ($row = mysql_fetch_array($result))
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
  $proveedor = $proveedor . "<a onclick=\"show_items($row[0])\">$row[1]</a><br />\n";
 }

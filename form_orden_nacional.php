@@ -16,11 +16,11 @@ db_connect();
 if ($estado == "confirma") 
 {
  $query = "update productos set stock_disponible = stock_disponible+$cantidad where id_producto=$producto";
- if ($result = mysql_query($query))
+ if ($result = $pdo->query($query))
  {
   $query = "select productos.stock_disponible from productos where productos.id_producto=$producto";
-  $result = mysql_query($query);
-  $row = mysql_fetch_array($result);
+  $result = $pdo->query($query);
+  $row = $result->fetch(PDO::FETCH_NUM);
   $mensaje = "La compra se ingreso exitosamente. El stock actual del producto \"$producto_nombre\" es $row[0].";
   $var = array("mensaje" => $mensaje,
     "producto" => $producto,
@@ -38,8 +38,8 @@ elseif ($estado == "check")
  if ( ($producto != 0) and ($cantidad != "") )
  {
   $query = "select productos.producto, proveedores.proveedor from productos left join proveedores using (id_proveedor) where productos.id_producto=$producto";
-  $result = mysql_query($query);
-  $row = mysql_fetch_array($result);
+  $result = $pdo->query($query);
+  $row = $result->fetch(PDO::FETCH_NUM);
   $producto_nombre = "$row[0] - $row[1]";
   $estado = "confirma";
   $var = array("mensaje" => $mensaje,

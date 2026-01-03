@@ -6,6 +6,7 @@ include 'dbutils.php';
 check_session();
 
 db_connect();
+$pdo = get_db_connection();
 
 $id_grupo = $_GET['id_grupo'];
 
@@ -20,9 +21,9 @@ $query = "SELECT DISTINCT
         ) 
   ORDER BY 
 	categoria.categoria";
-$result = mysql_query($query);
+$result = $pdo->query($query);
 $categorias = array();
-while ($row = mysql_fetch_array($result))
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
  array_push($categorias, $row[0]);
 }
@@ -44,10 +45,10 @@ foreach($categorias as $categoria)
 	)
   ORDER BY
 	proveedor.proveedor";
- $result = mysql_query($query);
- $row = mysql_fetch_array($result);
+ $result = $pdo->query($query);
+ $row = $result->fetch(PDO::FETCH_NUM);
  $listado = $listado . "<tr><td colspan=\"2\" class=\"list2\">$row[1]</td></tr>\n<tr><td>&nbsp;</td><td><a href=\"form_impresion_etiquetas.php?id_item=$row[0]\" target=\"impresion_etiquetas\" onclick=\"open_print()\" class=\"list\">$row[2]</a></td></tr>\n";
- while($row = mysql_fetch_array($result))
+ while($row = $result->fetch(PDO::FETCH_NUM))
  {
   $listado = $listado . "<tr><td>&nbsp;</td><td><a href=\"form_impresion_etiquetas.php?id_item=$row[0]\" target=\"impresion_etiquetas\" onclick=\"open_print()\" class=\"list\">$row[2]</a></td></tr>\n";
  }

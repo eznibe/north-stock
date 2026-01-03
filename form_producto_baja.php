@@ -29,7 +29,7 @@ function delete_subproducto(&$mensaje, $id_subproducto)
   $query = "DELETE FROM item 
             WHERE id_item = $id_subproducto";
 
-  $result = mysql_query($query);
+  $result = $pdo->query($query);
   $mensaje = "El subproducto seleccionado ha sido eliminado.";
   return TRUE;
  }

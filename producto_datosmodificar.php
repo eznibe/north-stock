@@ -7,11 +7,11 @@
 	function mostrar_precio_correcto($proveedor,$precio_fob,$precio_ref) {
 
 		$query = "insert into auxiliar (precio) values (3.5)";
-		$result = mysql_query($query);
+		$result = $pdo->query($query);
 
 		$query = "SELECT proveedor, pais FROM proveedor, pais WHERE id_proveedor = $proveedor AND proveedor.id_pais = pais.id_pais";
-		$result = mysql_query($query);
-		$row = mysql_fetch_array($result);
+		$result = $pdo->query($query);
+		$row = $result->fetch(PDO::FETCH_NUM);
 
 		$nom_proveedor = $row[0];
 		$pais = $row[1];

@@ -83,13 +83,13 @@ $query = "SELECT
   ORDER BY
 	$orderbygrupo
 	categoria.categoria";
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 //dump($query);
 
 $aux = "";
 $aux2 = "";
-while ($row = mysql_fetch_array($result))
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
  $aux = $aux . "<tr class=\"provlistrow\"><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td></tr>\n";
 }
@@ -124,7 +124,7 @@ function armar_select_grupos()
 	$codigo = "";
 	$result = get_groups();
 
-	while ($row = mysql_fetch_array($result))
+	while ($row = $result->fetch(PDO::FETCH_NUM))
 	{
 	      $codigo = $codigo . "<option value='".$row[0]. (isset($id_grupo) && $row[0]==$id_grupo ? "' selected>" : "'>") . $row[1] ."</option>";
 	}

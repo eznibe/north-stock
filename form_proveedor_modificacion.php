@@ -38,8 +38,8 @@ function get_prov_data(&$data, $id_proveedor)
 	(id_proveedor = $id_proveedor)
   )";
 
- $result = mysql_query($query);
- $data = mysql_fetch_array($result);
+ $result = $pdo->query($query);
+ $data = $result->fetch(PDO::FETCH_NUM);
 }
 
 function update_proveedor(&$mensaje, $id_proveedor, $proveedor, $direccion, $id_pais, $telefono, $fax, $contacto, $mail)
@@ -66,12 +66,12 @@ function update_proveedor(&$mensaje, $id_proveedor, $proveedor, $direccion, $id_
   WHERE 
 	proveedor.id_proveedor = $id_proveedor";
 
-  if (!($result = mysql_query($query)))
+  if (!($result = $pdo->query($query)))
   {
    // Si hay un error al insertar los datos en la base.
    //
    $mensaje = "Error: El proveedor " . htmlspecialchars(stripslashes($proveedor)) . " no pudo ser actualizado. Motivo posible: El nombre de proveedor ya ex
-istia." . mysql_error();
+istia.";
    return FALSE;
   }
   else

@@ -31,10 +31,10 @@ if (get_orden_status($id_orden) == 1)
   WHERE
         id_orden = $id_orden";
 
- $result = mysql_query($query);
+ $result = $pdo->query($query);
  $items = array();
  $cantidades = array();
- while ($row = mysql_fetch_array($result))
+ while ($row = $result->fetch(PDO::FETCH_NUM))
  {
   array_push($items, array($row[0],$row[2]));
  }
@@ -52,7 +52,7 @@ if (get_orden_status($id_orden) == 1)
 	WHERE (
         (item.id_item = $item[0])
    )";
-  $result = mysql_query($query);
+  $result = $pdo->query($query);
  }
 }
 
@@ -65,7 +65,7 @@ $query = "UPDATE
         (id_orden = $id_orden)
   )";
 
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 log_trans($valid_user, 5, 0, 0, $fecha, $id_orden);
 

@@ -177,8 +177,8 @@ case 'usuario':
 	 
 //	 dump($query);
 	
-	 $result = mysql_query($query);
-	 while ($row = mysql_fetch_array($result))
+	 $result = $pdo->query($query);
+	 while ($row = $result->fetch(PDO::FETCH_NUM))
 	 {
 	 	if($transac <> 'Todos')	
 	 		$listado = $listado . "<tr class=\"provlistrow\"><td class=\"list\">$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td></tr>\n";

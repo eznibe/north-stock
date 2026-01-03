@@ -24,7 +24,7 @@ $proveedor = $id_proveedor;
 $query =  "UPDATE itemcomprar JOIN item
 	ON itemcomprar.id_item = item.id_item
 	SET itemcomprar.tentativo = false WHERE item.id_proveedor = $id_proveedor AND itemcomprar.tentativo = true";
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 // logueo comprar confirmada (9)
 log_trans($valid_user, 9, 0, 0, $fecha);

@@ -281,9 +281,9 @@
 		
 		function dumpMysql($input) {
 		
-			$rows = mysql_num_rows($input);
+			$rows = $input->rowCount();
 			
-			$row = mysql_fetch_assoc($input);
+			$row = fetch(PDO::FETCH_ASSOC)($input);
 			
 			$colspan = count($row);
 				
@@ -307,16 +307,21 @@
 			
 				if($rows) {
 				
-					mysql_data_seek($input, 0);	
+					// PDO doesn't have data_seek, we need to fetch all rows
+					$all_rows = [];
+					while($row = $input->fetch(PDO::FETCH_ASSOC)) {
+						$all_rows[] = $row;
+					}
 				
-					while($row = mysql_fetch_assoc($input)) {
+					foreach($all_rows as $row) {
 					
 						$output .= '<tr>';
 						
 							$cols = 0;
 							foreach($row as $key => $value) {
 							
-								$mySQLtype = mysql_field_type($input, $cols);
+								// PDO doesn't have mysql_field_type, skip type detection
+								$mySQLtype = 'string';
 								
 								$value = $this->mysqlType($mySQLtype, $value);
 		
@@ -337,7 +342,7 @@
 					
 					}
 					
-					mysql_data_seek($input, 0);	
+					// No need for data_seek with array	
 					
 				}
 						

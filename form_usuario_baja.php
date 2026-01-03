@@ -26,10 +26,10 @@ function delete_usuario(&$mensaje, $id_usuario)
  {
   // Si estan todos los campos requeridos
   //
-  $query = "DELETE FROM usuario 
+  $query = "DELETE FROM Usuario
             WHERE id_usuario = $id_usuario";
 
-  $result = mysql_query($query);
+  $result = $pdo->query($query);
   $mensaje = "El usuario seleccionado ha sido eliminado.";
   return TRUE;
  }

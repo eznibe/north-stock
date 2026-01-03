@@ -6,6 +6,7 @@ include 'dbutils.php';
 session_start();
 
 db_connect();
+$pdo = get_db_connection();
 $query = "SELECT 
 	proveedor.id_proveedor, 
 	proveedor.proveedor, 
@@ -21,7 +22,7 @@ $query = "SELECT
 	(id_pais)
   ORDER BY
 	proveedor.proveedor";
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 /*echo $query . "<br />";
 if ($result)
@@ -30,12 +31,12 @@ if ($result)
 }
 else
 {
- echo"RESULT = false" . mysql_error() . "<br />";
+ echo"RESULT = false" . "<br />";
 }
 */
 
 $aux = "";
-while ($row = mysql_fetch_array($result))
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
  $aux = $aux . "<tr class=\"provlistrow\"><td><a class=\"list\" onclick=\"show_detail($row[0]);\">$row[1]</a></td></tr>\n";
 // $aux = $aux . "<tr class=\"provlistrow\"><td><a class=\"list\" onclick=\"show_detail($row[3]);\">$row[1]</a></td><td>$row[2] - $row[3]</td><td>$row[4]</td><td>$row[5]</td></tr>\n";

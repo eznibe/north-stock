@@ -12,6 +12,7 @@ $mensaje = "";
 $focus = "forms[0].grupo";
 
 db_connect();
+$pdo = get_db_connection();
 
 function insert_grupo(&$mensaje, $grupo)
 {
@@ -31,11 +32,11 @@ function insert_grupo(&$mensaje, $grupo)
             (grupo)
             VALUES 
             (\"$grupo\")";
-  if (!($result = mysql_query($query)))
+  if (!($result = db_query($query)))
   {
    // Si hay un error al insertar los datos en la base.
    //
-   $mensaje = "ERROR: El grupo " . htmlspecialchars(stripslashes($grupo)) . " no pudo ser dado de alta. Motivo posible: El grupo ya existia." . mysql_error();
+   $mensaje = "ERROR: El grupo " . htmlspecialchars(stripslashes($grupo)) . " no pudo ser dado de alta. Motivo posible: El grupo ya existia.";
    return FALSE;
   }
   else

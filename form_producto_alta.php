@@ -89,23 +89,23 @@ function insert_producto(&$mensaje, $categoria, $proveedor, $scan, $codigo_prove
             	($categoria, $proveedor,\"$codigo_proveedor\", $codigo_barras, $precio_fob, $precio_nac, $precio, $precio_fob, $precio_nac, $unidad, $factor_unidades, $agrup_contable)";
   	}
 
-  	if (!($result = mysql_query($query)))
+  	if (!($result = $pdo->query($query)))
   	{
 	   // Si hay un error al insertar los datos en la base.
 	   //
-   		$mensaje = "<em class=\"error\">Error: El item " . htmlspecialchars(stripslashes($producto)) . " no pudo ser dado de alta. Motivo posible: El item ya existia.</em>" . mysql_error();
+   		$mensaje = "<em class=\"error\">Error: El item " . htmlspecialchars(stripslashes($producto)) . " no pudo ser dado de alta. Motivo posible: El item ya existia.</em>";
    		return FALSE;
   	}
   	else
   	{
    		if ($autoassign)
    		{
-    		$result = mysql_query("SELECT LAST_INSERT_ID()");
-    		$row = mysql_fetch_array($result);
+    		$result = $pdo->query("SELECT LAST_INSERT_ID()");
+    		$row = $result->fetch(PDO::FETCH_NUM);
     		$query = "UPDATE item
 				SET codigo_barras = \"NSSA$row[0]\"
 				WHERE id_item = $row[0]";
-    		$result = mysql_query($query);
+    		$result = $pdo->query($query);
    		}
 
 	   // Si se puede insertar los campos en la base.
@@ -131,8 +131,8 @@ function busca_proveedores(&$proveedores, &$mensaje, $proveedor)
            FROM proveedor
            WHERE proveedor LIKE \"%$proveedor%\"
 	ORDER BY proveedor";
-  $result = mysql_query($query);
-  $num_results = mysql_num_rows($result);
+  $result = $pdo->query($query);
+  $num_results = $result->rowCount();
   if ($num_results == 0)
   {
    $mensaje = "(<em class=\"error\">Error: No hay proveedores con esos datos.)</em>";
@@ -144,7 +144,7 @@ function busca_proveedores(&$proveedores, &$mensaje, $proveedor)
     $mensaje = "(Hay $num_results posible proveedor.)";
    else
     $mensaje = "(Hay $num_results posibles proveedores.)";
-   while ($row = mysql_fetch_array($result))
+   while ($row = $result->fetch(PDO::FETCH_NUM))
    {
     $proveedores = $proveedores . "<option value=\"" . htmlspecialchars(stripslashes($row[0])) . "\">" . htmlspecialchars(stripslashes($row[1])) . "</option>\n";
    }
@@ -166,8 +166,8 @@ function busca_categoria(&$categoria, &$mensaje, $pcategoria)
            FROM categoria
            WHERE categoria LIKE \"%$pcategoria%\"
 	ORDER BY categoria";
-  $result = mysql_query($query);
-  $num_results = mysql_num_rows($result);
+  $result = $pdo->query($query);
+  $num_results = $result->rowCount();
   if ($num_results == 0)
   {
    $mensaje = "(<em class=\"error\">Error: No hay productos con esos datos.)</em>";
@@ -179,7 +179,7 @@ function busca_categoria(&$categoria, &$mensaje, $pcategoria)
     $mensaje = "(Hay $num_results posible producto.)";
    else
     $mensaje = "(Hay $num_results posibles productos.)";
-   while ($row = mysql_fetch_array($result))
+   while ($row = $result->fetch(PDO::FETCH_NUM))
    {
     $categoria = $categoria . "<option value=\"" . htmlspecialchars(stripslashes($row[0])) . "\">" . htmlspecialchars(stripslashes($row[1])) . "</option>\n";
    }
@@ -193,8 +193,8 @@ function get_name($tabla, $columna, $valor)
  $query = "SELECT $columna
            FROM $tabla
            WHERE id_$columna = $valor";
- $result = mysql_query($query);
- $row = mysql_fetch_array($result);
+ $result = $pdo->query($query);
+ $row = $result->fetch(PDO::FETCH_NUM);
  return $row[0];
 }
 
@@ -203,8 +203,8 @@ function get_scan($valor)
  $query = "SELECT scan
            FROM categoria
            WHERE id_categoria = $valor";
- $result = mysql_query($query);
- $row = mysql_fetch_array($result);
+ $result = $pdo->query($query);
+ $row = $result->fetch(PDO::FETCH_NUM);
  if ($row[0] == "si") return TRUE;
  else return FALSE;
 }
@@ -212,16 +212,16 @@ function get_scan($valor)
 function porcentaje_impuesto_categoria($id_categoria)
 {
 	$query = "SELECT porc_impuesto FROM categoria WHERE id_categoria=$id_categoria";
-	$result = mysql_query($query);
- 	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+ 	$row = $result->fetch(PDO::FETCH_NUM);
  	return $row[0];
 }
 
 function precio_dolar()
 {
 	$query = "SELECT precio_dolar FROM dolarhoy WHERE id_dolar=(SELECT MAX(id_dolar) FROM dolarhoy)";
-	$result = mysql_query($query);
- 	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+ 	$row = $result->fetch(PDO::FETCH_NUM);
  	return $row[0];
 }
 
@@ -230,8 +230,8 @@ function get_moneda_proveedor($id_proveedor)
 	$query = "SELECT pais FROM pais, proveedor
 			  WHERE pais.id_pais = proveedor.id_pais AND
 					proveedor.id_proveedor = $id_proveedor";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	if($row[0] == "ARGENTINA") return "AR$";
 
 	return "US$";
@@ -245,8 +245,8 @@ function obtener_tipo_proveedor($id_proveedor){
 	$query = "SELECT pais FROM pais, proveedor
 		  WHERE pais.id_pais = proveedor.id_pais and
 				proveedor.id_proveedor = $id_proveedor";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	if($row[0] == "ARGENTINA") return "NACIONAL";
 
 	return "EXTRANJERO";

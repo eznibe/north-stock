@@ -40,12 +40,12 @@ function search_items_categoria($search_categoria) {
   ORDER BY 
     c.categoria";
   
-  $result = mysql_query($query);
+  $result = $pdo->query($query);
 	if(!$result) {
     $obj->success = false;
   } else {
     $obj->items = array(); 
-    while ($row = mysql_fetch_array($result)) {
+    while ($row = $result->fetch(PDO::FETCH_NUM)) {
       array_push($obj->items, $row);
     }
   }

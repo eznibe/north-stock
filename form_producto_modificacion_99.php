@@ -50,8 +50,8 @@ function get_item_data(&$data, $id_item)
 	(categoria.id_categoria = item.id_categoria) AND
 	(proveedor.id_proveedor = item.id_proveedor)
   )";
- $result = mysql_query($query);
- $data = mysql_fetch_array($result);
+ $result = $pdo->query($query);
+ $data = $result->fetch(PDO::FETCH_NUM);
 }
 
 function item_scan_oblig($id_item)
@@ -65,8 +65,8 @@ function item_scan_oblig($id_item)
 	(item.id_categoria = categoria.id_categoria) AND
 	(item.id_item = $id_item)
   )";
- $result = mysql_query($query);
- $row = mysql_fetch_array($result);
+ $result = $pdo->query($query);
+ $row = $result->fetch(PDO::FETCH_NUM);
  if ($row[0] == 'si') return TRUE;
  else return FALSE;
 }
@@ -77,8 +77,8 @@ function log_modificacion_item($id_item, $precio_fob, $precio_nac, $precio_ref, 
 	(id_item, precio_fob, precio_nac, precio_ref, stock_anterior, stock_disponible)
   VALUES
 	($id_item, $precio_fob, $precio_nac, $precio_ref, $stock_anterior, $stock_nuevo)";
- $result = mysql_query($query);
- echo mysql_error();
+ $result = $pdo->query($query);
+ // PDO handles errors via exceptions
 }
 
 function update_item(&$mensaje, $id_item, $codigo_proveedor, $codigo_barras, $stock_disponible, $stock_transito, $precio_fob, $precio_nac, $precio_ref, $id_proveedor, $agrupacion)
@@ -135,11 +135,11 @@ function update_item(&$mensaje, $id_item, $codigo_proveedor, $codigo_barras, $st
   WHERE
 	item.id_item = $id_item";
 
-  if (!($result = mysql_query($query)))
+  if (!($result = $pdo->query($query)))
   {
    // Si hay un error al insertar los datos en la base.
    //
-   $mensaje = "Error: El item no pudo ser actualizado. Motivo posible: El codigo de barras del item ya existia.";// . mysql_error();
+   $mensaje = "Error: El item no pudo ser actualizado. Motivo posible: El codigo de barras del item ya existia.";//;
    return FALSE;
   }
   else
@@ -155,34 +155,34 @@ function update_item(&$mensaje, $id_item, $codigo_proveedor, $codigo_barras, $st
 function porcentaje_impuesto_categoria($id_categoria)
 {
 	$query = "SELECT porc_impuesto FROM categoria WHERE id_categoria=$id_categoria";
-	$result = mysql_query($query);
- 	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+ 	$row = $result->fetch(PDO::FETCH_NUM);
  	return $row[0];
 }
 
 function precio_dolar()
 {
 	$query = "SELECT precio_dolar FROM dolarhoy WHERE id_dolar=(SELECT MAX(id_dolar) FROM dolarhoy)";
-	$result = mysql_query($query);
- 	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+ 	$row = $result->fetch(PDO::FETCH_NUM);
  	return $row[0];
 }
 
 function obtener_categoria($id_item)
 {
 	$query = "SELECT id_categoria FROM item WHERE id_item=$id_item";
-	$result = mysql_query($query);
- 	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+ 	$row = $result->fetch(PDO::FETCH_NUM);
  	return $row[0];
 }
 
 function obtener_proveedores($provname)
 {
 	$query = "SELECT id_proveedor, proveedor FROM proveedor ORDER BY proveedor";
-	$result = mysql_query($query);
+	$result = $pdo->query($query);
 
 	$opcionesprov="";
-	while($row = mysql_fetch_array($result)){
+	while($row = $result->fetch(PDO::FETCH_NUM)){
 		if($row[1] <> $provname)
 			$opcionesprov .= "<option value=\"$row[0]\">$row[1]</option>\n";
 	}
@@ -194,8 +194,8 @@ function obtener_id_proveedor($provname)
 {
 	$query = "SELECT id_proveedor FROM proveedor " .
 			"WHERE proveedor = '$provname'";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	return $row[0];
 }
 
@@ -208,8 +208,8 @@ function obtener_tipo_proveedor($id_item){
 		  WHERE pais.id_pais = proveedor.id_pais AND
 		  		item.id_proveedor = proveedor.id_proveedor AND
 				item.id_item = $id_item";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	if($row[0] == "ARGENTINA") return "NACIONAL";
 
 	return "EXTRANJERO";

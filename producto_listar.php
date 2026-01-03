@@ -6,6 +6,7 @@ include 'dbutils.php';
 check_session();
 
 db_connect();
+$pdo = get_db_connection();
 
 if ($_SESSION['user_level'] < 11) $imprimir = "";
 else $imprimir = "<p class=\"imprimir\">
@@ -39,10 +40,10 @@ $query = "SELECT
 	  item.id_categoria
   ORDER BY
 	  categoria.categoria";
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 $aux = "";
-while ($row = mysql_fetch_array($result))
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
  $unidad = "<em>" . strtoupper($row[5]) . "</em>";
  if ($row[4] < 0) $row[4] = "<em>$row[4]</em>";

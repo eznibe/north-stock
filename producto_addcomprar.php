@@ -32,10 +32,10 @@ $query = "SELECT
 	categoria.categoria
   ORDER BY
 	categoria.categoria";
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 
-$row = mysql_fetch_array($result);
+$row = $result->fetch(PDO::FETCH_NUM);
 $categoria = $row[0];
 $proveedor = $row[1];
 $id_proveedor = $row[6];
@@ -71,7 +71,7 @@ function ordenes_a_confirmar($id_proveedor) {
 	$codigo = "<option value=''>Elige una orden</option>";
 	$result = get_ordenes_a_confirmar($id_proveedor);
 
-	while ($row = mysql_fetch_array($result))
+	while ($row = $result->fetch(PDO::FETCH_NUM))
 	{
 	      $codigo = $codigo . "<option value='".$row[0]."'> $row[0] - $row[2] ($row[1]) </option>";
 	}
@@ -87,7 +87,7 @@ function tipos_de_envio($id_proveedor) {
 	$codigo = "";
 	$result = get_tipos_de_envio();
 
-	while ($row = mysql_fetch_array($result))
+	while ($row = $result->fetch(PDO::FETCH_NUM))
 	{
 	      $codigo = $codigo . "<option value='".$row[0]."'". ($row[0]==$default ? 'selected' : '') ."> $row[1] </option>";
 	}

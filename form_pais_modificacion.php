@@ -31,7 +31,7 @@ function modify_pais(&$mensaje, $id_pais, $pais)
   $query = "UPDATE pais 
 		SET pais = \"$pais\"
             WHERE id_pais = $id_pais";
-  $result = mysql_query($query);
+  $result = $pdo->query($query);
   $mensaje = "El pais seleccionado ha sido modificado.";
   return TRUE;
  }

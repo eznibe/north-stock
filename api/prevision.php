@@ -23,7 +23,7 @@ function allitems() {
   $obj->success = true;
 
   $query = "UPDATE orden SET despacho = '$despacho' WHERE id_orden = $id_orden";
-	if(!mysql_query($query)) {
+	if(!$pdo->query($query)) {
     $obj->success = false;
   }
 
@@ -50,7 +50,7 @@ function guardarPrevision($id_prevision, $numero_orden, $cliente, $fecha_entrega
 
   //echo $query;
 
-	if(!mysql_query($query)) {
+	if(!$pdo->query($query)) {
     $obj->success = false;
   }
 

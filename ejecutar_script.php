@@ -10,7 +10,7 @@ db_connect();
 
 
 $query = "update orden set fecha = fecha_bkp";
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 echo 'Ejecutado.';
 

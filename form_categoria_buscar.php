@@ -6,19 +6,20 @@ include 'dbutils.php';
 session_start();
 
 db_connect();
+$pdo = get_db_connection();
 
 $focus = "forms[0].producto";
 $mensaje = "";
 $categoria = $_POST['categoria'];
 
 $query = "SELECT categoria.categoria, categoria.scan, categoria.stock_minimo, unidad.unidad FROM categoria, unidad WHERE ((unidad.id_unidad = categoria.id_unidad_visual) AND (categoria.categoria LIKE \"%$categoria%\")) ORDER BY categoria.categoria";
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 $aux = "";
 
-if (mysql_num_rows($result) > 0)
+if ($result->rowCount() > 0)
 {
-  while ($row = mysql_fetch_array($result))
+  while ($row = $result->fetch(PDO::FETCH_NUM))
   {
    $aux = $aux . "<tr class=\"provlistrow\"><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td></tr>\n";
   }

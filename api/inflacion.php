@@ -6,6 +6,7 @@ require_once('../dbutils.php');
 session_start();
 
 db_connect();
+$pdo = get_db_connection();
 
 
 if(isset($_GET['obtenerInflacion'])) {
@@ -23,12 +24,12 @@ function obtenerInflacion($anio, $mes) {
   $obj->success = true;
 
   $query = "SELECT valor FROM inflacion WHERE anio = $anio and mes = $mes";
-  $result = mysql_query($query);
+  $result = $pdo->query($query);
 	if(!$result) {
     $obj->success = false;
   } else {
-    if (mysql_num_rows($result) > 0) {
-      $row = mysql_fetch_array($result);
+    if ($result->rowCount() > 0) {
+      $row = $result->fetch(PDO::FETCH_NUM);
       $obj->valor = $row[0];
     }
   }
@@ -43,13 +44,13 @@ function actualizarInflacion($anio, $mes, $valor, $isNew) {
   if (isset($isNew)) {
 
     $query = "INSERT INTO inflacion (anio, mes, valor) values ($anio, $mes, $valor)";
-    if(!mysql_query($query)) {
+    if(!$pdo->query($query)) {
       $obj->success = false;
     }
   } else {
 
     $query = "UPDATE inflacion SET valor = $valor WHERE anio = $anio AND mes = $mes";
-    if(!mysql_query($query)) {
+    if(!$pdo->query($query)) {
       $obj->success = false;
     }
   }

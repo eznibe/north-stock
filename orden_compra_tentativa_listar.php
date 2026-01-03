@@ -19,8 +19,8 @@ $query = "SELECT P.id_proveedor, P.proveedor, COUNT(*)
   		GROUP BY P.id_proveedor
   		ORDER BY P.proveedor";
  
-$result = mysql_query($query);
-while ($row = mysql_fetch_array($result))
+$result = $pdo->query($query);
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
  $orden = $orden .  "<tr class=\"provlistrow\"> 
 	<td><a class=\"list\" href=\"orden_compra_tentativa.php?id_proveedor=$row[0]\">$row[1]</a></td>

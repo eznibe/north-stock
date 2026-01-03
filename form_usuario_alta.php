@@ -15,6 +15,7 @@ $mensaje = "";
 $focus = "forms[0].id_tipo";
 
 db_connect();
+$pdo = get_db_connection();
 
 function insert_usuario(&$mensaje, $id_tipo, $nombre, $username, $clave)
 {
@@ -30,7 +31,7 @@ function insert_usuario(&$mensaje, $id_tipo, $nombre, $username, $clave)
   // Si estan todos los campos requeridos
   //
   $nombre = addslashes(trim(strtoupper($nombre)));
-  $query = "INSERT INTO usuario 
+  $query = "INSERT INTO Usuario
         (id_tipousr,
 	nombre,
 	username,
@@ -40,11 +41,11 @@ function insert_usuario(&$mensaje, $id_tipo, $nombre, $username, $clave)
 	\"$nombre\",
 	\"$username\",
 	\"$clave\")";
-  if (!($result = mysql_query($query)))
+  if (!($result = db_query($query)))
   {
    // Si hay un error al insertar los datos en la base.
    //
-   $mensaje = "ERROR: El usuario " . htmlspecialchars(stripslashes($username)) . " no pudo ser dado de alta. Motivo posible: El nombre de usuario ya existia." . mysql_error();
+   $mensaje = "ERROR: El usuario " . htmlspecialchars(stripslashes($username)) . " no pudo ser dado de alta. Motivo posible: El nombre de usuario ya existia.";
    return FALSE;
   }
   else

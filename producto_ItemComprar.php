@@ -21,9 +21,9 @@ $query = "SELECT
 	(unidad.id_unidad = categoria.id_unidad_visual)
 	)";
 
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
-while ($row = mysql_fetch_array($result))
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
  $item = $item . "$row[0] - $row[1] - <input type=\"text\" size=\"5\" name=\"pcategoria\" value=\"$row[2]\" id=\"pcategoria\" class=\"obligatorio\"> ($row[3]) <br />\n";
 }

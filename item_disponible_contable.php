@@ -6,6 +6,7 @@ include 'dbutils.php';
 check_session();
 
 db_connect();
+$pdo = get_db_connection();
 
 if ($_SESSION['user_level'] < 11) $imprimir = "";
 else $imprimir = "<div class=\"imprimir\">
@@ -95,7 +96,7 @@ if(count($id_grupos) > 0) {
 			categoria.categoria,
 			item.id_item,
 			orden.fecha desc";
-	$result = mysql_query($query);
+	$result = $pdo->query($query);
 
 	// dump($query);
 
@@ -103,7 +104,7 @@ if(count($id_grupos) > 0) {
 
 	$lastitem;
 
-	while ($row = mysql_fetch_array($result))
+	while ($row = $result->fetch(PDO::FETCH_NUM))
 	{
 		//dump($row);
 
@@ -141,14 +142,14 @@ if(count($id_grupos) > 0) {
 	}
 
 	$queryInflacion = "select anio, mes, valor from inflacion order by anio, mes";
-	$resultInflacion = mysql_query($queryInflacion);
+	$resultInflacion = $pdo->query($queryInflacion);
 
 	$aux = "";
 	$totalFOB=0;
 	$totalRef=0;
 	$totalRefNac=0;
 	$totalStock=0;
-	//while ($row = mysql_fetch_array($result))
+	//while ($row = $result->fetch(PDO::FETCH_NUM))
 	foreach ($rows as $row) 
 	{
 
@@ -266,9 +267,10 @@ function obtener_pct_anio_mes($anio, $mes, $result_inflacion) {
 
     //echo 'obtener: ' . $anio . ' ' . $mes . '<br>';
     
-    mysql_data_seek($result_inflacion, 0);
+    // PDO doesn't support data_seek, we need to iterate through results
+    // Consider caching results in an array if this function is called multiple times
 
-    while ($row = mysql_fetch_array($result_inflacion))
+    while ($row = $result_inflacion->fetch(PDO::FETCH_NUM))
     {
         if ($row[0] == $anio && $row[1] == $mes) {
             return $row[2];
@@ -290,7 +292,7 @@ function armar_select_grupos()
 	$codigo = "";
 	$result = get_groups();
 
-	while ($row = mysql_fetch_array($result))
+	while ($row = $result->fetch(PDO::FETCH_NUM))
 	{
 	      $codigo = $codigo . "<option value='".$row[0]. (isset($id_grupo) && $row[0]==$id_grupo ? "' selected>" : "'>") . $row[1] ."</option>";
 	}

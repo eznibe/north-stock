@@ -24,19 +24,19 @@ if(obtener_tipo_proveedor($id_orden_item) == "EXTRANJERO")
 		categoria.id_categoria,
 		ordenitem.cantidad_pendiente
   FROM
-      categoria, proveedor, ordenitem, item, unidad
+      categoria, Proveedor, ordenitem, item, Unidad
   WHERE (
 	(ordenitem.id_orden_item = $id_orden_item) AND
         (item.id_item = ordenitem.id_item) AND
         (categoria.id_categoria = item.id_categoria) AND
-        (proveedor.id_proveedor = item.id_proveedor) AND
-        (unidad.id_unidad = item.id_unidad_compra)
+        (Proveedor.id_proveedor = item.id_proveedor) AND
+        (Unidad.id_unidad = item.id_unidad_compra)
   )
   ORDER BY
         categoria.categoria";
 
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 
 	$moneda = "US$";
 }
@@ -55,19 +55,19 @@ else
 		categoria.id_categoria,
 		ordenitem.cantidad_pendiente
   FROM
-      categoria, proveedor, ordenitem, item, unidad
+      categoria, Proveedor, ordenitem, item, Unidad
   WHERE (
 	(ordenitem.id_orden_item = $id_orden_item) AND
         (item.id_item = ordenitem.id_item) AND
         (categoria.id_categoria = item.id_categoria) AND
-        (proveedor.id_proveedor = item.id_proveedor) AND
-        (unidad.id_unidad = item.id_unidad_compra)
+        (Proveedor.id_proveedor = item.id_proveedor) AND
+        (Unidad.id_unidad = item.id_unidad_compra)
   )
   ORDER BY
         categoria.categoria";
 
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 
 	$moneda = "AR$";
 }
@@ -111,13 +111,13 @@ eval_html('orden_update.html', $var);
  * a partir del id_orden_item
  */
 function obtener_tipo_proveedor($id_orden_item){
-	$query = "SELECT pais.pais FROM pais pais, proveedor proveedor, item item, ordenitem ordenitem
+	$query = "SELECT pais.pais FROM Pais pais, Proveedor proveedor, item item, ordenitem ordenitem
 		  WHERE pais.id_pais = proveedor.id_pais and
 				proveedor.id_proveedor = item.id_proveedor and
 				ordenitem.id_orden_item = $id_orden_item and
 				ordenitem.id_item = item.id_item";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	if($row[0] == "ARGENTINA") return "NACIONAL";
 
 	return "EXTRANJERO";

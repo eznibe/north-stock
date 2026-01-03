@@ -21,8 +21,8 @@ $query = "SELECT p.id_prevision
 
 // dump($query);
 
-$result = mysql_query($query);
-$row = mysql_fetch_array($result);
+$result = $pdo->query($query);
+$row = $result->fetch(PDO::FETCH_NUM);
 
 $var = array(
 );

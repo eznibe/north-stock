@@ -12,13 +12,13 @@ $mensaje = "";
 $producto = $_POST['producto'];
 
 $query = "SELECT categoria.categoria, categoria.stock_minimo, SUM(item.stock_disponible), item.id_categoria, (SUM(item.stock_disponible)-categoria.stock_minimo), unidad.unidad FROM item, categoria, unidad WHERE ((item.id_categoria = categoria.id_categoria) AND (unidad.id_unidad = categoria.id_unidad_visual) AND (categoria.categoria LIKE \"%$producto%\")) GROUP BY item.id_categoria ORDER BY categoria.categoria";
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 $aux = "";
 
-if (mysql_num_rows($result) > 0)
+if ($result->rowCount() > 0)
 {
-  while ($row = mysql_fetch_array($result))
+  while ($row = $result->fetch(PDO::FETCH_NUM))
   {
    $aux = $aux . "<tr class=\"provlistrow\"><td><a class=\"list\" onclick=\"show_detail($row[3]);\">$row[0]</a></td><td>$row[1]</td><td>$row[2]</td><td>$row[4]</td><td>$row[5]</td></tr>\n";
   }

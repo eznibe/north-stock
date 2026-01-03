@@ -18,6 +18,7 @@ $mensaje = "";
 $focus = "forms[0].categoria";
 
 db_connect();
+$pdo = get_db_connection();
 
 function insert_categoria(&$mensaje, $categoria, $id_grupo, $scan, $stock_minimo, $unidad, $porcentaje, $pos_arancelaria)
 {
@@ -39,11 +40,11 @@ function insert_categoria(&$mensaje, $categoria, $id_grupo, $scan, $stock_minimo
             VALUES
             (\"$categoria\", $id_grupo, \"$scan\", $stock_minimo, $unidad, $porcentaje, \"$pos_arancelaria\")";
 
-  if (!($result = mysql_query($query)))
+  if (!($result = db_query($query)))
   {
    // Si hay un error al insertar los datos en la base.
    //
-   $mensaje = "<em class=\"error\">Error: El producto " . htmlspecialchars(stripslashes($categoria)) . " no pudo ser dado de alta. Motivo posible: El producto ya existia.</em>" . mysql_error();
+   $mensaje = "<em class=\"error\">Error: El producto " . htmlspecialchars(stripslashes($categoria)) . " no pudo ser dado de alta. Motivo posible: El producto ya existia.</em>";
    return FALSE;
   }
   else
@@ -51,8 +52,8 @@ function insert_categoria(&$mensaje, $categoria, $id_grupo, $scan, $stock_minimo
    // Si se puede insertar los campos en la base.
    //
    $mensaje = "El producto " . htmlspecialchars(stripslashes($categoria)) . " ha sido dado de alta.";
-   $result = mysql_query("SELECT LAST_INSERT_ID()");
-   $row = mysql_fetch_array($result);
+   $result = $pdo->query("SELECT LAST_INSERT_ID()");
+   $row = $result->fetch(PDO::FETCH_NUM);
    $mensaje = $mensaje . "<br />
 	<form action=\"form_producto_alta.php\" method=\"post\" target=\"_self\" name=\"scategoria\">
 <input type=\"hidden\" value=\"scategoria\" size=\"10\" name=\"formname\" id=\"formname\">

@@ -25,14 +25,14 @@ $query = "SELECT pi.id_prevision_item, pi.id_item, pi.cantidad
   WHERE p.id_prevision = $id_prevision";
 
 
-$result = mysql_query($query);
-while ($row = mysql_fetch_array($result)) {
+$result = $pdo->query($query);
+while ($row = $result->fetch(PDO::FETCH_NUM)) {
   $cantidad_factor = (get_factor_unidades($row[1])) * $row[2];
   $query = "UPDATE item i 
     SET	i.stock_disponible = i.stock_disponible + $cantidad_factor
     WHERE i.id_item = $row[1]";
 
-  $res = mysql_query($query);
+  $res = $pdo->query($query);
 
   if($row[2] != 0) { // log cantidad revertida distinta a cero
     log_trans($valid_user, 1, $row[1], $row[2], $fecha, 'NULL', $id_prevision);
@@ -42,12 +42,12 @@ while ($row = mysql_fetch_array($result)) {
 // actualizar prevision
 $query = "UPDATE prevision SET fecha_descarga = null, usuario_descarga = null WHERE id_prevision = $id_prevision";
 
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 // actualizar prevision items
 $query = "UPDATE previsionitem SET descargado = false WHERE id_prevision = $id_prevision";
 
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 log_trans($valid_user, 27, 0, 0, $fecha, 'NULL', $id_prevision);
 

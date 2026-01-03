@@ -84,7 +84,7 @@ $query = "SELECT
   ORDER BY
 		$orderbygrupo
 		categoria.categoria";
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 // dump($query);
 
@@ -93,7 +93,7 @@ $totalFOB=0;
 $totalRef=0;
 $totalRefNac=0;
 $totalStock=0;
-while ($row = mysql_fetch_array($result))
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
 
 	$precioRef = 0;
@@ -142,7 +142,7 @@ function armar_select_grupos()
 	$codigo = "";
 	$result = get_groups();
 
-	while ($row = mysql_fetch_array($result))
+	while ($row = $result->fetch(PDO::FETCH_NUM))
 	{
 	      $codigo = $codigo . "<option value='".$row[0]. (isset($id_grupo) && $row[0]==$id_grupo ? "' selected>" : "'>") . $row[1] ."</option>";
 	}

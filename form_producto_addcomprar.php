@@ -37,7 +37,7 @@ else {
 	$query = "INSERT INTO itemcomprar (id_item, cantidad, id_tipo_envio, cantidad_pendiente) VALUES ($id_item, $cantidad, $tipoenvio, $cantidad)";
 }
 
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 $var = "";
 eval_html('window_close.html', $var);
@@ -51,8 +51,8 @@ function obtener_tipo_proveedor($id_proveedor){
 	$query = "SELECT pais FROM pais, proveedor
 		  WHERE pais.id_pais = proveedor.id_pais and
 				proveedor.id_proveedor = $id_proveedor";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	if($row[0] == "ARGENTINA") return "NACIONAL";
 
 	return "EXTRANJERO";

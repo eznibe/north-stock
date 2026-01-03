@@ -47,7 +47,7 @@ foreach ($table_map as $item)
   WHERE (
 	(item.id_item = $item[2])
   )";
- $result = mysql_query($query);
+ $result = $pdo->query($query);
 
  if($item[1]!=0) // log cantidad arribada distinta a cero
  	log_trans($valid_user, 1, $item[2], $item[1], $fecha, $id_orden);
@@ -69,7 +69,7 @@ foreach ($table_map as $item)
   WHERE (
         (item.id_item = $item[2])
   )";
- $result = mysql_query($query);
+ $result = $pdo->query($query);
 
  // update item de la orden (cantidad pendiente)
  $query = "UPDATE
@@ -79,7 +79,7 @@ foreach ($table_map as $item)
   WHERE (
         (ordenitem.id_orden_item = $item[0])
   )";
- $result = mysql_query($query);
+ $result = $pdo->query($query);
 }
 
 
@@ -109,7 +109,7 @@ function update_orden_arribada($id_orden, $fecha, $valid_user)
 	$query = "UPDATE orden  SET  id_status = 2, fecha = '$fecha'
   			  WHERE (id_orden = $id_orden)";
 
-	$result = mysql_query($query);
+	$result = $pdo->query($query);
 
 	log_trans($valid_user, 6, 0, 0, $fecha, $id_orden);
 }
@@ -124,9 +124,9 @@ function obtener_cantidad_items_pendientes($id_orden)
 				AND orden.id_orden = ordenitem.id_orden
 				AND ordenitem.cantidad_pendiente <> 0";
 
-	$result = mysql_query($query);
+	$result = $pdo->query($query);
 
-	$row = mysql_fetch_array($result);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	return $row[0];
 }
 
@@ -136,8 +136,8 @@ function get_cantidad_pendiente_comprar($id_orden_item)
  $query = "SELECT ordenitem.cantidad_pendiente
         FROM ordenitem
         WHERE ordenitem.id_orden_item = $id_orden_item";
- $result = mysql_query($query);
- $row = mysql_fetch_array($result);
+ $result = $pdo->query($query);
+ $row = $result->fetch(PDO::FETCH_NUM);
  return $row[0];
 }
 ?>

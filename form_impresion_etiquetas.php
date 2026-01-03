@@ -6,6 +6,7 @@ include 'dbutils.php';
 check_session();
 
 db_connect();
+$pdo = get_db_connection();
 
 $id_item = $_GET['id_item'];
 
@@ -17,10 +18,10 @@ $query = "SELECT
 	item a LEFT JOIN categoria b ON a.id_categoria=b.id_categoria
 	LEFT JOIN proveedor c ON a.id_proveedor=c.id_proveedor
 	WHERE id_item = $id_item";
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 
-$row = mysql_fetch_array($result);
+$row = $result->fetch(PDO::FETCH_NUM);
 
 $codigo_barras = $row[0];
 if (preg_match("/^\*.*\*$/", $codigo_barras)) $tipo = "Code 39";

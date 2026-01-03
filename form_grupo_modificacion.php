@@ -14,6 +14,7 @@ $mensaje = "";
 $focus = "forms[0].id_grupo";
 
 db_connect();
+$pdo = get_db_connection();
 
 function modify_grupo(&$mensaje, $id_grupo, $grupo, $agrupacion)
 {
@@ -32,14 +33,14 @@ function modify_grupo(&$mensaje, $id_grupo, $grupo, $agrupacion)
   $query = "UPDATE grupo 
 			SET grupo = \"$grupo\", agrupacion_contable = \"$agrupacion\" 
             WHERE id_grupo = $id_grupo";
-  $result = mysql_query($query);
+  $result = db_query($query);
   
   // Los items del grupo tambien modifican a la nueva agrupacion contable, solo si esta cambio en el grupo
   if($agrupacion != grupo_agrupacion_contable($id_grupo)) {
 	  $query = "UPDATE item i join categoria c on i.id_categoria = c.id_categoria join grupo g on g.id_grupo = c.id_grupo
 				SET i.agrupacion_contable = $agrupacion 
 				WHERE g.id_grupo = $id_grupo";
-	  $result = mysql_query($query);
+	  $result = db_query($query);
   }
   
   $mensaje = "El grupo seleccionado ha sido modificado.";
@@ -50,8 +51,8 @@ function modify_grupo(&$mensaje, $id_grupo, $grupo, $agrupacion)
 function grupo_agrupacion_contable($id_grupo) 
 {
 	$query = "SELECT agrupacion_contable FROM grupo WHERE grupo_id_grupo = $id_grupo";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = db_query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	return $row[0];
 }
 

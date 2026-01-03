@@ -59,8 +59,8 @@ function showPrevisionDetailsScreen($id_prevision) {
     WHERE 
       p.id_prevision = $id_prevision";
       
-  $result = mysql_query($query);
-  $row = mysql_fetch_array($result);
+  $result = $pdo->query($query);
+  $row = $result->fetch(PDO::FETCH_NUM);
   
   
   $fecha_entrega = $row[0];
@@ -104,11 +104,11 @@ function showPrevisionDetailsScreen($id_prevision) {
     c.categoria";
   
   $count=0; $previsionitems="";
-  $result = mysql_query($query);
+  $result = $pdo->query($query);
   $header = "";
   $stock_suficiente = 'true';
 
-  while ($row = mysql_fetch_array($result))
+  while ($row = $result->fetch(PDO::FETCH_NUM))
   {
     $previsionitems = $previsionitems . "<tr class=\"provlistrow\">"
       .($descargada === 'false' 
@@ -188,8 +188,8 @@ function update_prevision($id_prevision_item, $cantidad, $descargando_item, $rev
   global $valid_user;
 
 	$query = "SELECT id_prevision, id_item, cantidad FROM previsionitem WHERE id_prevision_item = $id_prevision_item";
-	$result = mysql_query($query);
-  $row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+  $row = $result->fetch(PDO::FETCH_NUM);
   
   if ($descargando_item === "true") {
     $query = "UPDATE previsionitem SET descargado = true WHERE id_prevision_item = $id_prevision_item";
@@ -237,10 +237,10 @@ function update_prevision($id_prevision_item, $cantidad, $descargando_item, $rev
 
     log_trans($valid_user, 23, $row[1], $cantidad, date("Y-m-d"), 'NULL', $row[0]);
  	}
-  $result = mysql_query($query);
+  $result = $pdo->query($query);
 
   if (isset($query2)) {
-    $result = mysql_query($query2);
+    $result = $pdo->query($query2);
   }
 
   descargar_prevision_por_items_descargados(get_prevision_id($id_prevision_item));
@@ -254,18 +254,18 @@ function descargar_prevision_por_items_descargados($id_prevision) {
   
   $query = "SELECT * FROM previsionitem WHERE descargado = false AND id_prevision = $id_prevision";
 
-  $result = mysql_query($query);
+  $result = $pdo->query($query);
 
-  if (mysql_num_rows($result) == 0) {
+  if ($result->rowCount() == 0) {
     $updatePrevision = "UPDATE prevision SET fecha_descarga = '$fecha', usuario_descarga = '$username' WHERE id_prevision = $id_prevision";
-    $result = mysql_query($updatePrevision);
+    $result = $pdo->query($updatePrevision);
   }
 }
 
 function get_prevision_id($id_prevision_item) {
   $query = "SELECT id_prevision FROM previsionitem WHERE id_prevision_item = $id_prevision_item";
-  $result = mysql_query($query);
-  $row = mysql_fetch_array($result);
+  $result = $pdo->query($query);
+  $row = $result->fetch(PDO::FETCH_NUM);
   return $row['id_prevision'];
 }
 
@@ -276,7 +276,7 @@ function agregar_prevision_item($id_prevision, $id_item, $cantidad, $precio, $mo
 {
 	$insert = "INSERT INTO previsionitem (id_prevision, id_item, cantidad, moneda)
     VALUES ($id_prevision, $id_item, $cantidad, '$moneda')";
-  $result = mysql_query($insert);
+  $result = $pdo->query($insert);
 
   log_trans($valid_user, 21, $id_item, $cantidad, date("Y-m-d"), 'NULL', $id_prevision);
 }
@@ -285,16 +285,16 @@ function agregar_prevision_item($id_prevision, $id_item, $cantidad, $precio, $mo
 function obtener_precio_dolar_orden($id_prevision)
 {
 	$query = "SELECT cotizacion_dolar FROM orden WHERE id_orden = $id_prevision";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	return $row[0];
 }
 
 function obtener_fecha_orden($id_prevision)
 {
 	$query = "SELECT fecha FROM orden WHERE id_orden = $id_prevision";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	return $row[0];
 }
 

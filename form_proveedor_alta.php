@@ -38,7 +38,7 @@ if (($proveedor != "") and ($id_pais != 0))
 	\"$contacto\",
 	\"$mail\" )";
 
- if ( $result = mysql_query($query) )
+ if ( $result = $pdo->query($query) )
  {
   $mensaje = "El proveedor " . stripslashes($proveedor) . " ha sido dado de alta.";
  }
@@ -53,10 +53,10 @@ else
 }
 
 $query = "SELECT id_pais, pais FROM pais";
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 $aux = "";
-while ($row = mysql_fetch_array($result))
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
  $aux = $aux . "<option value=\"$row[0]\">$row[1]</option>\n";
 }

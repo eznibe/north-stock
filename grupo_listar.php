@@ -98,12 +98,12 @@ else{
 	  categoria.categoria";
 }
 
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 
 $titulo = obtener_grupo($id_grupo);
 $aux = "";
-while ($row = mysql_fetch_array($result))
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
  if ($row[4] < 0) $row[4] = "<em>$row[4]</em>";
  if ($row[7] < 0) $row[7] = "<em>$row[7]</em>";
@@ -132,8 +132,8 @@ eval_html('producto_grupo_listar.html', $var);
 function obtener_id_pais_argentina(){
 	$query = "SELECT id_pais FROM pais
 		 	  WHERE pais.pais = 'ARGENTINA'";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 
 	return $row[0];
 }
@@ -144,8 +144,8 @@ function obtener_id_pais_argentina(){
 function obtener_grupo($id_grupo)
 {
 	$query = "SELECT grupo FROM grupo WHERE id_grupo = $id_grupo";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	return $row[0];
 }
 
@@ -155,8 +155,8 @@ function obtener_grupo($id_grupo)
 function desglose_transito_por_tipo_envio($id_categoria) {
 
 	$query = "SELECT count(*) FROM tipoenvio";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 
 	$cant_tipo_envios = $row[0];
 
@@ -165,11 +165,11 @@ function desglose_transito_por_tipo_envio($id_categoria) {
 		WHERE i.id_categoria = $id_categoria and o.id_status = 1 and oi.cantidad_pendiente > 0
 		GROUP BY oi.id_tipo_envio
 		ORDER BY te.orden, oi.id_tipo_envio";
-	$result = mysql_query($query);
+	$result = $pdo->query($query);
 
 	$count=0;
 	$en_transito = array();
-	while ($row = mysql_fetch_array($result))
+	while ($row = $result->fetch(PDO::FETCH_NUM))
 	{
 		if($count==$row[0]) {
 			array_push($en_transito, array($row[0], $row[1]));

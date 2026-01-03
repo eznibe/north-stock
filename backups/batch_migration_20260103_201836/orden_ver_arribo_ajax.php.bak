@@ -1,0 +1,243 @@
+<?php
+
+require_once('include/TinyAjax.php');
+require_once('include/php-dump.php');
+require_once('main.php');
+require_once('dbutils.php');
+
+session_start();
+
+db_connect();
+
+
+  function saveDescripcion($descripcion, $id_orden) {
+
+	$query = "UPDATE orden SET descripcion = '$descripcion' WHERE id_orden = $id_orden";
+	$result = mysql_query($query);
+
+	$tab = new TinyAjaxBehavior();
+	$tab->add( TabEval::getBehavior("showFeedback()"));
+
+	return $tab->getString();
+  }
+
+	$ajax = new TinyAjax();
+	$ajax->showLoading();
+	$ajax->exportFunction("saveDescripcion", array("descripcion", "id_orden"));
+
+	$ajax->process();
+
+?>
+<html>
+<head>
+  <title>North Sails - Sistema de Control de Stock</title>
+  <link rel="stylesheet" type="text/css" href="north.css" />
+  <script language="JavaScript" src="javascript/jsGral.js?"<?php echo $var['date']; ?>></script>
+  <script language="JavaScript" src="include/jquery-1.12.4.min.js"></script>
+
+<script type="text/javascript">
+
+function update_orden(ID_ORDEN_ITEM)
+{
+ var url="orden_update_arribo.php?id_orden_item=" + ID_ORDEN_ITEM;
+ window.open(url,"producto_detalle","toolbar=no, location=no, directories=no, status=yes, menubar=no, scrollbars=yes, resizable=yes, width=600, height=300");
+}
+
+function confirma()
+{
+var envio = confirm("Desea eliminar el subproducto seleccionado?")
+if (envio == true)
+ {
+  document.forms[0].submit();
+ }
+}
+
+function showFeedback()
+{
+	document.getElementById('modifiedDescripcion').innerHTML = " (guardada)";
+}
+
+function toggleDescripcion() {
+	var container = document.getElementById('descripcionContainer');
+
+	container.style.display = (container.style.display=='none') ? 'inline-table' : 'none';
+}
+
+function descripcionKeyPress() {
+	document.getElementById('modifiedDescripcion').innerHTML = " (sin guardar)";
+}
+
+function guardarDespacho() {
+  // var data = {despacho: $('#despacho').val()};
+  $.ajax({
+    url:'api/ordenes.php?guardarDespacho=true&id_orden='+$('#id_orden').val()+'&despacho='+$('#despacho').val(),
+    success: function(data, status){
+      //console.log("Data: " + data + "\nStatus: " + status);
+      $('#label_despacho').text('Guardado');
+    }
+  })
+
+  $.ajax({
+    url:'api/ordenes.php?guardarNrFactura=true&id_orden='+$('#id_orden').val()+'&nr_factura='+$('#nr_factura').val(),
+    success: function(data, status){
+      //console.log("Data: " + data + "\nStatus: " + status);
+      $('#label_despacho').text('Guardado');
+    }
+  })
+
+  $.ajax({
+    url:'api/ordenes.php?guardarFacturaAR=true&id_orden='+$('#id_orden').val()+'&factura_AR='+$('#factura_AR').val(),
+    success: function(data, status){
+      //console.log("Data: " + data + "\nStatus: " + status);
+      $('#label_despacho').text('Guardado');
+    }
+  })
+
+  $.ajax({
+    url:'api/ordenes.php?guardarProveedorAR=true&id_orden='+$('#id_orden').val()+'&proveedor_AR='+$('#proveedor_AR').val(),
+    success: function(data, status){
+      //console.log("Data: " + data + "\nStatus: " + status);
+      $('#label_despacho').text('Guardado');
+    }
+  })
+}
+
+function despachoKeyPress() {
+	$('#label_despacho').text('Guardar');
+}
+
+</script>
+<?php 	$ajax->drawJavaScript(); ?>
+</head>
+<body class="ppal" >
+
+<div class="altas">
+<fieldset>
+ <legend><?php echo $var['header']; ?></legend>
+   <?php echo $var['mensaje']; ?>
+
+<form action="form_orden_confirma_arribo.php" method="post" target="_self" name="orden_confirma_arribo" onsubmit="return validar_tabla();">
+<!-- <form action="void.php" method="post" target="_self" name="orden_confirma_arribo" onsubmit="return validar_tabla();"> -->
+
+<table width="100%" id="orden_table" name="orden_table">
+<tr class="provlisthead">
+  <th>item</th> <th>Cod. producto</th> <th>Cantidad<br/>Original</th> <th>Cantidad<br/>Pendiente</th> <th>Cantidad<br/>Arribada</th> <th>Tipo<br/>envio</th> <th>unidad</th> <th>Precio<br /> unitario</th> <th>Precio</th> <th>Moneda</th>
+</tr>
+  <?php echo $var['orden']; ?>
+</table>
+ <center>
+ <br><span id="error" style="display:none; color:red;"><b>Hay error en una de las cantidades arribadas. No se puede confirmar el arribo</b></span>
+ <br />Total de la compra: US$ <?php echo $var['total_dolar']; ?> &nbsp;=&nbsp; $ <?php echo $var['total_pesos']; ?><br /><br />
+
+ <table width="100%">
+
+ <tr>
+ <td class="centrado">
+   Fecha de arribo:
+   <select name="dia" id="dia" class="obligatorio">
+      <?php echo $var['dia']; ?>
+   </select>
+   /
+   <select name="mes" id="mes" class="obligatorio">
+      <?php echo $var['mes']; ?>
+   </select>
+   /
+   <select name="ano" id="ano" class="obligatorio">
+      <?php echo $var['ano']; ?>
+   </select>
+ </td>
+ </tr>
+ </table>
+
+</center>
+
+<div style="float:left; margin-top: 15px;">
+  <input type="hidden" value="<?php echo $var['cant_filas']; ?>" size="10" name="rows" id="rows">
+  <input type="hidden" value="orden_confirma_arribo" size="10" name="formname" id="formname">
+  <input type="hidden" value="<?php echo $var['id_orden']; ?>" size="10" name="id_orden" id="id_orden">
+  <input type="hidden" value="<?php echo $var['orden_status']; ?>" size="10" name="orden_status" id="status">
+  <button type="submit" onclick="this.disabled=true; if(validar_tabla())this.form.submit();" name="enviar" value="enviar" <?php echo $var['orden_status'] == '5' ? 'disabled' : '' ?>>Confirmar arribo</button>
+</div>
+
+</form>
+
+<div style="float:right;">
+  <form action="form_orden_elimina.php" method="post" target="_self" name="orden_elimina">
+<!-- <form action="void_elimina.php" method="post" target="_self" name="orden_elimina"> -->
+    <input type="hidden" value="orden_elimina" size="10" name="formname" id="formname">
+    <input type="hidden" value="<?php echo $var['id_orden']; ?>" size="10" name="id_orden" id="id_orden">
+    <button type="submit" name="enviar" value="enviar">Eliminar pedido</button>
+  </form>
+</div>
+
+<table width="100%">
+<tr>
+<td>
+  <div style="margin-bottom: 10px;">
+    <label class="ordenData">Despacho:</label>
+    <input type="text" value="<?php echo $var['despacho']; ?>" size="20" name="despacho" id="despacho" onkeypress="despachoKeyPress();">
+    <!-- <button name="guardar" value="guardar" style="margin-left: 20px;" onclick="guardarDespacho();"><label id="label_despacho">Guardar</label></button> -->
+  </div>
+</td>
+</tr>
+<tr>
+<td>
+  <div style="margin-bottom: 10px;">
+    <label class="ordenData">Nr. factura:</label>
+    <input type="text" value="<?php echo $var['nr_factura']; ?>" size="20" name="nr_factura" id="nr_factura" onkeypress="despachoKeyPress();">
+  </div>
+</td>
+</tr>
+<tr>
+ <td>
+   <div style="margin-bottom: 10px;">
+     <label class="ordenData">Factura AR:</label>
+     <input type="text" value="<?php echo $var['factura_AR']; ?>" size="20" name="factura_AR" id="factura_AR" onkeypress="despachoKeyPress();">
+   </div>
+ </td>
+</tr>
+
+<tr>
+ <td>
+   <div style="margin-bottom: 10px;">
+     <label class="ordenData">Proveedor AR:</label>
+     <input type="text" value="<?php echo $var['proveedor_AR']; ?>" size="20" name="proveedor_AR" id="proveedor_AR" onkeypress="despachoKeyPress();">
+     <button name="guardar" value="guardar" style="margin-left: 20px;" onclick="guardarDespacho();"><label id="label_nr_factura">Guardar</label></button>
+   </div>
+ </td>
+</tr>
+<tr>
+<td>
+  <div style="margin-bottom: 15px;"><a onclick="toggleDescripcion();" class="toggleDescripcion">Ver descripcion</a></div>
+</td>
+</tr>
+</table>
+
+<table style="width: 100%; display:none;" id="descripcionContainer">
+  <tr class="headerDescripcion">
+    <td>
+      <span class="tituloDescripcion">Descripcion</span><span id="modifiedDescripcion"></span>
+      <span class="guardarDescripcion"><a onclick="saveDescripcion();" class="linkGuardarDescripcion">Guardar</a></span>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <textarea rows="6" name="descripcion" id="descripcion" style="width:100%;" onkeypress="descripcionKeyPress();"><?php echo $var['descripcion']; ?></textarea>
+      <input type="hidden" value="<?php echo $var['id_orden']; ?>" size="10" name="id_orden" id="id_orden">
+    </td>
+  </tr>
+</table>
+
+<table>
+<tr>
+<td align="left">La cotizacion del dolar considerada es <?php echo $var['cotiz_dolar']; ?> $ correspondiente al dia <?php echo $var['cotiz_fecha']; ?> cuando se genero la compra
+</td>
+</tr>
+</table>
+
+</fieldset>
+</div>
+
+
+</body>
+</html>

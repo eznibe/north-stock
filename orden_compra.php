@@ -32,7 +32,7 @@ function update_cantidad($id_itemcomprar, $cantidad)
    WHERE
  	id_itemcomprar = $id_itemcomprar";
  }
- $result = mysql_query($query);
+ $result = $pdo->query($query);
 }
 
 
@@ -59,9 +59,9 @@ $query = "SELECT
   ORDER BY
 	categoria.categoria";
 
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
-while ($row = mysql_fetch_array($result))
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
  $compra = $compra . "<tr class=\"provlistrow\">
 	<td>$row[1]</td>
@@ -95,9 +95,9 @@ $query = "SELECT
   ORDER BY
 	categoria.categoria";
 
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
-while ($row = mysql_fetch_array($result))
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
  $compra = $compra . "<tr class=\"provlistrow\">
 	<td>$row[1]</td>
@@ -124,8 +124,8 @@ $query = "SELECT
         (unidad.id_unidad = categoria.id_unidad_visual) AND
         (item.id_proveedor IN (SELECT id_proveedor FROM proveedor, pais WHERE proveedor.id_pais = pais.id_pais AND pais.pais <> 'ARGENTINA') )
   )";
-$result = mysql_query($query);
-$row = mysql_fetch_array($result);
+$result = $pdo->query($query);
+$row = $result->fetch(PDO::FETCH_NUM);
 
 $total_dolar_aux = $row[0];
 $total_pesos_aux = $row[1];
@@ -144,8 +144,8 @@ $query = "SELECT
         (unidad.id_unidad = categoria.id_unidad_visual) AND
         (item.id_proveedor IN (SELECT id_proveedor FROM proveedor, pais WHERE proveedor.id_pais = pais.id_pais AND pais.pais = 'ARGENTINA') )
   )";
-$result = mysql_query($query);
-$row = mysql_fetch_array($result);
+$result = $pdo->query($query);
+$row = $result->fetch(PDO::FETCH_NUM);
 
 $total_dolar_aux += $row[0];
 $total_pesos_aux += $row[1];

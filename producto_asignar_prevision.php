@@ -37,22 +37,22 @@ function asignar_a_prevision($id_item, &$id_prevision, $cantidad, $numero_orden)
     $numero_orden = isset($numero_orden) && $numero_orden <> "" ? "'$numero_orden'" : 'null';
 
     $query = "INSERT INTO prevision (numero_orden) VALUES ($numero_orden)";
-    $result = mysql_query($query);
+    $result = $pdo->query($query);
 
     $query = "SELECT p.id_prevision
       FROM prevision p
       ORDER BY p.id_prevision desc
       LIMIT 1";
 
-    $result = mysql_query($query);
-    $row = mysql_fetch_array($result);
+    $result = $pdo->query($query);
+    $row = $result->fetch(PDO::FETCH_NUM);
 
     $id_prevision = $row[0];
   }
 
   $insert = "INSERT INTO previsionitem (id_prevision, id_item, cantidad)
     VALUES ($id_prevision, $id_item, $cantidad)";
-  $result = mysql_query($insert);
+  $result = $pdo->query($insert);
   
   log_trans($_SESSION['valid_user'], 21, $id_item, $cantidad, date("Y-m-d"), 'NULL', $id_prevision);
 }
@@ -60,7 +60,7 @@ function asignar_a_prevision($id_item, &$id_prevision, $cantidad, $numero_orden)
 function getPrevision($id_prevision) {
 
   $query = "SELECT coalesce(p.numero_orden, concat('(', p.id_prevision, ')')) as prevision FROM prevision p WHERE id_prevision = $id_prevision";
-  $result = mysql_query($query);
-  $row = mysql_fetch_array($result);
+  $result = $pdo->query($query);
+  $row = $result->fetch(PDO::FETCH_NUM);
   return $row["prevision"];
 }

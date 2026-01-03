@@ -21,6 +21,7 @@ $focus = "forms[0].categoria";
 $formname = $_POST['formname'];
 
 db_connect();
+$pdo = get_db_connection();
 
 function get_cat_data(&$data, $id_categoria)
 {
@@ -37,8 +38,8 @@ function get_cat_data(&$data, $id_categoria)
   WHERE (
 	(id_categoria = $id_categoria)
   )";
- $result = mysql_query($query);
- $data = mysql_fetch_array($result);
+ $result = db_query($query);
+ $data = $result->fetch(PDO::FETCH_NUM);
 }
 
 function update_categoria(&$mensaje, $categoria, $id_grupo, $scan, $stock_minimo, $unidad, $id_categoria, $porcentaje, $pos_arancelaria)
@@ -69,11 +70,11 @@ function update_categoria(&$mensaje, $categoria, $id_grupo, $scan, $stock_minimo
   WHERE
 	categoria.id_categoria = $id_categoria";
 
-  if (!($result = mysql_query($query)))
+  if (!($result = $pdo->query($query)))
   {
    // Si hay un error al insertar los datos en la base.
    //
-   $mensaje = "<em class=\"error\">Error: El producto " . htmlspecialchars(stripslashes($categoria)) . " no pudo ser actualizado. Motivo posible: El producto ya existia.</em>" . mysql_error();
+   $mensaje = "<em class=\"error\">Error: El producto " . htmlspecialchars(stripslashes($categoria)) . " no pudo ser actualizado. Motivo posible: El producto ya existia.</em>";
    return FALSE;
   }
   else
@@ -87,14 +88,14 @@ function update_categoria(&$mensaje, $categoria, $id_grupo, $scan, $stock_minimo
    $precio_dolar = obtener_precio_dolar();
 
    $query = "SELECT id_item, precio_fob FROM item WHERE id_categoria = $id_categoria and precio_fob IS NOT NULL";
-   $result = mysql_query($query);
-   while($row = mysql_fetch_array($result))
+   $result = $pdo->query($query);
+   while($row = $result->fetch(PDO::FETCH_NUM))
    {
    		$precio_nac = $row[1] + ($row[1] * $porcentaje / 100);
    		$precio_ref = $precio_nac * $precio_dolar;
 
    		$query = "UPDATE item SET precio_nac = $precio_nac, precio_ref = $precio_ref WHERE id_item = $row[0]";
-   		$result2 = mysql_query($query);
+   		$result2 = $pdo->query($query);
    }
 
    return TRUE;
@@ -106,8 +107,8 @@ function obtener_precio_dolar()
 {
 	$query = "SELECT precio_dolar from dolarhoy where id_dolar=(SELECT max(id_dolar) FROM dolarhoy)";
 
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	//Devuelvo el precio del dolar actual
 	return $row[0];
 }

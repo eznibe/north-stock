@@ -26,7 +26,7 @@ $query = "SELECT
   WHERE
 	proveedor.id_proveedor = $id_proveedor";
 
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 /*echo $query . "<br />";
 if ($result)
@@ -35,10 +35,10 @@ if ($result)
 }
 else
 {
- echo"RESULT = false" . mysql_error() . "<br />";
+ echo"RESULT = false" . "<br />";
 }
 */
-$row = mysql_fetch_array($result);
+$row = $result->fetch(PDO::FETCH_NUM);
 
 $proveedor = $row[0];
 $direccion = $row[1];

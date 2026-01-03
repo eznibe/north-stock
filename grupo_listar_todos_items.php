@@ -12,8 +12,8 @@ $id_grupo = $_GET['id_grupo'];
 function obtener_grupo($id_grupo)
 {
 	$query = "SELECT grupo FROM grupo WHERE id_grupo = $id_grupo";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	return $row[0];
 }
 
@@ -49,10 +49,10 @@ $query = "SELECT
     item.id_item
   ORDER BY
 	  categoria.categoria";
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 $aux = "";
-while ($row = mysql_fetch_array($result))
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
  if ($row[6] < 0) $row[6] = "<em>$row[6]</em>";
  if ($row[9] < 0) $row[9] = "<em>$row[9]</em>";

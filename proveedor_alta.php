@@ -7,7 +7,7 @@ session_start();
 
 db_connect();
 $query = "SELECT id_pais, pais FROM pais";
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 /*echo $query . "<br />";
 if ($result)
@@ -16,12 +16,12 @@ if ($result)
 }
 else
 {
- echo"RESULT = false" . mysql_error() . "<br />";
+ echo"RESULT = false" . "<br />";
 }
 */
 
 $aux = "";
-while ($row = mysql_fetch_array($result))
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
  $aux = $aux . "<option value=\"$row[0]\">$row[1]</option>\n";
 }

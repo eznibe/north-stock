@@ -12,6 +12,7 @@ $mensaje = "";
 $focus = "forms[0].id_categoria";
 
 db_connect();
+$pdo = get_db_connection();
 
 function delete_categoria(&$mensaje, $id_categoria)
 {
@@ -29,7 +30,7 @@ function delete_categoria(&$mensaje, $id_categoria)
   $query = "DELETE FROM categoria 
             WHERE id_categoria = $id_categoria";
 
-  $result = mysql_query($query);
+  $result = db_query($query);
   $mensaje = "El producto seleccionado ha sido eliminado.";
   return TRUE;
  }

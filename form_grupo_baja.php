@@ -12,6 +12,7 @@ $mensaje = "";
 $focus = "forms[0].id_grupo";
 
 db_connect();
+$pdo = get_db_connection();
 
 function delete_grupo(&$mensaje, $id_grupo)
 {
@@ -29,7 +30,7 @@ function delete_grupo(&$mensaje, $id_grupo)
   $query = "DELETE FROM grupo 
             WHERE id_grupo = $id_grupo";
 
-  $result = mysql_query($query);
+  $result = db_query($query);
   $mensaje = "El grupo seleccionado ha sido eliminado.";
   return TRUE;
  }

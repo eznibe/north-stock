@@ -55,10 +55,11 @@ $query = "SELECT
 	  saldo < 0
   ORDER BY
 	  $orderbygrupo categoria.categoria";
-$result = mysql_query($query);
+$pdo = get_db_connection();
+$result = $pdo->query($query);
 
 $aux = "";
-while ($row = mysql_fetch_array($result))
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
  $unidad = "<em>" . strtoupper($row[5]) . "</em>";
  if ($row[4] < 0) $row[4] = "<em>$row[4]</em>";
@@ -88,7 +89,7 @@ function armar_select_grupos($id_grupo)
   	$codigo = "<option value=''>Elige un grupo</option>";
 	$result = get_groups();
 
-	while ($row = mysql_fetch_array($result))
+	while ($row = $result->fetch(PDO::FETCH_NUM))
 	{
 	      $codigo = $codigo . "<option value='".$row[0]. (isset($id_grupo) && $row[0]==$id_grupo ? "' selected>" : "'>") . $row[1] ."</option>";
 	}

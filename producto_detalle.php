@@ -29,10 +29,10 @@ $query = "SELECT
 	item.id_categoria 
   ORDER BY 
 	categoria.categoria";
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 
-$row = mysql_fetch_array($result);
+$row = $result->fetch(PDO::FETCH_NUM);
 
 if ($row[3] < 0) $row[3] = "<em>$row[3]</em>";
 if ($row[6] < 0) $row[6] = "<em>$row[6]</em>";
@@ -61,11 +61,11 @@ $query = "SELECT
   ) 
   ORDER BY 
 	proveedor.proveedor";
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 
 $aux = "";
-while ($row = mysql_fetch_array($result))
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
  $aux = $aux . "<tr class=\"provlistrow\"><td><a class=\"list\" onclick=\"add_comprar($row[5]);\">$row[0]</a></td>
               <td>$row[1]</td><td>$row[2]</td><td>$row[6]</td><td>$row[3]</td><td>$row[4]</td><td>$row[7]</td><td>$row[8]</td><td>$row[9]</td></tr>\n";

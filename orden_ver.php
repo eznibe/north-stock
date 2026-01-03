@@ -56,9 +56,9 @@ if(obtener_tipo_proveedor($id_orden) == "EXTRANJERO")
 	categoria.categoria, tipoenvio.id_tipo_envio";
 
 $count=0; $orden="";
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
-while ($row = mysql_fetch_array($result))
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
  $header = "$row[1] $row[0] / $id_orden";
  $orden = $orden . "<tr class=\"provlistrow\">
@@ -83,8 +83,8 @@ $query = "SELECT
   WHERE (
         (ordenitem.id_orden = $id_orden)
   )";
-$result = mysql_query($query);
-$row = mysql_fetch_array($result);
+$result = $pdo->query($query);
+$row = $result->fetch(PDO::FETCH_NUM);
 
 $total = $row[0];
 $total_dolar = $total;
@@ -123,9 +123,9 @@ else
 	categoria.categoria, tipoenvio.id_tipo_envio";
 
 $count=0;
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
-while ($row = mysql_fetch_array($result))
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
  $header = "$row[1] $row[0] / $id_orden";
  $orden = $orden . "<tr class=\"provlistrow\">
@@ -150,8 +150,8 @@ $query = "SELECT
   WHERE (
         (ordenitem.id_orden = $id_orden)
   )";
-$result = mysql_query($query);
-$row = mysql_fetch_array($result);
+$result = $pdo->query($query);
+$row = $result->fetch(PDO::FETCH_NUM);
 
 $total = $row[0];
 $total_dolar = $total / obtener_precio_dolar_orden($id_orden);
@@ -188,24 +188,24 @@ eval_html('orden_ver_ajax.php', $var);
 function orden_descripcion($id_orden)
 {
 	$query = "SELECT descripcion FROM orden WHERE orden.id_orden = $id_orden";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	return $row[0];
 }
 
 function orden_despacho($id_orden)
 {
 	$query = "SELECT despacho FROM orden WHERE orden.id_orden = $id_orden";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	return $row[0];
 }
 
 function orden_nr_factura($id_orden)
 {
 	$query = "SELECT nr_factura FROM orden WHERE orden.id_orden = $id_orden";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	return $row[0];
 }
 
@@ -218,8 +218,8 @@ function update_orden($id_orden_item, $cantidad, $precio)
  if ( ($cantidad == 0) or ($cantidad == "") )
  {
   $query = "SELECT id_orden, id_item FROM ordenitem WHERE id_orden_item = $id_orden_item";
-  $result = mysql_query($query);
-  $row = mysql_fetch_array($result);
+  $result = $pdo->query($query);
+  $row = $result->fetch(PDO::FETCH_NUM);
 
   $query = "DELETE FROM ordenitem WHERE id_orden_item = $id_orden_item";
 
@@ -254,7 +254,7 @@ function update_orden($id_orden_item, $cantidad, $precio)
   }
 
  }
- $result = mysql_query($query);
+ $result = $pdo->query($query);
 }
 
 /**
@@ -266,8 +266,8 @@ function obtener_tipo_proveedor($id_orden){
 				proveedor.id_proveedor = item.id_proveedor and
 				ordenitem.id_orden = $id_orden and
 				ordenitem.id_item = item.id_item";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 
 	if($row[0] == "ARGENTINA") return "NACIONAL";
 
@@ -284,8 +284,8 @@ function obtener_tipo_proveedor_por_orden_item($id_orden_item){
 				proveedor.id_proveedor = item.id_proveedor and
 				ordenitem.id_orden_item = $id_orden_item and
 				ordenitem.id_item = item.id_item";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	if($row[0] == "ARGENTINA") return "NACIONAL";
 
 	return "EXTRANJERO";
@@ -294,24 +294,24 @@ function obtener_tipo_proveedor_por_orden_item($id_orden_item){
 function obtener_precio_dolar_orden($id_orden)
 {
 	$query = "SELECT cotizacion_dolar FROM orden WHERE id_orden = $id_orden";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	return $row[0];
 }
 
 function obtener_fecha_orden($id_orden)
 {
 	$query = "SELECT fecha FROM orden WHERE id_orden = $id_orden";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	return $row[0];
 }
 
 function obtener_orden($id_orden)
 {
 	$query = "SELECT * FROM orden WHERE id_orden = $id_orden";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	return $row;
 }
 

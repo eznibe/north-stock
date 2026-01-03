@@ -32,8 +32,8 @@ $query = "SELECT
 		pi.id_prevision_item = $id_prevision_item
 	";
 
-$result = mysql_query($query);
-$row = mysql_fetch_array($result);
+$result = $pdo->query($query);
+$row = $result->fetch(PDO::FETCH_NUM);
 
 $focus = "forms[0].cantidad";
 

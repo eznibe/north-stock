@@ -666,10 +666,10 @@ class TinyAjax
 	 * @return array key->val array containing all form data
 	 */
 	public static function getPostData($data) {
-		$row = split("!ROW!", $data);
+		$row = explode("!ROW!", $data);
 		$arr = "";
 		foreach($row as $val) {
-			$tmp = split("!COL!", $val);
+			$tmp = explode("!COL!", $val);
 			if(sizeof($tmp) > 1)
 				$arr[$tmp[0]] = $tmp[1];
 			else

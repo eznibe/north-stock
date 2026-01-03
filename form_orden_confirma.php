@@ -25,6 +25,7 @@ $mensaje = "";
 $focus = "forms[0].pais";
 
 db_connect();
+$pdo = get_db_connection();
 
 $query = "UPDATE
 	orden
@@ -34,7 +35,7 @@ $query = "UPDATE
   WHERE (
 	(id_orden = $id_orden)
   )";
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 // logueo orden confirmada (4)
 log_trans($valid_user, 4, 0, 0, $fecha, $id_orden);
@@ -47,10 +48,10 @@ $query = "SELECT
   WHERE
         id_orden = $id_orden";
 
-$result = mysql_query($query);
+$result = $pdo->query($query);
 $items = array();
 $cantidades = array();
-while ($row = mysql_fetch_array($result))
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
  array_push($items, array($row[0],$row[1]));
 }
@@ -70,7 +71,7 @@ foreach ($items as $item)
   WHERE (
         (item.id_item = $item[0])
   )";
- $result = mysql_query($query);
+ $result = $pdo->query($query);
 }
 
 $var = array(

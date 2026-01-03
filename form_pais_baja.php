@@ -29,7 +29,7 @@ function delete_pais(&$mensaje, $id_pais)
   $query = "DELETE FROM pais 
             WHERE id_pais = $id_pais";
 
-  $result = mysql_query($query);
+  $result = $pdo->query($query);
   $mensaje = "El pais seleccionado ha sido eliminado.";
   return TRUE;
  }

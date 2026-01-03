@@ -20,13 +20,13 @@ $query = "SELECT DISTINCT(categoria.id_categoria) FROM categoria, item, proveedo
 				pais <> 'ARGENTINA' and
 				pais.id_pais = proveedor.id_pais and
 				item.id_proveedor = proveedor.id_proveedor";
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
-while ($row = mysql_fetch_array($result))
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
 	$id_categoria = $row[0];
 	$update = "UPDATE categoria SET porc_impuesto = $valor WHERE id_categoria = $id_categoria";
-	if(mysql_query($update))
+	if($pdo->query($update))
 		$mensaje = "La actualizacion se realizo con exito";
 	else
 		$mensaje = "Problemas!!!";
@@ -41,27 +41,27 @@ $query = "SELECT id_item, precio_fob FROM item WHERE id_categoria IN (SELECT DIS
 																	  pais.id_pais = proveedor.id_pais and
 																	  item.id_proveedor = proveedor.id_proveedor) 
 													 AND precio_fob IS NOT NULL";
-$result = mysql_query($query);
-while($row = mysql_fetch_array($result))
+$result = $pdo->query($query);
+while($row = $result->fetch(PDO::FETCH_NUM))
 {
 	$precio_nac = $row[1] + ($row[1] * $valor / 100);
 	$precio_ref = $precio_nac * $precio_dolar;
 
    	$query = "UPDATE item SET precio_nac = $precio_nac, precio_ref = $precio_ref WHERE id_item = $row[0]";
-   	$result2 = mysql_query($query);
+   	$result2 = $pdo->query($query);
 }
 
 
 //Modifica codigo_barras
 //
 $update = "UPDATE item SET codigo_barras = SUBSTR(codigo_barras,2,LENGTH(codigo_barras)-2) WHERE codigo_barras LIKE '*%*'";
-if(!mysql_query($update))
+if(!$pdo->query($update))
 	echo "Error modificando codigo de barras en item<p>";
 
 //Cambia cotizacion del dolar de ordenes
 //
 $update = "UPDATE orden SET cotizacion_dolar = 1 WHERE cotizacion_dolar IS NULL OR cotizacion_dolar = 0";
-if(!mysql_query($update))
+if(!$pdo->query($update))
 	echo "Error modificando cotizacion del dolar en orden<p>";
 
 	
@@ -69,8 +69,8 @@ function obtener_precio_dolar()
 {
 	$query = "SELECT precio_dolar from dolarhoy where id_dolar=(SELECT max(id_dolar) FROM dolarhoy)";
 
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	//Devuelvo el precio del dolar actual
 	return $row[0];
 }

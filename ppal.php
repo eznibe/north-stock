@@ -31,15 +31,15 @@ $query = "SELECT
 		  ORDER BY 
 			categoria.categoria";
 
-$result = mysql_query($query);
-$num_results = mysql_num_rows($result);
+$result = $pdo->query($query);
+$num_results = $result->rowCount();
 
 
 if ($num_results != 0)
 {
   
 	$aux = "";
-	while ($row = mysql_fetch_array($result))
+	while ($row = $result->fetch(PDO::FETCH_NUM))
 	{
 	 $unidad = "<em>" . strtoupper($row[5]) . "</em>";
 	 $producto = htmlspecialchars(stripslashes($row[0]));

@@ -43,10 +43,10 @@ $query = "SELECT
 	  disponible_real > 0
   ORDER BY
 	  categoria.categoria";
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 $aux = "";
-while ($row = mysql_fetch_array($result))
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
  $unidad = "<em>" . strtoupper($row[5]) . "</em>";
  if ($row[4] < 0) $row[4] = "<em>$row[4]</em>";

@@ -82,12 +82,12 @@ $query = "SELECT
   ORDER BY
 	$orderbygrupo
 	categoria.categoria";
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 //dump($query);
 
 $aux = "";
-while ($row = mysql_fetch_array($result))
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
  $aux = $aux . "<tr class=\"provlistrow\"><td><a class=\"list\" onclick=\"add_comprar($row[5]);\">$row[0]</a></td>
               <td>$row[1]</td><td>$row[2]</td><td>$row[6]</td><td>$row[3]</td><td>$row[4]</td><td>$row[7]</td><td>$row[10]</td><td>$row[8]</td><td>$row[9]</td><td>$row[11]</td><td>".tipoproveedor($row[12])."</td></tr>\n";
@@ -135,7 +135,7 @@ function armar_select_grupos()
 	$codigo = "";
 	$result = get_groups();
 
-	while ($row = mysql_fetch_array($result))
+	while ($row = $result->fetch(PDO::FETCH_NUM))
 	{
 	      $codigo = $codigo . "<option value='".$row[0]. (isset($id_grupo) && $row[0]==$id_grupo ? "' selected>" : "'>") . $row[1] ."</option>";
 	}

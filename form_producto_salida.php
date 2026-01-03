@@ -57,10 +57,10 @@ function busca_item(&$mensaje, &$items, $pitem, &$num_results)
   ORDER BY 
 	categoria.categoria";
 
- $result = mysql_query($query);
+ $result = $pdo->query($query);
 
  $items = "";
- $num_results = mysql_num_rows($result);
+ $num_results = $result->rowCount();
  if ($num_results == 0)
  {
   $mensaje = "No se encontraron coincidencias.";
@@ -73,12 +73,12 @@ function busca_item(&$mensaje, &$items, $pitem, &$num_results)
  else $mensaje = "Se encontraron $num_results coincidencias.";
 
  if ($num_results > 1) {
-   while ($row = mysql_fetch_array($result))
+   while ($row = $result->fetch(PDO::FETCH_NUM))
    {
     $items = $items . "<option value=\"" . $row[0] . "\">" . htmlspecialchars(stripslashes($row[1])) . "-" . htmlspecialchars(stripslashes($row[2])) ."</option>\n";
    }
  } else {
-  $items = mysql_fetch_array($result);
+  $items = $result->fetch(PDO::FETCH_NUM);
  }
  return TRUE;
 }
@@ -105,9 +105,9 @@ function busca_barras(&$mensaje, &$datos, $pitem)
         (proveedor.id_proveedor = item.id_proveedor) AND
         (unidad.id_unidad = categoria.id_unidad_visual)
   )";
- $result = mysql_query($query);
- $num_results = mysql_num_rows($result);
- $datos = mysql_fetch_array($result);
+ $result = $pdo->query($query);
+ $num_results = $result->rowCount();
+ $datos = $result->fetch(PDO::FETCH_NUM);
 
  if ($num_results == 1) return true;
  else return false;
@@ -170,8 +170,8 @@ elseif ($formname == "select_producto")
   ORDER BY 
 	categoria.categoria";
 
- $result = mysql_query($query);
- $row = mysql_fetch_array($result);
+ $result = $pdo->query($query);
+ $row = $result->fetch(PDO::FETCH_NUM);
 
  $item = $row[0];
  $producto = $row[1] . " - " . $row[2];
@@ -209,7 +209,7 @@ elseif ($formname == "producto_salida")
 	item.stock_disponible = (item.stock_disponible - $cantidad) 
   WHERE 
 	item.id_item = $item";
-   $result = mysql_query($query);
+   $result = $pdo->query($query);
    
    //log_trans($valid_user, 2, $item, $cantidad, strftime('%G-%m-%d')); 
    $fechaHoy = date('Y')."-".date('n')."-".date('d');
@@ -258,12 +258,12 @@ function ingresarordenManual($id_item, $cantidad, $fecha) {
   $query = "INSERT INTO orden (fecha,	cotizacion_dolar,	id_status, descripcion) 
     VALUES ('$fecha', $cotiz_dolar, 2, 'orden desde descarga manual')";
 
-  $result = mysql_query($query);
+  $result = $pdo->query($query);
   
   // id ultima orden ingresada
   $query = "SELECT id_orden FROM orden ORDER BY id_orden desc LIMIT 1";
-  $result = mysql_query($query);
-  $row = mysql_fetch_array($result);
+  $result = $pdo->query($query);
+  $row = $result->fetch(PDO::FETCH_NUM);
   
   $id_orden = $row[0];
 
@@ -274,8 +274,8 @@ function ingresarordenManual($id_item, $cantidad, $fecha) {
     JOIN proveedor pro on pro.id_proveedor = i.id_proveedor
     WHERE i.id_item = $id_item";
 
-  $result = mysql_query($query);
-  $row = mysql_fetch_array($result);
+  $result = $pdo->query($query);
+  $row = $result->fetch(PDO::FETCH_NUM);
 
   $precio_fob = $row[0];
   $precio_ref = $row[1];
@@ -284,7 +284,7 @@ function ingresarordenManual($id_item, $cantidad, $fecha) {
   $query = "INSERT INTO ordenitem (id_orden, id_item, cantidad, cantidad_pendiente, precio_fob, precio_ref, moneda) 
     VALUES ($id_orden, $id_item, $cantidad, 0, $precio_fob, $precio_ref, '$moneda')";
 
-  $result = mysql_query($query);
+  $result = $pdo->query($query);
 
   return $id_orden;
 }
@@ -294,8 +294,8 @@ function obtener_precio_dolar()
 {
 	$query = "SELECT precio_dolar from dolarhoy where id_dolar=(SELECT max(id_dolar) FROM dolarhoy)";
 
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	//Devuelvo el precio del dolar actual
 	return $row[0];
 }

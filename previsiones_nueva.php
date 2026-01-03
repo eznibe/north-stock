@@ -11,15 +11,15 @@ $mensaje = "";
 
 // insertar una prevision nueva
 $query = "INSERT INTO prevision () VALUES ()";
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 $query = "SELECT p.id_prevision
 	FROM prevision p
   ORDER BY p.id_prevision desc
   LIMIT 1";
 
-$result = mysql_query($query);
-$row = mysql_fetch_array($result);
+$result = $pdo->query($query);
+$row = $result->fetch(PDO::FETCH_NUM);
 
 $id_prevision = $row[0];
 

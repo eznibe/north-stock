@@ -20,11 +20,11 @@ db_connect();
 // Elimino prevision y sus items
 $query = "DELETE FROM previsionitem WHERE id_prevision = $id_prevision";
 
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 $query = "DELETE FROM prevision WHERE id_prevision = $id_prevision";
 
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 log_trans($valid_user, 25, 0, 0, date("Y-m-d"), 'NULL', $id_prevision);
 

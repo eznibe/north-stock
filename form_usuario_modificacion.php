@@ -31,8 +31,8 @@ function get_usuario_data(&$data, $id_usuario)
 	(id_usuario = $id_usuario)
   )";
 
- $result = mysql_query($query);
- $data = mysql_fetch_array($result);
+ $result = $pdo->query($query);
+ $data = $result->fetch(PDO::FETCH_NUM);
 }
 
 function update_usuario(&$mensaje, $id_usuario, $nombre, $username, $clave, $id_tipo)
@@ -48,20 +48,20 @@ function update_usuario(&$mensaje, $id_usuario, $nombre, $username, $clave, $id_
  {
   // Si estan todos los campos requeridos
   //
-  $query = "UPDATE usuario SET
+  $query = "UPDATE Usuario SET
 	nombre = \"$nombre\",
 	username = \"$username\",
 	clave = \"$clave\",
 	id_tipousr = $id_tipo
-  WHERE 
-	usuario.id_usuario = $id_usuario";
+  WHERE
+	Usuario.id_usuario = $id_usuario";
 
-  if (!($result = mysql_query($query)))
+  if (!($result = $pdo->query($query)))
   {
    // Si hay un error al insertar los datos en la base.
    //
    $mensaje = "Error: El usuario " . htmlspecialchars(stripslashes($username)) . " no pudo ser actualizado. Motivo posible: El nombre de usuario ya ex
-istia." . mysql_error();
+istia.";
    return FALSE;
   }
   else

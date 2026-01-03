@@ -21,8 +21,8 @@ $query = "SELECT p.id_prevision,
 	ORDER BY p.fecha_entrega, p.numero_orden, p.id_prevision";
 
 $previsiones = "";
-$result = mysql_query($query);
-while ($row = mysql_fetch_array($result))
+$result = $pdo->query($query);
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
  $previsiones = $previsiones .  "<tr class=\"provlistrow\"> 
 	<td><a class=\"list\" href=\"prevision_ver.php?id_prevision=$row[0]\">$row[1]</a></td>

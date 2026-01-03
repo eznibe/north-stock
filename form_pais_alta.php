@@ -12,6 +12,7 @@ $mensaje = "";
 $focus = "forms[0].pais";
 
 db_connect();
+$pdo = get_db_connection();
 
 function insert_pais(&$mensaje, $pais)
 {
@@ -31,11 +32,11 @@ function insert_pais(&$mensaje, $pais)
             (pais)
             VALUES 
             (\"$pais\")";
-  if (!($result = mysql_query($query)))
+  if (!($result = db_query($query)))
   {
    // Si hay un error al insertar los datos en la base.
    //
-   $mensaje = "ERROR: El pais " . htmlspecialchars(stripslashes($pais)) . " no pudo ser dado de alta. Motivo posible: El pais ya existia." . mysql_error();
+   $mensaje = "ERROR: El pais " . htmlspecialchars(stripslashes($pais)) . " no pudo ser dado de alta. Motivo posible: El pais ya existia.";
    return FALSE;
   }
   else

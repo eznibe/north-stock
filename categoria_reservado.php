@@ -18,9 +18,9 @@ $query = "SELECT
   WHERE
 	categoria.id_categoria = $id_categoria";
 
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
-$row = mysql_fetch_array($result);
+$row = $result->fetch(PDO::FETCH_NUM);
 $id_categoria = $row[0];
 $categoria = $row[1];
 $reservado = $row[2];

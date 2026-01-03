@@ -90,8 +90,8 @@ if(isset($id_orden) && $id_orden!="") {
 
 	//  dump($query);
 
-	 $result = mysql_query($query);
-	 while ($row = mysql_fetch_array($result))
+	 $result = $pdo->query($query);
+	 while ($row = $result->fetch(PDO::FETCH_NUM))
 	 {
 	 		$listado = $listado . "<tr class=\"provlistrow\"> <td class=\"list\">$row[1]</td><td>$row[0]</td><td>$row[10]</td>
 																												<td>$row[6]</td><td>$row[8]</td><td>$row[2]</td>

@@ -61,10 +61,10 @@ function getPrevisiones() {
   WHERE p.fecha_descarga is null
   ORDER by coalesce(numero_orden, id_prevision)";
 
-  $result = mysql_query($query);
+  $result = $pdo->query($query);
 
   $previsiones = "";
-  while ($row = mysql_fetch_array($result))
+  while ($row = $result->fetch(PDO::FETCH_NUM))
   {
     $previsiones = $previsiones . "<option value=\"$row[0]\">$row[1]</option>";
   }
@@ -86,10 +86,10 @@ function getitems($id_item) {
     i.id_item = $id_item
   order by c.categoria, pro.proveedor";
 
-  $result = mysql_query($query);
+  $result = $pdo->query($query);
 
   $items = "";
-  while ($row = mysql_fetch_array($result))
+  while ($row = $result->fetch(PDO::FETCH_NUM))
   {
     $items = $items . "<option value=\"$row[0],$row[2],$row[3],$row[4],$row[5],$row[6]\"". ($id_item == $row[0] ? "selected" : "") .">$row[1]</option>";
   }
@@ -108,9 +108,9 @@ function getitem($id_item) {
   JOIN proveedor p on p.id_proveedor = i.id_proveedor
   WHERE i.id_item = $id_item";
 
-  $result = mysql_query($query);
+  $result = $pdo->query($query);
 
-  $item = mysql_fetch_array($result);
+  $item = $result->fetch(PDO::FETCH_NUM);
   return $item;
 }
 

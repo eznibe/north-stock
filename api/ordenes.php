@@ -29,7 +29,7 @@ function guardarDespacho($id_orden, $despacho) {
   $obj->success = true;
 
   $query = "UPDATE orden SET despacho = '$despacho' WHERE id_orden = $id_orden";
-	if(!mysql_query($query)) {
+	if(!$pdo->query($query)) {
     $obj->success = false;
   }
 
@@ -41,7 +41,7 @@ function guardarNrFactura($id_orden, $nr_factura) {
   $obj->success = true;
 
   $query = "UPDATE orden SET nr_factura = '$nr_factura' WHERE id_orden = $id_orden";
-	if(!mysql_query($query)) {
+	if(!$pdo->query($query)) {
     $obj->success = false;
   }
 
@@ -53,7 +53,7 @@ function guardarFacturaAR($id_orden, $factura_AR) {
   $obj->success = true;
 
   $query = "UPDATE orden SET factura_AR = '$factura_AR' WHERE id_orden = $id_orden";
-	if(!mysql_query($query)) {
+	if(!$pdo->query($query)) {
     $obj->success = false;
   }
 
@@ -65,7 +65,7 @@ function guardarProveedorAR($id_orden, $proveedor_AR) {
   $obj->success = true;
 
   $query = "UPDATE orden SET proveedor_AR = '$proveedor_AR' WHERE id_orden = $id_orden";
-	if(!mysql_query($query)) {
+	if(!$pdo->query($query)) {
     $obj->success = false;
   }
 

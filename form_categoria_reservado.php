@@ -12,7 +12,7 @@ $reservado = $_POST['reservado'];
 
 $query = "UPDATE categoria SET reservado = $reservado WHERE id_categoria = $id_categoria";
 
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 $var = "";
 eval_html('cerrar_popup.html', $var);

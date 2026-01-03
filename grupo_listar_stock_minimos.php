@@ -16,8 +16,8 @@ else $periodo = 6;
 function obtener_grupo($id_grupo)
 {
 	$query = "SELECT grupo FROM grupo WHERE id_grupo = $id_grupo";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	return $row[0];
 }
 
@@ -51,10 +51,10 @@ $query = "SELECT
 
   ORDER BY
 	categoria.categoria";
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
 $aux = "";
-while ($row = mysql_fetch_array($result))
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
   $aux = $aux . process_item($row, $periodo);
 }
@@ -105,7 +105,7 @@ $mes_inicial = $mes_actual;
 	GROUP BY year(fecha), month(fecha)
 	ORDER BY year(fecha) desc, month(fecha) desc";
 
- $result = mysql_query($query);
+ $result = $pdo->query($query);
 
  $result_mem = result_a_memoria($result);
 

@@ -24,8 +24,8 @@ $var = array("mensaje" => $mensaje,
   	function updateGroupFields($id_grupo) {
 
 		$query = "SELECT grupo, agrupacion_contable FROM grupo WHERE id_grupo = $id_grupo";
-		$result = mysql_query($query);
-		$row = mysql_fetch_array($result);
+		$result = $pdo->query($query);
+		$row = $result->fetch(PDO::FETCH_NUM);
 
 		$grupo = $row[0];
 		$agrupacion_contable = $row[1];

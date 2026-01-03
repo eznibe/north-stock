@@ -112,7 +112,7 @@ function mostrar_tabla_fechas_por_periodo($tipo_periodo, $tipo, $opcion, $id_acc
 
 //	dump($query);
 	
-	$result = mysql_query($query);
+	$result = $pdo->query($query);
 
 	$listado = armar_listado($result,$tipo_periodo);
 
@@ -143,7 +143,7 @@ function armar_listado($result,$tipo_periodo)
 	// Row: [0]:id_item, [1]:categoria, [2]:username, [3]:sum(cantidad), [4]:a�o de fecha, [5]: mes de fecha, [6]:unidad
 	//
 
-	$row = mysql_fetch_array($result);
+	$row = $result->fetch(PDO::FETCH_NUM);
 
 	$categoria = $row[1];
 
@@ -177,7 +177,7 @@ function armar_listado($result,$tipo_periodo)
 	$item_anterior = $row[0];
 
 
-	while ($row = mysql_fetch_array($result))
+	while ($row = $result->fetch(PDO::FETCH_NUM))
 	{
 		$item = $row[0];
 		if($item <> $item_anterior)
@@ -302,24 +302,24 @@ function crearQueryTodosByPeriodo($query_fin, $fecha_ini, $fecha_fin, $groupByPe
 function get_ano($fecha)
 {
 	$query = "SELECT YEAR($fecha)";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	return $row[0];
 }
 
 function get_mes($fecha)
 {
 	$query = "SELECT MONTH($fecha)";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	return $row[0];
 }
 
 function get_dia($fecha)
 {
 	$query = "SELECT DAY($fecha)";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 	return $row[0];
 }
 

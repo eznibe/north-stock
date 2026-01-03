@@ -13,7 +13,7 @@ db_connect();
   function saveDescripcion($descripcion, $id_orden) {
 
 	$query = "UPDATE orden SET descripcion = '$descripcion' WHERE id_orden = $id_orden";
-	$result = mysql_query($query);
+	$result = $pdo->query($query);
 
 	$tab = new TinyAjaxBehavior();
 	$tab->add( TabEval::getBehavior("showFeedback()"));

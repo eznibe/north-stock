@@ -49,9 +49,9 @@ $query = "SELECT *,
     ";
     //where id_item = 1086 or id_item = 3341 or id_item = 1632
 
-$result = mysql_query($query);
+$result = $pdo->query($query);
 
-while ($row = mysql_fetch_array($result))
+while ($row = $result->fetch(PDO::FETCH_NUM))
 {
     foreach ($campos as $campo) {
         //$content .= '"  ' . $row[$campo] . '";';
