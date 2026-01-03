@@ -23,7 +23,7 @@ $result = mysql_query($query);
 $row = mysql_fetch_array($result);
 
 $codigo_barras = $row[0];
-if (ereg("^\*.*\*$", $codigo_barras)) $tipo = "Code 39";
+if (preg_match("/^\*.*\*$/", $codigo_barras)) $tipo = "Code 39";
 else $tipo = "EAN-13"; 
 
 $descripcion = $row[1];

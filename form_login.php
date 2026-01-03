@@ -3,39 +3,59 @@
 include 'main.php';
 include 'dbutils.php';
 
-$username = $_POST['username'];
-$clave = $_POST['password'];
+// Sanitize inputs
+$username = isset($_POST['username']) ? trim($_POST['username']) : '';
+$clave = isset($_POST['password']) ? $_POST['password'] : '';
+
+// Validate inputs
+if (empty($username) || empty($clave)) {
+    echo "usuario o clave invalidos.";
+    exit;
+}
 
 db_connect();
+$pdo = get_db_connection();
 
-$query = "SELECT
-	 nivel, nombre
-  FROM
-	usuario,
-	tipousr
-  WHERE (
-	(username LIKE \"$username\") AND
-	(clave LIKE \"$clave\") AND
-	(tipousr.id_tipousr = usuario.id_tipousr) )";
+// Use prepared statement to prevent SQL injection
+$query = "SELECT nivel, nombre, clave
+  FROM Usuario
+  INNER JOIN Tipousr ON Tipousr.id_tipousr = Usuario.id_tipousr
+  WHERE username = :username";
 
-$result = mysql_query($query);
-$num_results = mysql_num_rows($result);
-
-session_start();
-if ($num_results != 0)
-{
-  $row = mysql_fetch_array($result);
-  $valid_user = $username;
-//  $valid_user = $row[1];
-
-  $user_level = $row[0];
-  $_SESSION['valid_user'] = $valid_user;
-  $_SESSION['user_level'] = $user_level;
-  $var = array("username" => $valid_user);
-  eval_html('main_menu2.html', $var);
-}
-else {
-  echo "usuario o clave invalidos.";
+try {
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(['username' => $username]);
+    $row = $stmt->fetch();
+    
+    session_start();
+    
+    // Check if user exists and verify password
+    if ($row) {
+        // Check if password is hashed (starts with $2y$ for bcrypt)
+        if (strpos($row['clave'], '$2y$') === 0) {
+            // New hashed password - use password_verify
+            $password_valid = password_verify($clave, $row['clave']);
+        } else {
+            // Old plain text password - direct comparison (for backward compatibility)
+            $password_valid = ($row['clave'] === $clave);
+        }
+        
+        if ($password_valid) {
+            $valid_user = $username;
+            $user_level = $row['nivel'];
+            $_SESSION['valid_user'] = $valid_user;
+            $_SESSION['user_level'] = $user_level;
+            $var = array("username" => $valid_user);
+            eval_html('main_menu2.html', $var);
+        } else {
+            echo "usuario o clave invalidos.";
+        }
+    } else {
+        echo "usuario o clave invalidos.";
+    }
+} catch (PDOException $e) {
+    echo "Error en la autenticación.";
+    error_log("Login error: " . $e->getMessage());
 }
 
 ?>

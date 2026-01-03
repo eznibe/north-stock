@@ -40,10 +40,11 @@ function eval_html($filename, $var) {
 function get_units_opt($id_unidad)
 {
  $unidades = "";
- $query = "SELECT unidad.id_unidad, unidad.unidad
-           FROM unidad";
- $result = mysql_query($query);
- while ($row = mysql_fetch_array($result))
+ $query = "SELECT Unidad.id_unidad, Unidad.unidad
+           FROM Unidad";
+ $pdo = get_db_connection();
+ $result = $pdo->query($query);
+ while ($row = $result->fetch(PDO::FETCH_NUM))
  {
   if ($row[0] == $id_unidad) $option = "option selected";
   else $option = "option";
@@ -55,31 +56,29 @@ function get_units_opt($id_unidad)
 function get_group_opt($id_grupo)
 {
  $query = "SELECT id_grupo, grupo FROM grupo ORDER BY grupo";
- $result = mysql_query($query);
- if (mysql_num_rows($result) > 0)
+ $pdo = get_db_connection();
+ $result = $pdo->query($query);
+ $grupo = "";
+ while ($row = $result->fetch(PDO::FETCH_NUM))
  {
-  while ($row = mysql_fetch_array($result))
-  {
-   if ($row[0] == $id_grupo) $option = "option selected";
-   else $option = "option";
-   $grupo = $grupo . "<$option value=\"" . htmlspecialchars(stripslashes($row[0])) . "\">" . htmlspecialchars(stripslashes($row[1])) . "</option>\n";
-  }
+  if ($row[0] == $id_grupo) $option = "option selected";
+  else $option = "option";
+  $grupo = $grupo . "<$option value=\"" . htmlspecialchars(stripslashes($row[0])) . "\">" . htmlspecialchars(stripslashes($row[1])) . "</option>\n";
  }
  return $grupo;
 }
 
 function get_pais_opt($id_pais)
 {
- $query = "SELECT id_pais, pais FROM pais ORDER BY pais";
- $result = mysql_query($query);
- if (mysql_num_rows($result) > 0)
+ $query = "SELECT id_pais, pais FROM Pais ORDER BY pais";
+ $pdo = get_db_connection();
+ $result = $pdo->query($query);
+ $pais = "";
+ while ($row = $result->fetch(PDO::FETCH_NUM))
  {
-  while ($row = mysql_fetch_array($result))
-  {
-   if ($row[0] == $id_pais) $option = "option selected";
-   else $option = "option";
-   $pais = $pais . "<$option value=\"" . htmlspecialchars(stripslashes($row[0])) . "\">" . htmlspecialchars(stripslashes($row[1])) . "</option>\n";
-  }
+  if ($row[0] == $id_pais) $option = "option selected";
+  else $option = "option";
+  $pais = $pais . "<$option value=\"" . htmlspecialchars(stripslashes($row[0])) . "\">" . htmlspecialchars(stripslashes($row[1])) . "</option>\n";
  }
  return $pais;
 }
@@ -87,15 +86,14 @@ function get_pais_opt($id_pais)
 function get_categoria_opt($id_categoria)
 {
  $query = "SELECT id_categoria, categoria FROM categoria ORDER BY categoria";
- $result = mysql_query($query);
- if (mysql_num_rows($result) > 0)
+ $pdo = get_db_connection();
+ $result = $pdo->query($query);
+ $categoria = "";
+ while ($row = $result->fetch(PDO::FETCH_NUM))
  {
-  while ($row = mysql_fetch_array($result))
-  {
-   if ($row[0] == $id_categoria) $option = "option selected";
-   else $option = "option";
-   $categoria = $categoria . "<$option value=\"" . htmlspecialchars(stripslashes($row[0])) . "\">" . htmlspecialchars(stripslashes($row[1])) . "</option>\n";
-  }
+  if ($row[0] == $id_categoria) $option = "option selected";
+  else $option = "option";
+  $categoria = $categoria . "<$option value=\"" . htmlspecialchars(stripslashes($row[0])) . "\">" . htmlspecialchars(stripslashes($row[1])) . "</option>\n";
  }
  return $categoria;
 }
@@ -103,23 +101,22 @@ function get_categoria_opt($id_categoria)
 function get_subproducto_opt($id_item)
 {
  $query = "SELECT
-	item.id_item, concat(categoria.categoria, \" - \", proveedor.proveedor)
+	item.id_item, concat(categoria.categoria, \" - \", Proveedor.proveedor)
 	FROM
-	item, categoria, proveedor
+	item, categoria, Proveedor
 	WHERE (
 	(item.id_categoria = categoria.id_categoria) AND
-	(item.id_proveedor = proveedor.id_proveedor)
+	(item.id_proveedor = Proveedor.id_proveedor)
 	)
 	ORDER BY categoria.categoria";
- $result = mysql_query($query);
- if (mysql_num_rows($result) > 0)
+ $pdo = get_db_connection();
+ $result = $pdo->query($query);
+ $subproducto = "";
+ while ($row = $result->fetch(PDO::FETCH_NUM))
  {
-  while ($row = mysql_fetch_array($result))
-  {
-   if ($row[0] == $id_item) $option = "option selected";
-   else $option = "option";
-   $subproducto = $subproducto . "<$option value=\"" . htmlspecialchars(stripslashes($row[0])) . "\">" . htmlspecialchars(stripslashes($row[1])) . "</option>\n";
-  }
+  if ($row[0] == $id_item) $option = "option selected";
+  else $option = "option";
+  $subproducto = $subproducto . "<$option value=\"" . htmlspecialchars(stripslashes($row[0])) . "\">" . htmlspecialchars(stripslashes($row[1])) . "</option>\n";
  }
  return $subproducto;
 }
@@ -139,51 +136,48 @@ function get_scan_opt($scan)
 function get_proveedor_opt($id_proveedor)
 {
  $query = "SELECT
-	proveedor.id_proveedor, proveedor.proveedor
+	Proveedor.id_proveedor, Proveedor.proveedor
   FROM
-	proveedor
-  ORDER BY proveedor.proveedor";
- $result = mysql_query($query);
- if (mysql_num_rows($result) > 0)
+	Proveedor
+  ORDER BY Proveedor.proveedor";
+ $pdo = get_db_connection();
+ $result = $pdo->query($query);
+ $proveedor = "";
+ while ($row = $result->fetch(PDO::FETCH_NUM))
  {
-  while ($row = mysql_fetch_array($result))
-  {
-   if ($row[0] == $id_proveedor) $option = "option selected";
-   else $option = "option";
-   $proveedor = $proveedor . "<$option value=\"" . htmlspecialchars(stripslashes($row[0])) . "\">" . htmlspecialchars(stripslashes($row[1])) . "</option>\n";
-  }
+  if ($row[0] == $id_proveedor) $option = "option selected";
+  else $option = "option";
+  $proveedor = $proveedor . "<$option value=\"" . htmlspecialchars(stripslashes($row[0])) . "\">" . htmlspecialchars(stripslashes($row[1])) . "</option>\n";
  }
  return $proveedor;
 }
 
 function get_tipousr_opt($id_tipo)
 {
- $query = "SELECT id_tipousr, tipousr FROM tipousr ORDER BY tipousr";
- $result = mysql_query($query);
- if (mysql_num_rows($result) > 0)
+ $query = "SELECT id_tipousr, tipousr FROM Tipousr ORDER BY tipousr";
+ $pdo = get_db_connection();
+ $result = $pdo->query($query);
+ $tipousr = "";
+ while ($row = $result->fetch(PDO::FETCH_NUM))
  {
-  while ($row = mysql_fetch_array($result))
-  {
-   if ($row[0] == $id_tipo) $option = "option selected";
-   else $option = "option";
-   $tipousr = $tipousr . "<$option value=\"" . htmlspecialchars(stripslashes($row[0])) . "\">" . htmlspecialchars(stripslashes($row[1])) . "</option>\n";
-  }
+  if ($row[0] == $id_tipo) $option = "option selected";
+  else $option = "option";
+  $tipousr = $tipousr . "<$option value=\"" . htmlspecialchars(stripslashes($row[0])) . "\">" . htmlspecialchars(stripslashes($row[1])) . "</option>\n";
  }
  return $tipousr;
 }
 
 function get_usuario_opt($id_usuario)
 {
- $query = "SELECT id_usuario, username FROM usuario ORDER BY username";
- $result = mysql_query($query);
- if (mysql_num_rows($result) > 0)
+ $query = "SELECT id_usuario, username FROM Usuario ORDER BY username";
+ $pdo = get_db_connection();
+ $result = $pdo->query($query);
+ $usuario = "";
+ while ($row = $result->fetch(PDO::FETCH_NUM))
  {
-  while ($row = mysql_fetch_array($result))
-  {
-   if ($row[0] == $id_usuario) $option = "option selected";
-   else $option = "option";
-   $usuario = $usuario . "<$option value=\"" . htmlspecialchars(stripslashes($row[0])) . "\">" . htmlspecialchars(stripslashes($row[1])) . "</option>\n";
-  }
+  if ($row[0] == $id_usuario) $option = "option selected";
+  else $option = "option";
+  $usuario = $usuario . "<$option value=\"" . htmlspecialchars(stripslashes($row[0])) . "\">" . htmlspecialchars(stripslashes($row[1])) . "</option>\n";
  }
  return $usuario;
 }
@@ -196,41 +190,46 @@ function log_trans($username, $id_accion, $id_item, $cantidad, $fecha, $id_orden
 	(username, id_accion, id_item, cantidad, fecha, id_orden, id_prevision)
   VALUES
 	(\"$username\", $id_accion, $id_item, $cantidad, \"$fecha\", $id_orden, $id_prevision)";
- $result = mysql_query($query);
- echo mysql_error();
+ $pdo = get_db_connection();
+ try {
+  $pdo->exec($query);
+ } catch (PDOException $e) {
+  echo $e->getMessage();
+ }
 }
 
 function get_group($id_grupo)
 {
  $query = "SELECT grupo FROM grupo WHERE id_grupo = $id_grupo";
- $result = mysql_query($query);
- mysql_num_rows($result);
- $row = mysql_fetch_array($result);
+ $pdo = get_db_connection();
+ $result = $pdo->query($query);
+ $row = $result->fetch(PDO::FETCH_NUM);
  return $row[0];
 }
 
 function get_groups()
 {
  $query = "SELECT * FROM grupo ORDER BY grupo";
- $result = mysql_query($query);
+ $pdo = get_db_connection();
+ $result = $pdo->query($query);
  return $result;
 }
 
 function get_proveedor($id_proveedor)
 {
- $query = "SELECT proveedor FROM proveedor WHERE id_proveedor = $id_proveedor";
- $result = mysql_query($query);
- mysql_num_rows($result);
- $row = mysql_fetch_array($result);
+ $query = "SELECT proveedor FROM Proveedor WHERE id_proveedor = $id_proveedor";
+ $pdo = get_db_connection();
+ $result = $pdo->query($query);
+ $row = $result->fetch(PDO::FETCH_NUM);
  return $row[0];
 }
 
 function get_categoria($id_categoria)
 {
  $query = "SELECT categoria FROM categoria WHERE id_categoria = $id_categoria";
- $result = mysql_query($query);
- mysql_num_rows($result);
- $row = mysql_fetch_array($result);
+ $pdo = get_db_connection();
+ $result = $pdo->query($query);
+ $row = $result->fetch(PDO::FETCH_NUM);
  return $row[0];
 }
 
@@ -238,42 +237,43 @@ function get_usuario($id_usuario, $tipo)
 {
  //$tipo: 1: retorna username
  //	      2: retorna nombre de usuario
- if($tipo==1) $query = "SELECT username FROM usuario WHERE id_usuario = $id_usuario";
- else         $query = "SELECT nombre   FROM usuario WHERE id_usuario = $id_usuario";
- $result = mysql_query($query);
- mysql_num_rows($result);
- $row = mysql_fetch_array($result);
+ if($tipo==1) $query = "SELECT username FROM Usuario WHERE id_usuario = $id_usuario";
+ else         $query = "SELECT nombre   FROM Usuario WHERE id_usuario = $id_usuario";
+ $pdo = get_db_connection();
+ $result = $pdo->query($query);
+ $row = $result->fetch(PDO::FETCH_NUM);
  return $row[0];
 }
 
 function get_item($id_item)
 {
  $query = "SELECT
-	CONCAT(categoria.categoria, \" - \", proveedor.proveedor)
+	CONCAT(categoria.categoria, \" - \", Proveedor.proveedor)
   FROM
 	item,
 	categoria,
-	proveedor
+	Proveedor
   WHERE (
 	(item.id_item = $id_item) AND
 	(categoria.id_categoria = item.id_categoria) AND
-	(proveedor.id_proveedor = item.id_proveedor)
+	(Proveedor.id_proveedor = item.id_proveedor)
 	)";
- $result = mysql_query($query);
- mysql_num_rows($result);
- $row = mysql_fetch_array($result);
+ $pdo = get_db_connection();
+ $result = $pdo->query($query);
+ $row = $result->fetch(PDO::FETCH_NUM);
  return $row[0];
 }
 
 function get_unidad_descarga($id_categoria)
 {
- $query = "SELECT unidad.unidad
-        FROM unidad, categoria
+ $query = "SELECT Unidad.unidad
+        FROM Unidad, categoria
         WHERE
-                unidad.id_unidad = categoria.id_unidad_visual AND
+                Unidad.id_unidad = categoria.id_unidad_visual AND
                 categoria.id_categoria = $id_categoria";
- $result = mysql_query($query);
- $row = mysql_fetch_array($result);
+ $pdo = get_db_connection();
+ $result = $pdo->query($query);
+ $row = $result->fetch(PDO::FETCH_NUM);
  return (strtoupper($row[0]));
 }
 
@@ -282,13 +282,14 @@ function get_unidad_descarga($id_categoria)
  */
 function get_unidad_compra($id_item)
 {
- $query = "SELECT unidad.unidad
-  		   FROM unidad, item
+ $query = "SELECT Unidad.unidad
+  		   FROM Unidad, item
     	   WHERE
-            	unidad.id_unidad = item.id_unidad_compra AND
+            	Unidad.id_unidad = item.id_unidad_compra AND
             	item.id_item = $id_item";
- $result = mysql_query($query);
- $row = mysql_fetch_array($result);
+ $pdo = get_db_connection();
+ $result = $pdo->query($query);
+ $row = $result->fetch(PDO::FETCH_NUM);
  return (strtoupper($row[0]));
 }
 
@@ -297,8 +298,9 @@ function get_stock_transito($id_item)
  $query = "SELECT item.stock_transito
         FROM item
         WHERE item.id_item = $id_item";
- $result = mysql_query($query);
- $row = mysql_fetch_array($result);
+ $pdo = get_db_connection();
+ $result = $pdo->query($query);
+ $row = $result->fetch(PDO::FETCH_NUM);
  return $row[0];
 }
 
@@ -309,19 +311,23 @@ function set_stock_transito($id_item, $stock)
 		stock_transito = $stock
         WHERE
                 item.id_item = $id_item";
- return mysql_query($query);
+ $pdo = get_db_connection();
+ return $pdo->exec($query);
 }
 
-function log_stock_transito_negativo($username, $id_item,  $id_orden, $stock_transito_actual, $stock_transito_nuevo, $cantidad_pendiente, $cantidad_user, $tipo_accion) {
+function log_stock_transito_negativo($username, $id_item,  $id_orden, $stock_transito_actual, $stock_transito_nuevo, $cantidad_pendiente, $cantidad_user, $tipo_accion)
 {
  $query = "INSERT INTO DG_transito_negativo
 		   (username, id_item, id_orden, stock_transito_actual, stock_transito_nuevo, cantidad_pendiente, cantidad_user, tipo_accion)
   		   VALUES
 		   (\"$username\", $id_item, $id_orden, $stock_transito_actual, $stock_transito_nuevo, $cantidad_pendiente, $cantidad_user, \"$tipo_accion\")";
  //var_dump($query);
- $result = mysql_query($query);
- echo mysql_error();
-}
+ $pdo = get_db_connection();
+ try {
+  $pdo->exec($query);
+ } catch (PDOException $e) {
+  echo $e->getMessage();
+ }
 }
 
 /**
@@ -332,8 +338,9 @@ function get_factor_unidades($id_item)
  $query = "SELECT item.factor_unidades
         FROM item
         WHERE item.id_item = $id_item";
- $result = mysql_query($query);
- $row = mysql_fetch_array($result);
+ $pdo = get_db_connection();
+ $result = $pdo->query($query);
+ $row = $result->fetch(PDO::FETCH_NUM);
  return $row[0];
 }
 
@@ -342,8 +349,9 @@ function get_cantidad_comprar($id_orden_item)
  $query = "SELECT ordenitem.cantidad
         FROM ordenitem
         WHERE ordenitem.id_orden_item = $id_orden_item";
- $result = mysql_query($query);
- $row = mysql_fetch_array($result);
+ $pdo = get_db_connection();
+ $result = $pdo->query($query);
+ $row = $result->fetch(PDO::FETCH_NUM);
  return $row[0];
 }
 
@@ -353,8 +361,9 @@ function get_ordenitem_id_item($id_orden_item)
         FROM ordenitem
         WHERE
                 ordenitem.id_orden_item = $id_orden_item";
- $result = mysql_query($query);
- $row = mysql_fetch_array($result);
+ $pdo = get_db_connection();
+ $result = $pdo->query($query);
+ $row = $result->fetch(PDO::FETCH_NUM);
  return $row[0];
 }
 
@@ -363,8 +372,9 @@ function get_orden_status($id_orden)
  $query = "SELECT orden.id_status
         FROM orden
         WHERE orden.id_orden = $id_orden";
- $result = mysql_query($query);
- $row = mysql_fetch_array($result);
+ $pdo = get_db_connection();
+ $result = $pdo->query($query);
+ $row = $result->fetch(PDO::FETCH_NUM);
  return $row[0];
 }
 
@@ -375,22 +385,23 @@ function get_ordenes_a_confirmar($id_proveedor)
 	$condition =  " AND proveedor.id_proveedor = $id_proveedor ";
  }
 
- $query = "SELECT orden.id_orden, DATE_FORMAT(orden.fecha, '%d-%m-%Y') AS fecha, proveedor
+ $query = "SELECT orden.id_orden, DATE_FORMAT(orden.fecha, '%d-%m-%Y') AS fecha, Proveedor.proveedor
            FROM
 		orden,
 		ordenitem,
 		item,
-		proveedor
+		Proveedor
 	  WHERE (
 		(orden.id_status = 0) AND
 		(ordenitem.id_orden = orden.id_orden) AND
 		(item.id_item = ordenitem.id_item) AND
-		(proveedor.id_proveedor = item.id_proveedor)
+		(Proveedor.id_proveedor = item.id_proveedor)
 		$condition
 	  )
-	  GROUP BY orden.id_orden, orden.fecha, proveedor
-	  ORDER BY fecha, proveedor";
- $result = mysql_query($query);
+	  GROUP BY orden.id_orden, orden.fecha, Proveedor.proveedor
+	  ORDER BY fecha, Proveedor.proveedor";
+ $pdo = get_db_connection();
+ $result = $pdo->query($query);
  return $result;
 }
 
@@ -398,8 +409,9 @@ function get_agrupacion_contable($id_categoria)
 {
  $query = "SELECT g.agrupacion_contable FROM grupo g join categoria c on c.id_grupo = g.id_grupo
 		   WHERE c.id_categoria = $id_categoria";
- $result = mysql_query($query);
- $row = mysql_fetch_array($result);
+ $pdo = get_db_connection();
+ $result = $pdo->query($query);
+ $row = $result->fetch(PDO::FETCH_NUM);
  return $row[0];
 }
 
@@ -407,24 +419,27 @@ function get_item_agrupacion_contable($id_item)
 {
  $query = "SELECT i.agrupacion_contable FROM item i
 		   WHERE i.id_item = $id_item";
- $result = mysql_query($query);
- $row = mysql_fetch_array($result);
+ $pdo = get_db_connection();
+ $result = $pdo->query($query);
+ $row = $result->fetch(PDO::FETCH_NUM);
  return $row[0];
 }
 
 function get_tipos_de_envio() {
 
  $query = "SELECT * FROM tipoenvio ORDER BY tipo_envio, id_tipo_envio";
- $result = mysql_query($query);
+ $pdo = get_db_connection();
+ $result = $pdo->query($query);
 
  return $result;
 }
 
 function es_proveedor_nacional($id_proveedor, $pais) {
-	$query = "SELECT pais FROM pais, proveedor
-		  WHERE pais.id_pais = proveedor.id_pais AND proveedor.id_proveedor = $id_proveedor";
-	$result = mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$query = "SELECT pais FROM Pais, Proveedor
+		  WHERE Pais.id_pais = Proveedor.id_pais AND Proveedor.id_proveedor = $id_proveedor";
+	$pdo = get_db_connection();
+	$result = $pdo->query($query);
+	$row = $result->fetch(PDO::FETCH_NUM);
 
 	return $row[0] == $pais;
 }
@@ -432,7 +447,7 @@ function es_proveedor_nacional($id_proveedor, $pais) {
 function result_a_memoria($result)
 {
 	$rows = array();
-	while($row = mysql_fetch_array($result)) {
+	while($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		array_push($rows, $row);
 	}
 
