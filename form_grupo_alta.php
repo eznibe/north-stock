@@ -15,8 +15,7 @@ db_connect();
 $pdo = get_db_connection();
 
 function insert_grupo(&$mensaje, $grupo)
-{
- if ($grupo == "")
+{ global $pdo; if ($grupo == "")
  {
   // Si falta alguno de los campos requeridos. 
   //

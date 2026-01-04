@@ -15,8 +15,7 @@ db_connect();
 $pdo = get_db_connection();
 
 function delete_grupo(&$mensaje, $id_grupo)
-{
- if ($id_grupo == 0)
+{ global $pdo; if ($id_grupo == 0)
  {
   // Si falta alguno de los campos requeridos. 
   //

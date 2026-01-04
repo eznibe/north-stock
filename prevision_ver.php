@@ -91,7 +91,7 @@ function showPrevisionDetailsScreen($id_prevision) {
     JOIN item i on i.id_item = pi.id_item
     JOIN categoria c on c.id_categoria = i.id_categoria
     JOIN unidad u on u.id_unidad = i.id_unidad_compra
-    JOIN proveedor pro on pro.id_proveedor = i.id_proveedor
+    JOIN Proveedor pro on pro.id_proveedor = i.id_proveedor
     LEFT JOIN (
     	SELECT l.id_item, l.id_prevision, max(fecha_sistema) fecha_sistema, max(username) username 
     	FROM log l 

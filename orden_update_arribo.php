@@ -112,7 +112,7 @@ eval_html('orden_update.html', $var);
  */
 function obtener_tipo_proveedor($id_orden_item){
 	$query = "SELECT pais.pais FROM Pais pais, Proveedor proveedor, item item, ordenitem ordenitem
-		  WHERE pais.id_pais = proveedor.id_pais and
+		  WHERE pais.id_pais = Proveedor.id_pais and
 				proveedor.id_proveedor = item.id_proveedor and
 				ordenitem.id_orden_item = $id_orden_item and
 				ordenitem.id_item = item.id_item";

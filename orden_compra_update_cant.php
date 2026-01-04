@@ -21,7 +21,7 @@ $query = "SELECT
 	item.factor_unidades,
 	categoria.id_categoria
   FROM
-      categoria, proveedor, itemcomprar, item, unidad
+      categoria, Proveedor, itemcomprar, item, unidad
   WHERE (
 	(itemcomprar.id_itemcomprar = $id_itemcomprar) AND
         (item.id_item = itemcomprar.id_item) AND

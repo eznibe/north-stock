@@ -12,7 +12,7 @@ $orden = "";
 $focus = "producto";
 
 $query = "SELECT P.id_proveedor, P.proveedor, COUNT(*)
-		FROM itemcomprar IC, proveedor P, item I
+		FROM itemcomprar IC, Proveedor P, item I
 		WHERE I.id_item = IC.id_item
   		  AND I.id_proveedor = P.id_proveedor
 			AND IC.tentativo = true

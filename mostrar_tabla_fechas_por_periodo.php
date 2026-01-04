@@ -9,7 +9,7 @@ check_session();
 /**
  * Arma el vector de variables para pasarle al html que muestra la pagina de fechas por periodo.
  * Parametros:  $tipo_periodo: semana, mes, a�o
- * 				$tipo: todos, proveedor, producto, etc.
+ * 				$tipo: todos, Proveedor, producto, etc.
  * 				$opcion: nro que representa el id del tipo indicado
  * 				$id_accion: compras o consumos (1 o 2)
  */
@@ -92,7 +92,7 @@ function mostrar_tabla_fechas_por_periodo($tipo_periodo, $tipo, $opcion, $id_acc
 	if($id_accion==1 || $id_accion==2) {
 		
 		$query = "SELECT log.id_item, CONCAT(categoria,' - ',proveedor), log.username, sum(cantidad), YEAR(fecha), MONTH(fecha), $selecciono
-				  FROM categoria, log, item, usuario, proveedor, unidad
+				  FROM categoria, log, item, usuario, Proveedor, unidad
 				  WHERE 	log.id_item = item.id_item AND
 							item.id_categoria = categoria.id_categoria AND
 							usuario.username = log.username AND
@@ -265,7 +265,7 @@ function crearQueryTodosByPeriodo($query_fin, $fecha_ini, $fecha_fin, $groupByPe
 	
 	
  	$query = "(SELECT log.id_item as iditem, CONCAT(categoria,' - ',proveedor) as cate, log.username, sum(cantidad), YEAR(fecha), MONTH(fecha), $selecciono_1, fecha, id_accion as accion, log.fecha as fechaordenar
-			  FROM categoria, log, item, usuario, proveedor, unidad
+			  FROM categoria, log, item, usuario, Proveedor, unidad
 			  WHERE 	log.id_item = item.id_item AND
 						item.id_categoria = categoria.id_categoria AND
 						usuario.username = log.username AND
@@ -281,7 +281,7 @@ function crearQueryTodosByPeriodo($query_fin, $fecha_ini, $fecha_fin, $groupByPe
  	$query .= " UNION ";
  	
  	$query .= "(SELECT log.id_item as iditem, CONCAT(categoria,' - ',proveedor) as cate, log.username, sum(cantidad), YEAR(fecha), MONTH(fecha), $selecciono_2, fecha, id_accion as accion, log.fecha as fechaordenar
-			   FROM categoria, log, item, usuario, proveedor, unidad
+			   FROM categoria, log, item, usuario, Proveedor, unidad
 			   WHERE 	log.id_item = item.id_item AND
 						item.id_categoria = categoria.id_categoria AND
 						usuario.username = log.username AND

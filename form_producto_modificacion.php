@@ -186,7 +186,7 @@ function obtener_categoria($id_item)
 
 function obtener_proveedores($provname)
 {
-	$query = "SELECT id_proveedor, proveedor FROM Proveedor ORDER BY proveedor";
+	$query = "SELECT id_proveedor, Proveedor FROM Proveedor ORDER BY proveedor";
 	$result = $pdo->query($query);
 
 	$opcionesprov="";

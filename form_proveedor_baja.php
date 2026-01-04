@@ -26,7 +26,7 @@ function delete_proveedor(&$mensaje, $id_proveedor)
  {
   // Si estan todos los campos requeridos
   //
-  $query = "DELETE FROM proveedor 
+  $query = "DELETE FROM Proveedor 
             WHERE id_proveedor = $id_proveedor";
 
   $result = $pdo->query($query);

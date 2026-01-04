@@ -16,7 +16,7 @@ $query = "SELECT
 	CONCAT('<br>',categoria,'<br>',proveedor,' (',codigo_proveedor,')') 
 	FROM 
 	item a LEFT JOIN categoria b ON a.id_categoria=b.id_categoria
-	LEFT JOIN proveedor c ON a.id_proveedor=c.id_proveedor
+	LEFT JOIN Proveedor c ON a.id_proveedor=c.id_proveedor
 	WHERE id_item = $id_item";
 $result = $pdo->query($query);
 

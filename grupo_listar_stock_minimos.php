@@ -40,13 +40,13 @@ $query = "SELECT
 	item.precio_ref
 
   FROM
-	item, categoria, unidad, proveedor
+	item, categoria, unidad, Proveedor
   WHERE (
 	(item.id_categoria = categoria.id_categoria) AND
 	(unidad.id_unidad = categoria.id_unidad_visual) AND
 	(categoria.id_grupo = $id_grupo)
 
-	AND proveedor.id_proveedor = item.id_proveedor
+	AND Proveedor.id_proveedor = item.id_proveedor
         )
 
   ORDER BY

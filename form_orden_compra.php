@@ -162,8 +162,7 @@ eval_html('orden_compra_fin.html', $var);
  * Descripcion de la categoria a la cual pertenece el item pasado como parametro
  */
 function obtener_descripcion_categoria($id_item)
-{
-	$query_2 = "SELECT categoria
+{	global $pdo;	$query_2 = "SELECT categoria
   				FROM categoria, item
   				WHERE (item.id_item=$id_item AND
   					   item.id_categoria = categoria.id_categoria)";
@@ -176,6 +175,7 @@ function obtener_descripcion_categoria($id_item)
 
 function obtener_precio_dolar()
 {
+	global $pdo;
 	$query = "SELECT precio_dolar from dolarhoy where id_dolar=(SELECT max(id_dolar) FROM dolarhoy)";
 
 	$result = $pdo->query($query);
@@ -189,8 +189,9 @@ function obtener_precio_dolar()
  * a partir del id_proveedor pasado como parametro
  */
 function obtener_tipo_proveedor($id_proveedor){
-	$query = "SELECT pais FROM pais, proveedor
-		  WHERE pais.id_pais = proveedor.id_pais and
+	global $pdo;
+	$query = "SELECT pais FROM pais, Proveedor
+		  WHERE pais.id_pais = Proveedor.id_pais and
 				proveedor.id_proveedor = $id_proveedor";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);

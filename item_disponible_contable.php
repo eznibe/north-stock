@@ -80,7 +80,7 @@ if(count($id_grupos) > 0) {
 	FROM
 		item
 		join categoria on item.id_categoria = categoria.id_categoria
-		join proveedor on item.id_proveedor = proveedor.id_proveedor
+		join Proveedor on item.id_proveedor = Proveedor.id_proveedor
 		join unidad on unidad.id_unidad = item.id_unidad_compra
 		join grupo on grupo.id_grupo = categoria.id_grupo
 		join pais on proveedor.id_pais = pais.id_pais

@@ -178,7 +178,7 @@ function obtener_categoria($id_item)
 
 function obtener_proveedores($provname)
 {
-	$query = "SELECT id_proveedor, proveedor FROM proveedor ORDER BY proveedor";
+	$query = "SELECT id_proveedor, Proveedor FROM Proveedor ORDER BY proveedor";
 	$result = $pdo->query($query);
 
 	$opcionesprov="";
@@ -192,7 +192,7 @@ function obtener_proveedores($provname)
 
 function obtener_id_proveedor($provname)
 {
-	$query = "SELECT id_proveedor FROM proveedor " .
+	$query = "SELECT id_proveedor FROM Proveedor " .
 			"WHERE proveedor = '$provname'";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);
@@ -204,9 +204,9 @@ function obtener_id_proveedor($provname)
  * a partir del id_proveedor pasado como parametro
  */
 function obtener_tipo_proveedor($id_item){
-	$query = "SELECT pais FROM pais, proveedor, item
-		  WHERE pais.id_pais = proveedor.id_pais AND
-		  		item.id_proveedor = proveedor.id_proveedor AND
+	$query = "SELECT pais FROM pais, Proveedor, item
+		  WHERE pais.id_pais = Proveedor.id_pais AND
+		  		item.id_proveedor = Proveedor.id_proveedor AND
 				item.id_item = $id_item";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);

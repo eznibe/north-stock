@@ -9,17 +9,18 @@ include_once 'main.php';
 include_once 'dbutils.php';
 
 db_connect();
+$pdo = get_db_connection();
 
 //nuevo porcentaje a actualizar
 $valor = $_POST['valor'];
 
 //Actualiza porc_impuesto de categorias con items extranjeros
 //
-$query = "SELECT DISTINCT(categoria.id_categoria) FROM categoria, item, proveedor, pais
+$query = "SELECT DISTINCT(categoria.id_categoria) FROM categoria, item, Proveedor, pais
 		  WHERE categoria.id_categoria = item.id_categoria and
 				pais <> 'ARGENTINA' and
-				pais.id_pais = proveedor.id_pais and
-				item.id_proveedor = proveedor.id_proveedor";
+				pais.id_pais = Proveedor.id_pais and
+				item.id_proveedor = Proveedor.id_proveedor";
 $result = $pdo->query($query);
 
 while ($row = $result->fetch(PDO::FETCH_NUM))
@@ -35,11 +36,11 @@ while ($row = $result->fetch(PDO::FETCH_NUM))
 //Cambio valores de precio_nacionalizado segun nuevo porc_impuestos en items extranjeros
 $precio_dolar = obtener_precio_dolar();
 																	  //categorias con items extranjeros
-$query = "SELECT id_item, precio_fob FROM item WHERE id_categoria IN (SELECT DISTINCT(categoria.id_categoria) FROM categoria, item, proveedor, pais
+$query = "SELECT id_item, precio_fob FROM item WHERE id_categoria IN (SELECT DISTINCT(categoria.id_categoria) FROM categoria, item, Proveedor, pais
 		  															  WHERE categoria.id_categoria = item.id_categoria and
 																	  pais <> 'ARGENTINA' and
-																	  pais.id_pais = proveedor.id_pais and
-																	  item.id_proveedor = proveedor.id_proveedor) 
+																	  pais.id_pais = Proveedor.id_pais and
+																	  item.id_proveedor = Proveedor.id_proveedor) 
 													 AND precio_fob IS NOT NULL";
 $result = $pdo->query($query);
 while($row = $result->fetch(PDO::FETCH_NUM))
@@ -67,6 +68,7 @@ if(!$pdo->query($update))
 	
 function obtener_precio_dolar()
 {
+	global $pdo;
 	$query = "SELECT precio_dolar from dolarhoy where id_dolar=(SELECT max(id_dolar) FROM dolarhoy)";
 
 	$result = $pdo->query($query);

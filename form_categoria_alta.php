@@ -22,6 +22,7 @@ $pdo = get_db_connection();
 
 function insert_categoria(&$mensaje, $categoria, $id_grupo, $scan, $stock_minimo, $unidad, $porcentaje, $pos_arancelaria)
 {
+ global $pdo;
  if ( ($categoria == "") or ($id_grupo == 0) or ($unidad == 0) or ($porcentaje == ""))
  {
   // Si falta alguno de los campos requeridos.

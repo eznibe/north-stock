@@ -44,6 +44,7 @@ function get_cat_data(&$data, $id_categoria)
 
 function update_categoria(&$mensaje, $categoria, $id_grupo, $scan, $stock_minimo, $unidad, $id_categoria, $porcentaje, $pos_arancelaria)
 {
+ global $pdo;
  if ( ($categoria == "") or ($id_grupo == 0) or ($unidad == 0) or ($porcentaje == ""))
  {
   // Si falta alguno de los campos requeridos.
@@ -105,6 +106,7 @@ function update_categoria(&$mensaje, $categoria, $id_grupo, $scan, $stock_minimo
 
 function obtener_precio_dolar()
 {
+	global $pdo;
 	$query = "SELECT precio_dolar from dolarhoy where id_dolar=(SELECT max(id_dolar) FROM dolarhoy)";
 
 	$result = $pdo->query($query);

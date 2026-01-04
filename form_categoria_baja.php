@@ -15,8 +15,7 @@ db_connect();
 $pdo = get_db_connection();
 
 function delete_categoria(&$mensaje, $id_categoria)
-{
- if ($id_categoria == 0)
+{ global $pdo; if ($id_categoria == 0)
  {
   // Si falta alguno de los campos requeridos. 
   //

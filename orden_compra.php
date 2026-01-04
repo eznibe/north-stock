@@ -42,19 +42,19 @@ if ($formname == "orden_comprar_update_cant") update_cantidad($id_itemcomprar, $
 //
 $query = "SELECT
 	itemcomprar.id_itemcomprar,
-	concat(categoria.categoria, \" - \", proveedor.proveedor),
+	concat(categoria.categoria, \" - \", Proveedor.proveedor),
 	itemcomprar.cantidad,
 	CONCAT(unidad.unidad,'(',item.factor_unidades,')'),
 	item.precio_fob,
 	(itemcomprar.cantidad * item.precio_fob)
   FROM
-      categoria, proveedor, itemcomprar, item, unidad
+      categoria, Proveedor, itemcomprar, item, unidad
   WHERE (
 	(item.id_item = itemcomprar.id_item) AND
 	(categoria.id_categoria = item.id_categoria) AND
 	(proveedor.id_proveedor = item.id_proveedor) AND
 	(unidad.id_unidad = item.id_unidad_compra) AND
-	(item.id_proveedor IN (SELECT id_proveedor FROM proveedor, pais WHERE proveedor.id_pais = pais.id_pais AND pais.pais <> 'ARGENTINA') )
+	(item.id_proveedor IN (SELECT id_proveedor FROM Proveedor, pais WHERE Proveedor.id_pais = pais.id_pais AND pais.pais <> 'ARGENTINA') )
   )
   ORDER BY
 	categoria.categoria";
@@ -78,19 +78,19 @@ while ($row = $result->fetch(PDO::FETCH_NUM))
 //
 $query = "SELECT
 	itemcomprar.id_itemcomprar,
-	concat(categoria.categoria, \" - \", proveedor.proveedor),
+	concat(categoria.categoria, \" - \", Proveedor.proveedor),
 	itemcomprar.cantidad,
 	CONCAT(unidad.unidad,'(',item.factor_unidades,')'),
 	item.precio_ref,
 	(itemcomprar.cantidad * item.precio_ref)
   FROM
-      categoria, proveedor, itemcomprar, item, unidad
+      categoria, Proveedor, itemcomprar, item, unidad
   WHERE (
 	(item.id_item = itemcomprar.id_item) AND
 	(categoria.id_categoria = item.id_categoria) AND
 	(proveedor.id_proveedor = item.id_proveedor) AND
 	(unidad.id_unidad = item.id_unidad_compra) AND
-	(item.id_proveedor IN (SELECT id_proveedor FROM proveedor, pais WHERE proveedor.id_pais = pais.id_pais AND pais.pais = 'ARGENTINA') )
+	(item.id_proveedor IN (SELECT id_proveedor FROM Proveedor, pais WHERE Proveedor.id_pais = pais.id_pais AND pais.pais = 'ARGENTINA') )
   )
   ORDER BY
 	categoria.categoria";
@@ -116,13 +116,13 @@ $query = "SELECT
         sum((itemcomprar.cantidad * item.precio_fob)),
         sum((itemcomprar.cantidad * (item.precio_fob * (SELECT precio_dolar from dolarhoy where id_dolar=(SELECT max(id_dolar) FROM dolarhoy)))))
   FROM
-      categoria, proveedor, itemcomprar, item, unidad
+      categoria, Proveedor, itemcomprar, item, unidad
   WHERE (
         (item.id_item = itemcomprar.id_item) AND
         (categoria.id_categoria = item.id_categoria) AND
         (proveedor.id_proveedor = item.id_proveedor) AND
         (unidad.id_unidad = categoria.id_unidad_visual) AND
-        (item.id_proveedor IN (SELECT id_proveedor FROM proveedor, pais WHERE proveedor.id_pais = pais.id_pais AND pais.pais <> 'ARGENTINA') )
+        (item.id_proveedor IN (SELECT id_proveedor FROM Proveedor, pais WHERE Proveedor.id_pais = pais.id_pais AND pais.pais <> 'ARGENTINA') )
   )";
 $result = $pdo->query($query);
 $row = $result->fetch(PDO::FETCH_NUM);
@@ -136,13 +136,13 @@ $query = "SELECT
 		sum((itemcomprar.cantidad * (item.precio_ref / (SELECT precio_dolar from dolarhoy where id_dolar=(SELECT max(id_dolar) FROM dolarhoy))))),
         sum((itemcomprar.cantidad * item.precio_ref))
   FROM
-      categoria, proveedor, itemcomprar, item, unidad
+      categoria, Proveedor, itemcomprar, item, unidad
   WHERE (
         (item.id_item = itemcomprar.id_item) AND
         (categoria.id_categoria = item.id_categoria) AND
         (proveedor.id_proveedor = item.id_proveedor) AND
         (unidad.id_unidad = categoria.id_unidad_visual) AND
-        (item.id_proveedor IN (SELECT id_proveedor FROM proveedor, pais WHERE proveedor.id_pais = pais.id_pais AND pais.pais = 'ARGENTINA') )
+        (item.id_proveedor IN (SELECT id_proveedor FROM Proveedor, pais WHERE Proveedor.id_pais = pais.id_pais AND pais.pais = 'ARGENTINA') )
   )";
 $result = $pdo->query($query);
 $row = $result->fetch(PDO::FETCH_NUM);

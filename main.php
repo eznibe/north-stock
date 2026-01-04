@@ -139,7 +139,7 @@ function get_proveedor_opt($id_proveedor)
 	Proveedor.id_proveedor, Proveedor.proveedor
   FROM
 	Proveedor
-  ORDER BY Proveedor.proveedor";
+  ORDER BY proveedor";
  $pdo = get_db_connection();
  $result = $pdo->query($query);
  $proveedor = "";
@@ -382,7 +382,7 @@ function get_ordenes_a_confirmar($id_proveedor)
 {
  $condition = "";
  if(isset($id_proveedor) && !empty($id_proveedor)) {
-	$condition =  " AND proveedor.id_proveedor = $id_proveedor ";
+	$condition =  " AND Proveedor.id_proveedor = $id_proveedor ";
  }
 
  $query = "SELECT orden.id_orden, DATE_FORMAT(orden.fecha, '%d-%m-%Y') AS fecha, Proveedor.proveedor
@@ -399,7 +399,7 @@ function get_ordenes_a_confirmar($id_proveedor)
 		$condition
 	  )
 	  GROUP BY orden.id_orden, orden.fecha, Proveedor.proveedor
-	  ORDER BY fecha, Proveedor.proveedor";
+	  ORDER BY fecha, proveedor";
  $pdo = get_db_connection();
  $result = $pdo->query($query);
  return $result;

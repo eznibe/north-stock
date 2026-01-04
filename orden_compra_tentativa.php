@@ -31,7 +31,7 @@ if ($formname == "orden_comprar_update_cant")
 //
 $query = "SELECT
 	itemcomprar.id_itemcomprar,
-	concat(categoria.categoria, \" - \", proveedor.proveedor),
+	concat(categoria.categoria, \" - \", Proveedor.proveedor),
 	itemcomprar.cantidad,
 	CONCAT(unidad.unidad,'(',item.factor_unidades,')'),
 	item.precio_fob,
@@ -71,7 +71,7 @@ while ($row = $result->fetch(PDO::FETCH_NUM))
 //
 $query = "SELECT
 	itemcomprar.id_itemcomprar,
-	concat(categoria.categoria, \" - \", proveedor.proveedor),
+	concat(categoria.categoria, \" - \", Proveedor.proveedor),
 	itemcomprar.cantidad,
 	CONCAT(unidad.unidad,'(',item.factor_unidades,')'),
 	item.precio_ref,

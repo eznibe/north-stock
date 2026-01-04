@@ -7,6 +7,7 @@ include_once 'dbutils.php';
 session_start();
 
 db_connect();
+$pdo = get_db_connection();
 
 if ( isset($_GET['id_orden']) ) $id_orden = $_GET['id_orden'];
 else $id_orden = $_POST['id_orden'];
@@ -48,13 +49,13 @@ if(obtener_tipo_proveedor($id_orden) == "EXTRANJERO")
 		tipoenvio.tipo_envio,
 		orden.id_status
 	  FROM
-	      orden, categoria, proveedor, ordenitem, item, unidad, tipoenvio
+	      orden, categoria, Proveedor, ordenitem, item, unidad, tipoenvio
 	  WHERE (
 		(orden.id_orden = $id_orden) AND
 		(ordenitem.id_orden = orden.id_orden) AND
 		(item.id_item = ordenitem.id_item) AND
 		(categoria.id_categoria = item.id_categoria) AND
-		(proveedor.id_proveedor = item.id_proveedor) AND
+		(Proveedor.id_proveedor = item.id_proveedor) AND
 		(unidad.id_unidad = item.id_unidad_compra) AND
 		(ordenitem.id_tipo_envio = tipoenvio.id_tipo_envio) ";
 		if(!$incluir_completos){ // no incluir esta condicion si quiero ver la orden con los items ya arribados completamente
@@ -126,13 +127,13 @@ else
 	tipoenvio.tipo_envio,
 	orden.id_status
   FROM
-      orden, categoria, proveedor, ordenitem, item, unidad, tipoenvio
+      orden, categoria, Proveedor, ordenitem, item, unidad, tipoenvio
   WHERE (
 	(orden.id_orden = $id_orden) AND
 	(ordenitem.id_orden = orden.id_orden) AND
 	(item.id_item = ordenitem.id_item) AND
 	(categoria.id_categoria = item.id_categoria) AND
-	(proveedor.id_proveedor = item.id_proveedor) AND
+	(Proveedor.id_proveedor = item.id_proveedor) AND
 	(unidad.id_unidad = item.id_unidad_compra) AND
 	(ordenitem.id_tipo_envio = tipoenvio.id_tipo_envio) ";
 	if(!$incluir_completos){ // no incluir esta condicion si quiero ver la orden con los items ya arribados completamente
@@ -230,6 +231,7 @@ eval_html('orden_ver_arribo_ajax.php', $var);
 //FUNCIONES
 function orden_descripcion($id_orden)
 {
+	global $pdo;
 	$query = "SELECT descripcion FROM orden WHERE orden.id_orden = $id_orden";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);
@@ -238,6 +240,7 @@ function orden_descripcion($id_orden)
 
 function orden_despacho($id_orden)
 {
+	global $pdo;
 	$query = "SELECT despacho FROM orden WHERE orden.id_orden = $id_orden";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);
@@ -246,6 +249,7 @@ function orden_despacho($id_orden)
 
 function orden_nr_factura($id_orden)
 {
+	global $pdo;
 	$query = "SELECT nr_factura FROM orden WHERE orden.id_orden = $id_orden";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);
@@ -257,6 +261,7 @@ function orden_nr_factura($id_orden)
  */
 function update_orden($id_orden, $id_orden_item, $cantidad, $precio)
 {
+ global $pdo;
  $cantidad_anterior = get_cantidad_pendiente_comprar($id_orden_item);
  $id_item = get_ordenitem_id_item($id_orden_item);
  $stock_transito_actual = get_stock_transito($id_item);
@@ -337,6 +342,7 @@ function update_orden($id_orden, $id_orden_item, $cantidad, $precio)
 
 function update_precio_item($id_orden_item, $precio)
 {
+ global $pdo;
 
  $id_item = get_id_item_por_orden_item($id_orden_item);
 
@@ -374,6 +380,7 @@ function update_precio_item($id_orden_item, $precio)
 
 function obtener_categoria($id_item)
 {
+	global $pdo;
 	$query = "SELECT id_categoria FROM item WHERE id_item=$id_item";
 	$result = $pdo->query($query);
  	$row = $result->fetch(PDO::FETCH_NUM);
@@ -382,6 +389,7 @@ function obtener_categoria($id_item)
 
 function porcentaje_impuesto_categoria($id_categoria)
 {
+	global $pdo;
 	$query = "SELECT porc_impuesto FROM categoria WHERE id_categoria=$id_categoria";
 	$result = $pdo->query($query);
  	$row = $result->fetch(PDO::FETCH_NUM);
@@ -390,6 +398,7 @@ function porcentaje_impuesto_categoria($id_categoria)
 
 function precio_dolar()
 {
+	global $pdo;
 	$query = "SELECT precio_dolar FROM dolarhoy WHERE id_dolar=(SELECT MAX(id_dolar) FROM dolarhoy)";
 	$result = $pdo->query($query);
  	$row = $result->fetch(PDO::FETCH_NUM);
@@ -402,9 +411,10 @@ function precio_dolar()
  * a partir del id_orden
  */
 function obtener_tipo_proveedor($id_orden){
-	$query = "SELECT pais FROM pais pais, proveedor proveedor, item item, ordenitem ordenitem
-		  WHERE pais.id_pais = proveedor.id_pais and
-				proveedor.id_proveedor = item.id_proveedor and
+	global $pdo;
+	$query = "SELECT pais FROM pais pais, Proveedor proveedor, item item, ordenitem ordenitem
+		  WHERE pais.id_pais = Proveedor.id_pais and
+				Proveedor.id_proveedor = item.id_proveedor and
 				ordenitem.id_orden = $id_orden and
 				ordenitem.id_item = item.id_item";
 	$result = $pdo->query($query);
@@ -419,9 +429,10 @@ function obtener_tipo_proveedor($id_orden){
  * a partir del id_orden_item
  */
 function obtener_tipo_proveedor_por_orden_item($id_orden_item){
-	$query = "SELECT pais FROM pais, proveedor, item, ordenitem
-		  WHERE pais.id_pais = proveedor.id_pais and
-				proveedor.id_proveedor = item.id_proveedor and
+	global $pdo;
+	$query = "SELECT pais FROM pais, Proveedor, item, ordenitem
+		  WHERE pais.id_pais = Proveedor.id_pais and
+				Proveedor.id_proveedor = item.id_proveedor and
 				ordenitem.id_orden_item = $id_orden_item and
 				ordenitem.id_item = item.id_item";
 	$result = $pdo->query($query);
@@ -432,6 +443,7 @@ function obtener_tipo_proveedor_por_orden_item($id_orden_item){
 }
 
 function get_id_item_por_orden_item($id_orden_item){
+	global $pdo;
 	$query = "SELECT id_item
 				FROM ordenitem
 				WHERE id_orden_item = $id_orden_item";
@@ -443,6 +455,7 @@ function get_id_item_por_orden_item($id_orden_item){
 
 function obtener_precio_dolar_orden($id_orden)
 {
+	global $pdo;
 	$query = "SELECT cotizacion_dolar FROM orden WHERE id_orden = $id_orden";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);
@@ -451,6 +464,7 @@ function obtener_precio_dolar_orden($id_orden)
 
 function obtener_fecha_orden($id_orden)
 {
+	global $pdo;
 	$query = "SELECT fecha FROM orden WHERE id_orden = $id_orden";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);
@@ -459,6 +473,7 @@ function obtener_fecha_orden($id_orden)
 
 function obtener_orden($id_orden)
 {
+	global $pdo;
 	$query = "SELECT * FROM orden WHERE id_orden = $id_orden";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);
@@ -495,6 +510,7 @@ if($tok2<>""){
 // retorna lo que qeuda por comprar del item en la orden
 function get_cantidad_pendiente_comprar($id_orden_item)
 {
+ global $pdo;
  $query = "SELECT ordenitem.cantidad_pendiente
         FROM ordenitem
         WHERE ordenitem.id_orden_item = $id_orden_item";

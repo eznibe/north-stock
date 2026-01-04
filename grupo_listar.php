@@ -77,8 +77,8 @@ else{
     JOIN categoria on item.id_categoria = categoria.id_categoria
     JOIN unidad on unidad.id_unidad = categoria.id_unidad_visual
     JOIN grupo on categoria.id_grupo = grupo.id_grupo
-    JOIN proveedor on proveedor.id_proveedor = item.id_proveedor
-    JOIN pais on pais.id_pais = proveedor.id_pais
+    JOIN Proveedor on proveedor.id_proveedor = item.id_proveedor
+    JOIN pais on pais.id_pais = Proveedor.id_pais
     LEFT JOIN (
     	SELECT pi.id_item, sum(pi.cantidad) as cantidad
     	FROM prevision p

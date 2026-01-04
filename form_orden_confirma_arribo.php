@@ -106,6 +106,7 @@ eval_html('orden_arribo_fin.html', $var);
  */
 function update_orden_arribada($id_orden, $fecha, $valid_user)
 {
+	global $pdo;
 	$query = "UPDATE orden  SET  id_status = 2, fecha = '$fecha'
   			  WHERE (id_orden = $id_orden)";
 
@@ -119,6 +120,7 @@ function update_orden_arribada($id_orden, $fecha, $valid_user)
  */
 function obtener_cantidad_items_pendientes($id_orden)
 {
+	global $pdo;
 	$query = "SELECT count(*) FROM orden, ordenitem ordenitem
 			  WHERE orden.id_orden = $id_orden
 				AND orden.id_orden = ordenitem.id_orden
@@ -133,6 +135,7 @@ function obtener_cantidad_items_pendientes($id_orden)
 // retorna lo que qeuda por comprar del item en la orden
 function get_cantidad_pendiente_comprar($id_orden_item)
 {
+ global $pdo;
  $query = "SELECT ordenitem.cantidad_pendiente
         FROM ordenitem
         WHERE ordenitem.id_orden_item = $id_orden_item";

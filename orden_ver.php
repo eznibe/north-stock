@@ -42,7 +42,7 @@ if(obtener_tipo_proveedor($id_orden) == "EXTRANJERO")
 	tipoenvio.tipo_envio,
 	orden.despacho
   FROM
-      orden, categoria, proveedor, ordenitem, item, unidad, tipoenvio
+      orden, categoria, Proveedor, ordenitem, item, unidad, tipoenvio
   WHERE (
 	(orden.id_orden = $id_orden) AND
 	(ordenitem.id_orden = orden.id_orden) AND
@@ -109,7 +109,7 @@ else
 	tipoenvio.tipo_envio,
 	orden.despacho
   FROM
-      orden, categoria, proveedor, ordenitem, item, unidad, tipoenvio
+      orden, categoria, Proveedor, ordenitem, item, unidad, tipoenvio
   WHERE (
 	(orden.id_orden = $id_orden) AND
 	(ordenitem.id_orden = orden.id_orden) AND
@@ -261,8 +261,8 @@ function update_orden($id_orden_item, $cantidad, $precio)
  * Devuelve si el proveedor es extranjero o nacional para saber como mostrar el listado
  */
 function obtener_tipo_proveedor($id_orden){
-	$query = "SELECT pais.pais FROM pais pais, proveedor proveedor, item item, ordenitem ordenitem
-		  WHERE pais.id_pais = proveedor.id_pais and
+	$query = "SELECT pais.pais FROM pais pais, Proveedor proveedor, item item, ordenitem ordenitem
+		  WHERE pais.id_pais = Proveedor.id_pais and
 				proveedor.id_proveedor = item.id_proveedor and
 				ordenitem.id_orden = $id_orden and
 				ordenitem.id_item = item.id_item";
@@ -279,8 +279,8 @@ function obtener_tipo_proveedor($id_orden){
  * a partir del id_orden_item
  */
 function obtener_tipo_proveedor_por_orden_item($id_orden_item){
-	$query = "SELECT pais FROM pais, proveedor, item, ordenitem
-		  WHERE pais.id_pais = proveedor.id_pais and
+	$query = "SELECT pais FROM pais, Proveedor, item, ordenitem
+		  WHERE pais.id_pais = Proveedor.id_pais and
 				proveedor.id_proveedor = item.id_proveedor and
 				ordenitem.id_orden_item = $id_orden_item and
 				ordenitem.id_item = item.id_item";

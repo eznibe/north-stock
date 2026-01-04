@@ -123,7 +123,7 @@ case 'usuario':
 	 //
 	 if ($transac == 'Consumos') {
 	  $query = "SELECT
-		CONCAT(categoria.categoria, \" - \", proveedor.proveedor) AS articulo,
+		CONCAT(categoria.categoria, \" - \", Proveedor.proveedor) AS articulo,
 		DATE_FORMAT(log.fecha, '%d-%m-%Y') AS fech,
 		log.cantidad,
 		unidad.unidad,
@@ -148,7 +148,7 @@ case 'usuario':
 	 }
 	 if ($transac == 'Compras') {
 	  $query = "SELECT
-		CONCAT(categoria.categoria, \" - \", proveedor.proveedor) AS articulo,
+		CONCAT(categoria.categoria, \" - \", Proveedor.proveedor) AS articulo,
 		DATE_FORMAT(log.fecha, '%d-%m-%Y') AS fech,
 		log.cantidad,
 		CONCAT(unidad.unidad,'(',item.factor_unidades,')'),
@@ -209,7 +209,7 @@ case 'usuario':
  function crearQueryTodos($query_fin, $fecha_ini, $fecha_fin) {
  	
  	$query = "(SELECT
-				CONCAT(categoria.categoria, \" - \", proveedor.proveedor) AS articulo,
+				CONCAT(categoria.categoria, \" - \", Proveedor.proveedor) AS articulo,
 				DATE_FORMAT(log.fecha, '%d-%m-%Y') AS fech,
 				log.cantidad,
 				unidad.unidad,
@@ -235,7 +235,7 @@ case 'usuario':
  	$query .= " UNION ";
  	
  	$query .= "(SELECT
-				CONCAT(categoria.categoria, \" - \", proveedor.proveedor) AS articulo,
+				CONCAT(categoria.categoria, \" - \", Proveedor.proveedor) AS articulo,
 				DATE_FORMAT(log.fecha, '%d-%m-%Y') AS fech,
 				log.cantidad,
 				CONCAT(unidad.unidad,'(',item.factor_unidades,')'),

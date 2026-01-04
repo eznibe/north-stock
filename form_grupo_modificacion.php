@@ -49,8 +49,7 @@ function modify_grupo(&$mensaje, $id_grupo, $grupo, $agrupacion)
 }
 
 function grupo_agrupacion_contable($id_grupo) 
-{
-	$query = "SELECT agrupacion_contable FROM grupo WHERE grupo_id_grupo = $id_grupo";
+{	global $pdo;	$query = "SELECT agrupacion_contable FROM grupo WHERE grupo_id_grupo = $id_grupo";
 	$result = db_query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);
 	return $row[0];
