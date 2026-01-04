@@ -27,7 +27,7 @@ $query = "SELECT
   FROM
     item  
     JOIN categoria on item.id_categoria = categoria.id_categoria
-    JOIN unidad on unidad.id_unidad = categoria.id_unidad_visual
+    JOIN unidad unidad on unidad.id_unidad = categoria.id_unidad_visual
     LEFT JOIN (
     	SELECT pi.id_item, sum(pi.cantidad) as cantidad
     	FROM prevision p

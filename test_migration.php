@@ -65,7 +65,7 @@ try {
 // Test 5: Check Tables
 echo "<h2>Test 5: Database Tables Check</h2>";
 try {
-    $tables = ['Usuario', 'Tipousr', 'item', 'Proveedor', 'categoria', 'grupo', 'Pais', 'Unidad'];
+    $tables = ['usuario', 'tipousr', 'item', 'proveedor', 'categoria', 'grupo', 'pais', 'unidad'];
     $existing_tables = [];
     
     foreach ($tables as $table) {
@@ -129,7 +129,7 @@ try {
 echo "<h2>Test 7: Prepared Statements Test</h2>";
 try {
     // Test prepared statement with parameter
-    $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM Usuario WHERE username = :username");
+    $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM usuario WHERE username = :username");
     $stmt->execute(['username' => 'nonexistent_user_test']);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     

@@ -40,18 +40,18 @@ if ($formname == "orden_confirma_update") update_orden($id_orden_item, $cantidad
 
 $query = "SELECT 
 	OrdenItem.id_orden_item,
-	concat(Categoria.categoria, \" - \", Proveedor.proveedor),
+	concat(Categoria.categoria, \" - \", proveedor.proveedor),
 	OrdenItem.cantidad,
-	Unidad.unidad,
+	unidad.unidad,
 	OrdenItem.precio_fob,
 	(OrdenItem.cantidad * OrdenItem.precio_fob)
   FROM 
-      Categoria, Proveedor, OrdenItem, Item, Unidad 
+      Categoria, proveedor, OrdenItem, Item, unidad 
   WHERE (
 	(Item.id_item = OrdenItem.id_item) AND
 	(Categoria.id_categoria = Item.id_categoria) AND
-	(Proveedor.id_proveedor = Item.id_proveedor) AND
-	(Unidad.id_unidad = Categoria.id_unidad_visual)
+	(proveedor.id_proveedor = Item.id_proveedor) AND
+	(unidad.id_unidad = Categoria.id_unidad_visual)
   )
   ORDER BY 
 	Categoria.categoria";
@@ -75,12 +75,12 @@ while ($row = mysql_fetch_array($result))
 $query = "SELECT
         sum((ItemComprar.cantidad * Item.precio_fob))
   FROM
-      Categoria, Proveedor, ItemComprar, Item, Unidad
+      Categoria, proveedor, ItemComprar, Item, unidad
   WHERE (
         (Item.id_item = ItemComprar.id_item) AND
         (Categoria.id_categoria = Item.id_categoria) AND
-        (Proveedor.id_proveedor = Item.id_proveedor) AND
-        (Unidad.id_unidad = Categoria.id_unidad_visual)
+        (proveedor.id_proveedor = Item.id_proveedor) AND
+        (unidad.id_unidad = Categoria.id_unidad_visual)
   )";
 $result = mysql_query($query);
 $row = mysql_fetch_array($result);
@@ -90,9 +90,9 @@ $total = $row[0];
 foreach ($proveedores as $proveedor)
 {
  $query = "SELECT
-        Proveedor.proveedor
+        proveedor.proveedor
   FROM
-        Proveedor
+        proveedor
   WHERE
         id_proveedor = $proveedor";
  $result = mysql_query($query);
@@ -104,16 +104,16 @@ foreach ($proveedores as $proveedor)
         Categoria.categoria,
         Item.codigo_proveedor,
         OrdenItem.cantidad,
-        Unidad.unidad
+        unidad.unidad
   FROM
         OrdenItem,
         Item,
         Categoria,
-        Unidad
+        unidad
   WHERE (
         (OrdenItem.id_item = Item.id_item) AND
         (Categoria.id_categoria = Item.id_categoria) AND
-        (Unidad.id_unidad = Item.id_unidad_visual)
+        (unidad.id_unidad = Item.id_unidad_visual)
   )";
  $result = mysql_query($query);
  while ($row = mysql_fetch_array($result))

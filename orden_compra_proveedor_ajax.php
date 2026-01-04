@@ -82,7 +82,7 @@ function guardarDespacho() {
   })
 
   $.ajax({
-    url:'api/ordenes.php?guardarProveedorAR=true&id_orden='+$('#id_orden').val()+'&proveedor_AR='+$('#proveedor_AR').val(),
+    url:'api/ordenes.php?guardarproveedorAR=true&id_orden='+$('#id_orden').val()+'&proveedor_AR='+$('#proveedor_AR').val(),
     success: function(data, status){
       //console.log("Data: " + data + "\nStatus: " + status);
       $('#label_despacho').text('Guardado');
@@ -108,7 +108,7 @@ function despachoKeyPress() {
 
 <table width="100%" id="orden_table" name="orden_table">
 <tr class="provlisthead">
-<th>Item</th>  <th>Cod. producto</th> <th>Cantidad original</th> <th>Cantidad pendiente</th> <th>Unidad</th> <th>Precio<br /> unitario</th> <th>Precio</th> <th>Moneda</th>
+<th>Item</th>  <th>Cod. producto</th> <th>Cantidad original</th> <th>Cantidad pendiente</th> <th>unidad</th> <th>Precio<br /> unitario</th> <th>Precio</th> <th>Moneda</th>
 </tr>
   <?php echo $var['orden']; ?>
 </table>

@@ -51,11 +51,11 @@ function get_item_data(&$data, $id_item)
   FROM
 	item,
 	categoria,
-	Proveedor
+	proveedor
   WHERE (
 	(id_item = $id_item) AND
 	(categoria.id_categoria = item.id_categoria) AND
-	(Proveedor.id_proveedor = item.id_proveedor)
+	(proveedor.id_proveedor = item.id_proveedor)
   )";
  $result = $pdo->query($query);
  $data = $result->fetch(PDO::FETCH_NUM);
@@ -186,7 +186,7 @@ function obtener_categoria($id_item)
 
 function obtener_proveedores($provname)
 {
-	$query = "SELECT id_proveedor, Proveedor FROM Proveedor ORDER BY proveedor";
+	$query = "SELECT id_proveedor, proveedor FROM proveedor ORDER BY proveedor";
 	$result = $pdo->query($query);
 
 	$opcionesprov="";
@@ -200,7 +200,7 @@ function obtener_proveedores($provname)
 
 function obtener_id_proveedor($provname)
 {
-	$query = "SELECT id_proveedor FROM Proveedor " .
+	$query = "SELECT id_proveedor FROM proveedor " .
 			"WHERE proveedor = '$provname'";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);
@@ -212,9 +212,9 @@ function obtener_id_proveedor($provname)
  * a partir del id_item pasado como parametro
  */
 function obtener_tipo_proveedor($id_item){
-	$query = "SELECT pais FROM Pais, Proveedor, item
-		  WHERE Pais.id_pais = Proveedor.id_pais AND
-		  		item.id_proveedor = Proveedor.id_proveedor AND
+	$query = "SELECT pais FROM pais, proveedor, item
+		  WHERE pais.id_pais = proveedor.id_pais AND
+		  		item.id_proveedor = proveedor.id_proveedor AND
 				item.id_item = $id_item";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);

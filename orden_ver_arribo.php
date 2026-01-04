@@ -49,13 +49,13 @@ if(obtener_tipo_proveedor($id_orden) == "EXTRANJERO")
 		tipoenvio.tipo_envio,
 		orden.id_status
 	  FROM
-	      orden, categoria, Proveedor, ordenitem, item, unidad, tipoenvio
+	      orden, categoria, proveedor, ordenitem, item, unidad unidad, tipoenvio
 	  WHERE (
 		(orden.id_orden = $id_orden) AND
 		(ordenitem.id_orden = orden.id_orden) AND
 		(item.id_item = ordenitem.id_item) AND
 		(categoria.id_categoria = item.id_categoria) AND
-		(Proveedor.id_proveedor = item.id_proveedor) AND
+		(proveedor.id_proveedor = item.id_proveedor) AND
 		(unidad.id_unidad = item.id_unidad_compra) AND
 		(ordenitem.id_tipo_envio = tipoenvio.id_tipo_envio) ";
 		if(!$incluir_completos){ // no incluir esta condicion si quiero ver la orden con los items ya arribados completamente
@@ -127,13 +127,13 @@ else
 	tipoenvio.tipo_envio,
 	orden.id_status
   FROM
-      orden, categoria, Proveedor, ordenitem, item, unidad, tipoenvio
+      orden, categoria, proveedor, ordenitem, item, unidad unidad, tipoenvio
   WHERE (
 	(orden.id_orden = $id_orden) AND
 	(ordenitem.id_orden = orden.id_orden) AND
 	(item.id_item = ordenitem.id_item) AND
 	(categoria.id_categoria = item.id_categoria) AND
-	(Proveedor.id_proveedor = item.id_proveedor) AND
+	(proveedor.id_proveedor = item.id_proveedor) AND
 	(unidad.id_unidad = item.id_unidad_compra) AND
 	(ordenitem.id_tipo_envio = tipoenvio.id_tipo_envio) ";
 	if(!$incluir_completos){ // no incluir esta condicion si quiero ver la orden con los items ya arribados completamente
@@ -412,9 +412,9 @@ function precio_dolar()
  */
 function obtener_tipo_proveedor($id_orden){
 	global $pdo;
-	$query = "SELECT pais FROM pais pais, Proveedor proveedor, item item, ordenitem ordenitem
-		  WHERE pais.id_pais = Proveedor.id_pais and
-				Proveedor.id_proveedor = item.id_proveedor and
+	$query = "SELECT pais FROM pais pais, proveedor proveedor, item item, ordenitem ordenitem
+		  WHERE pais.id_pais = proveedor.id_pais and
+				proveedor.id_proveedor = item.id_proveedor and
 				ordenitem.id_orden = $id_orden and
 				ordenitem.id_item = item.id_item";
 	$result = $pdo->query($query);
@@ -430,9 +430,9 @@ function obtener_tipo_proveedor($id_orden){
  */
 function obtener_tipo_proveedor_por_orden_item($id_orden_item){
 	global $pdo;
-	$query = "SELECT pais FROM pais, Proveedor, item, ordenitem
-		  WHERE pais.id_pais = Proveedor.id_pais and
-				Proveedor.id_proveedor = item.id_proveedor and
+	$query = "SELECT pais FROM pais pais, proveedor, item, ordenitem
+		  WHERE pais.id_pais = proveedor.id_pais and
+				proveedor.id_proveedor = item.id_proveedor and
 				ordenitem.id_orden_item = $id_orden_item and
 				ordenitem.id_item = item.id_item";
 	$result = $pdo->query($query);

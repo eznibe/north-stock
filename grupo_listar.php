@@ -35,7 +35,7 @@ if($tipo_producto==1){
 	  FROM
       item  
       JOIN categoria on item.id_categoria = categoria.id_categoria
-      JOIN unidad on unidad.id_unidad = categoria.id_unidad_visual
+      JOIN unidad unidad on unidad.id_unidad = categoria.id_unidad_visual
       JOIN grupo on categoria.id_grupo = grupo.id_grupo
       LEFT JOIN (
     	SELECT pi.id_item, sum(pi.cantidad) as cantidad
@@ -75,10 +75,10 @@ else{
   FROM
     item  
     JOIN categoria on item.id_categoria = categoria.id_categoria
-    JOIN unidad on unidad.id_unidad = categoria.id_unidad_visual
+    JOIN unidad unidad on unidad.id_unidad = categoria.id_unidad_visual
     JOIN grupo on categoria.id_grupo = grupo.id_grupo
-    JOIN Proveedor on proveedor.id_proveedor = item.id_proveedor
-    JOIN pais on pais.id_pais = Proveedor.id_pais
+    JOIN proveedor on proveedor.id_proveedor = item.id_proveedor
+    JOIN pais pais on pais.id_pais = proveedor.id_pais
     LEFT JOIN (
     	SELECT pi.id_item, sum(pi.cantidad) as cantidad
     	FROM prevision p

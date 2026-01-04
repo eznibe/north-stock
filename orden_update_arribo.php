@@ -6,6 +6,7 @@ include 'dbutils.php';
 session_start();
 
 db_connect();
+$pdo = get_db_connection();
 
 $id_orden_item = $_GET['id_orden_item'];
 
@@ -24,13 +25,13 @@ if(obtener_tipo_proveedor($id_orden_item) == "EXTRANJERO")
 		categoria.id_categoria,
 		ordenitem.cantidad_pendiente
   FROM
-      categoria, Proveedor, ordenitem, item, Unidad
+      categoria, proveedor, ordenitem, item, unidad
   WHERE (
 	(ordenitem.id_orden_item = $id_orden_item) AND
         (item.id_item = ordenitem.id_item) AND
         (categoria.id_categoria = item.id_categoria) AND
-        (Proveedor.id_proveedor = item.id_proveedor) AND
-        (Unidad.id_unidad = item.id_unidad_compra)
+        (proveedor.id_proveedor = item.id_proveedor) AND
+        (unidad.id_unidad = item.id_unidad_compra)
   )
   ORDER BY
         categoria.categoria";
@@ -55,13 +56,13 @@ else
 		categoria.id_categoria,
 		ordenitem.cantidad_pendiente
   FROM
-      categoria, Proveedor, ordenitem, item, Unidad
+      categoria, proveedor, ordenitem, item, unidad
   WHERE (
 	(ordenitem.id_orden_item = $id_orden_item) AND
         (item.id_item = ordenitem.id_item) AND
         (categoria.id_categoria = item.id_categoria) AND
-        (Proveedor.id_proveedor = item.id_proveedor) AND
-        (Unidad.id_unidad = item.id_unidad_compra)
+        (proveedor.id_proveedor = item.id_proveedor) AND
+        (unidad.id_unidad = item.id_unidad_compra)
   )
   ORDER BY
         categoria.categoria";
@@ -111,8 +112,9 @@ eval_html('orden_update.html', $var);
  * a partir del id_orden_item
  */
 function obtener_tipo_proveedor($id_orden_item){
-	$query = "SELECT pais.pais FROM Pais pais, Proveedor proveedor, item item, ordenitem ordenitem
-		  WHERE pais.id_pais = Proveedor.id_pais and
+	global $pdo;
+	$query = "SELECT pais.pais FROM pais pais, proveedor proveedor, item item, ordenitem ordenitem
+		  WHERE pais.id_pais = proveedor.id_pais and
 				proveedor.id_proveedor = item.id_proveedor and
 				ordenitem.id_orden_item = $id_orden_item and
 				ordenitem.id_item = item.id_item";

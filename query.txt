@@ -1,4 +1,4 @@
-select Categoria.categoria, Proveedor.proveedor, ItemComprar.cantidad, Unidad.unidad from Categoria, Proveedor, ItemComprar, Item, Unidad WHERE ((ItemComprar.id_item = Item.id_item) AND (Item.id_proveedor = Proveedor.id_proveedor) AND (Categoria.id_categoria = Item.id_categoria) AND (Unidad.id_unidad = Categoria.id_unidad_visual) );
+select Categoria.categoria, proveedor.proveedor, ItemComprar.cantidad, Unidad.unidad from Categoria, Proveedor, ItemComprar, Item, Unidad WHERE ((ItemComprar.id_item = Item.id_item) AND (Item.id_proveedor = proveedor.id_proveedor) AND (Categoria.id_categoria = Item.id_categoria) AND (Unidad.id_unidad = Categoria.id_unidad_visual) );
 
 +-------------------------+---------------------+----------+--------+
 | categoria               | proveedor           | cantidad | unidad |
@@ -13,7 +13,7 @@ select Categoria.categoria, Proveedor.proveedor, ItemComprar.cantidad, Unidad.un
 
 -------------
 De Todos los paises
-mysql> select DISTINCT Proveedor.id_proveedor, Proveedor.proveedor from Categoria, Proveedor, ItemComprar, Item, Unidad WHERE ((ItemComprar.id_item = Item.id_item) AND (Item.id_proveedor = Proveedor.id_proveedor) AND (Categoria.id_categoria = Item.id_categoria) AND (Unidad.id_unidad = Categoria.id_unidad_visual) );
+mysql> select DISTINCT proveedor.id_proveedor, proveedor.proveedor from Categoria, Proveedor, ItemComprar, Item, Unidad WHERE ((ItemComprar.id_item = Item.id_item) AND (Item.id_proveedor = proveedor.id_proveedor) AND (Categoria.id_categoria = Item.id_categoria) AND (Unidad.id_unidad = Categoria.id_unidad_visual) );
 +--------------+---------------------+
 | id_proveedor | proveedor           |
 +--------------+---------------------+
@@ -24,7 +24,7 @@ mysql> select DISTINCT Proveedor.id_proveedor, Proveedor.proveedor from Categori
 3 rows in set (0.00 sec)
 ----------------------------
 Solo Argentinos:
-mysql> select DISTINCT Proveedor.id_proveedor, Proveedor.proveedor from Categoria, Proveedor, ItemComprar, Item, Unidad WHERE ((ItemComprar.id_item = Item.id_item) AND (Item.id_proveedor = Proveedor.id_proveedor) AND (Categoria.id_categoria = Item.id_categoria) AND (Unidad.id_unidad = Categoria.id_unidad_visual) AND (Proveedor.id_pais = 1) );
+mysql> select DISTINCT proveedor.id_proveedor, proveedor.proveedor from Categoria, Proveedor, ItemComprar, Item, Unidad WHERE ((ItemComprar.id_item = Item.id_item) AND (Item.id_proveedor = proveedor.id_proveedor) AND (Categoria.id_categoria = Item.id_categoria) AND (Unidad.id_unidad = Categoria.id_unidad_visual) AND (proveedor.id_pais = 1) );
 +--------------+---------------------+
 | id_proveedor | proveedor           |
 +--------------+---------------------+

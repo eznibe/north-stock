@@ -127,8 +127,8 @@ function busca_proveedores(&$proveedores, &$mensaje, $proveedor)
  }
  else
  {
-  $query = "SELECT id_proveedor, Proveedor
-           FROM Proveedor
+  $query = "SELECT id_proveedor, proveedor
+           FROM proveedor
            WHERE proveedor LIKE \"%$proveedor%\"
 	ORDER BY proveedor";
   $result = $pdo->query($query);
@@ -227,8 +227,8 @@ function precio_dolar()
 
 function get_moneda_proveedor($id_proveedor)
 {
-	$query = "SELECT pais FROM pais, Proveedor
-			  WHERE pais.id_pais = Proveedor.id_pais AND
+	$query = "SELECT pais FROM pais pais, proveedor
+			  WHERE pais.id_pais = proveedor.id_pais AND
 					proveedor.id_proveedor = $id_proveedor";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);
@@ -242,8 +242,8 @@ function get_moneda_proveedor($id_proveedor)
  * a partir del id_proveedor pasado como parametro
  */
 function obtener_tipo_proveedor($id_proveedor){
-	$query = "SELECT pais FROM pais, Proveedor
-		  WHERE pais.id_pais = Proveedor.id_pais and
+	$query = "SELECT pais FROM pais pais, proveedor
+		  WHERE pais.id_pais = proveedor.id_pais and
 				proveedor.id_proveedor = $id_proveedor";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);

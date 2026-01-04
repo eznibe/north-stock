@@ -17,8 +17,8 @@ else if(isset($_GET['guardarNrFactura'])) {
 else if(isset($_GET['guardarFacturaAR'])) {
 	$value = guardarFacturaAR($_GET['id_orden'], $_GET['factura_AR']);
 }
-else if(isset($_GET['guardarProveedorAR'])) {
-	$value = guardarProveedorAR($_GET['id_orden'], $_GET['proveedor_AR']);
+else if(isset($_GET['guardarproveedorAR'])) {
+	$value = guardarproveedorAR($_GET['id_orden'], $_GET['proveedor_AR']);
 }
 
 //return JSON array
@@ -60,7 +60,7 @@ function guardarFacturaAR($id_orden, $factura_AR) {
   return $obj;
 }
 
-function guardarProveedorAR($id_orden, $proveedor_AR) {
+function guardarproveedorAR($id_orden, $proveedor_AR) {
 
   $obj->success = true;
 

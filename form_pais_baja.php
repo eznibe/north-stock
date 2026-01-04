@@ -26,7 +26,7 @@ function delete_pais(&$mensaje, $id_pais)
  {
   // Si estan todos los campos requeridos
   //
-  $query = "DELETE FROM pais 
+  $query = "DELETE FROM pais pais 
             WHERE id_pais = $id_pais";
 
   $result = $pdo->query($query);

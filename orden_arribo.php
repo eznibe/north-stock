@@ -44,17 +44,17 @@ if ($formname == "orden_update") update_orden($id_orden_item, $cantidad, $precio
 $query = "SELECT DISTINCT
 	DATE_FORMAT(orden.fecha, '%d-%m-%Y') AS fecha, 
 	orden.id_orden, 
-	Proveedor.proveedor  
+	proveedor.proveedor  
   FROM 
 	orden, 
 	ordenitem, 
 	item, 
-	Proveedor 
+	proveedor 
   WHERE ( 
 	(orden.id_status = 1) AND 
 	(ordenitem.id_orden = orden.id_orden) AND 
 	(item.id_item = ordenitem.id_item) AND 
-	(Proveedor.id_proveedor = item.id_proveedor) 
+	(proveedor.id_proveedor = item.id_proveedor) 
   ) 
   ORDER BY fecha, proveedor";
  

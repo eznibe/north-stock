@@ -40,8 +40,8 @@ function eval_html($filename, $var) {
 function get_units_opt($id_unidad)
 {
  $unidades = "";
- $query = "SELECT Unidad.id_unidad, Unidad.unidad
-           FROM Unidad";
+ $query = "SELECT unidad.id_unidad, unidad.unidad
+           FROM unidad";
  $pdo = get_db_connection();
  $result = $pdo->query($query);
  while ($row = $result->fetch(PDO::FETCH_NUM))
@@ -70,7 +70,7 @@ function get_group_opt($id_grupo)
 
 function get_pais_opt($id_pais)
 {
- $query = "SELECT id_pais, pais FROM Pais ORDER BY pais";
+ $query = "SELECT id_pais, pais FROM pais ORDER BY pais";
  $pdo = get_db_connection();
  $result = $pdo->query($query);
  $pais = "";
@@ -101,12 +101,12 @@ function get_categoria_opt($id_categoria)
 function get_subproducto_opt($id_item)
 {
  $query = "SELECT
-	item.id_item, concat(categoria.categoria, \" - \", Proveedor.proveedor)
+	item.id_item, concat(categoria.categoria, \" - \", proveedor.proveedor)
 	FROM
-	item, categoria, Proveedor
+	item, categoria, proveedor
 	WHERE (
 	(item.id_categoria = categoria.id_categoria) AND
-	(item.id_proveedor = Proveedor.id_proveedor)
+	(item.id_proveedor = proveedor.id_proveedor)
 	)
 	ORDER BY categoria.categoria";
  $pdo = get_db_connection();
@@ -136,9 +136,9 @@ function get_scan_opt($scan)
 function get_proveedor_opt($id_proveedor)
 {
  $query = "SELECT
-	Proveedor.id_proveedor, Proveedor.proveedor
+	proveedor.id_proveedor, proveedor.proveedor
   FROM
-	Proveedor
+	proveedor
   ORDER BY proveedor";
  $pdo = get_db_connection();
  $result = $pdo->query($query);
@@ -154,7 +154,7 @@ function get_proveedor_opt($id_proveedor)
 
 function get_tipousr_opt($id_tipo)
 {
- $query = "SELECT id_tipousr, tipousr FROM Tipousr ORDER BY tipousr";
+ $query = "SELECT id_tipousr, tipousr FROM tipousr tipousr ORDER BY tipousr";
  $pdo = get_db_connection();
  $result = $pdo->query($query);
  $tipousr = "";
@@ -169,7 +169,7 @@ function get_tipousr_opt($id_tipo)
 
 function get_usuario_opt($id_usuario)
 {
- $query = "SELECT id_usuario, username FROM Usuario ORDER BY username";
+ $query = "SELECT id_usuario, username FROM usuario ORDER BY username";
  $pdo = get_db_connection();
  $result = $pdo->query($query);
  $usuario = "";
@@ -217,7 +217,7 @@ function get_groups()
 
 function get_proveedor($id_proveedor)
 {
- $query = "SELECT proveedor FROM Proveedor WHERE id_proveedor = $id_proveedor";
+ $query = "SELECT proveedor FROM proveedor WHERE id_proveedor = $id_proveedor";
  $pdo = get_db_connection();
  $result = $pdo->query($query);
  $row = $result->fetch(PDO::FETCH_NUM);
@@ -237,8 +237,8 @@ function get_usuario($id_usuario, $tipo)
 {
  //$tipo: 1: retorna username
  //	      2: retorna nombre de usuario
- if($tipo==1) $query = "SELECT username FROM Usuario WHERE id_usuario = $id_usuario";
- else         $query = "SELECT nombre   FROM Usuario WHERE id_usuario = $id_usuario";
+ if($tipo==1) $query = "SELECT username FROM usuario WHERE id_usuario = $id_usuario";
+ else         $query = "SELECT nombre   FROM usuario WHERE id_usuario = $id_usuario";
  $pdo = get_db_connection();
  $result = $pdo->query($query);
  $row = $result->fetch(PDO::FETCH_NUM);
@@ -248,15 +248,15 @@ function get_usuario($id_usuario, $tipo)
 function get_item($id_item)
 {
  $query = "SELECT
-	CONCAT(categoria.categoria, \" - \", Proveedor.proveedor)
+	CONCAT(categoria.categoria, \" - \", proveedor.proveedor)
   FROM
 	item,
 	categoria,
-	Proveedor
+	proveedor
   WHERE (
 	(item.id_item = $id_item) AND
 	(categoria.id_categoria = item.id_categoria) AND
-	(Proveedor.id_proveedor = item.id_proveedor)
+	(proveedor.id_proveedor = item.id_proveedor)
 	)";
  $pdo = get_db_connection();
  $result = $pdo->query($query);
@@ -266,10 +266,10 @@ function get_item($id_item)
 
 function get_unidad_descarga($id_categoria)
 {
- $query = "SELECT Unidad.unidad
-        FROM Unidad, categoria
+ $query = "SELECT unidad.unidad
+        FROM unidad, categoria
         WHERE
-                Unidad.id_unidad = categoria.id_unidad_visual AND
+                unidad.id_unidad = categoria.id_unidad_visual AND
                 categoria.id_categoria = $id_categoria";
  $pdo = get_db_connection();
  $result = $pdo->query($query);
@@ -282,10 +282,10 @@ function get_unidad_descarga($id_categoria)
  */
 function get_unidad_compra($id_item)
 {
- $query = "SELECT Unidad.unidad
-  		   FROM Unidad, item
+ $query = "SELECT unidad.unidad
+  		   FROM unidad, item
     	   WHERE
-            	Unidad.id_unidad = item.id_unidad_compra AND
+            	unidad.id_unidad = item.id_unidad_compra AND
             	item.id_item = $id_item";
  $pdo = get_db_connection();
  $result = $pdo->query($query);
@@ -382,23 +382,23 @@ function get_ordenes_a_confirmar($id_proveedor)
 {
  $condition = "";
  if(isset($id_proveedor) && !empty($id_proveedor)) {
-	$condition =  " AND Proveedor.id_proveedor = $id_proveedor ";
+	$condition =  " AND proveedor.id_proveedor = $id_proveedor ";
  }
 
- $query = "SELECT orden.id_orden, DATE_FORMAT(orden.fecha, '%d-%m-%Y') AS fecha, Proveedor.proveedor
+ $query = "SELECT orden.id_orden, DATE_FORMAT(orden.fecha, '%d-%m-%Y') AS fecha, proveedor.proveedor
            FROM
 		orden,
 		ordenitem,
 		item,
-		Proveedor
+		proveedor
 	  WHERE (
 		(orden.id_status = 0) AND
 		(ordenitem.id_orden = orden.id_orden) AND
 		(item.id_item = ordenitem.id_item) AND
-		(Proveedor.id_proveedor = item.id_proveedor)
+		(proveedor.id_proveedor = item.id_proveedor)
 		$condition
 	  )
-	  GROUP BY orden.id_orden, orden.fecha, Proveedor.proveedor
+	  GROUP BY orden.id_orden, orden.fecha, proveedor.proveedor
 	  ORDER BY fecha, proveedor";
  $pdo = get_db_connection();
  $result = $pdo->query($query);
@@ -435,8 +435,8 @@ function get_tipos_de_envio() {
 }
 
 function es_proveedor_nacional($id_proveedor, $pais) {
-	$query = "SELECT pais FROM Pais, Proveedor
-		  WHERE Pais.id_pais = Proveedor.id_pais AND Proveedor.id_proveedor = $id_proveedor";
+	$query = "SELECT pais FROM pais, proveedor
+		  WHERE pais.id_pais = proveedor.id_pais AND proveedor.id_proveedor = $id_proveedor";
 	$pdo = get_db_connection();
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);

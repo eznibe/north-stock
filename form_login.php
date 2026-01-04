@@ -18,8 +18,8 @@ $pdo = get_db_connection();
 
 // Use prepared statement to prevent SQL injection
 $query = "SELECT nivel, nombre, clave
-  FROM Usuario
-  INNER JOIN Tipousr ON Tipousr.id_tipousr = Usuario.id_tipousr
+  FROM usuario
+  INNER JOIN tipousr ON tipousr.id_tipousr = usuario.id_tipousr
   WHERE username = :username";
 
 try {

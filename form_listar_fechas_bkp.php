@@ -142,7 +142,7 @@ if ($formname == 'listar_fechas_segundo')
  //
  if ($transac == 'Consumos') {
   $query = "SELECT
-	CONCAT(categoria.categoria, \" - \", Proveedor.proveedor) AS articulo,
+	CONCAT(categoria.categoria, \" - \", proveedor.proveedor) AS articulo,
 	DATE_FORMAT(log.fecha, '%d-%m-%Y') AS fech,
 	log.cantidad,
 	unidad.unidad
@@ -164,7 +164,7 @@ if ($formname == 'listar_fechas_segundo')
  }
  if ($transac == 'Compras') {
   $query = "SELECT
-	CONCAT(categoria.categoria, \" - \", Proveedor.proveedor) AS articulo,
+	CONCAT(categoria.categoria, \" - \", proveedor.proveedor) AS articulo,
 	DATE_FORMAT(log.fecha, '%d-%m-%Y') AS fech,
 	log.cantidad,
 	CONCAT(unidad.unidad,'(',item.factor_unidades,')')

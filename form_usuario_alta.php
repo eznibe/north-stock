@@ -31,7 +31,7 @@ function insert_usuario(&$mensaje, $id_tipo, $nombre, $username, $clave)
   // Si estan todos los campos requeridos
   //
   $nombre = addslashes(trim(strtoupper($nombre)));
-  $query = "INSERT INTO Usuario
+  $query = "INSERT INTO usuario
         (id_tipousr,
 	nombre,
 	username,

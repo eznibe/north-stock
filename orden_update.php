@@ -25,7 +25,7 @@ if(obtener_tipo_proveedor($id_orden_item) == "EXTRANJERO")
 	item.factor_unidades,
 	categoria.id_categoria
   FROM
-      categoria, Proveedor, ordenitem, item, unidad
+      categoria, proveedor, ordenitem, item, unidad
   WHERE (
 	(ordenitem.id_orden_item = $id_orden_item) AND
         (item.id_item = ordenitem.id_item) AND
@@ -58,7 +58,7 @@ else
 	item.factor_unidades,
 	categoria.id_categoria
   FROM
-      categoria, Proveedor, ordenitem, item, unidad
+      categoria, proveedor, ordenitem, item, unidad
   WHERE (
 	(ordenitem.id_orden_item = $id_orden_item) AND
         (item.id_item = ordenitem.id_item) AND
@@ -114,8 +114,8 @@ eval_html('orden_update.html', $var);
  * a partir del id_orden_item
  */
 function obtener_tipo_proveedor($id_orden_item){
-	$query = "SELECT pais FROM pais, Proveedor, item, ordenitem
-		  WHERE pais.id_pais = Proveedor.id_pais and
+	$query = "SELECT pais FROM pais pais, proveedor, item, ordenitem
+		  WHERE pais.id_pais = proveedor.id_pais and
 				proveedor.id_proveedor = item.id_proveedor and
 				ordenitem.id_orden_item = $id_orden_item and
 				ordenitem.id_item = item.id_item";

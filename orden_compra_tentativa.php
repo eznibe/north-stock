@@ -31,20 +31,20 @@ if ($formname == "orden_comprar_update_cant")
 //
 $query = "SELECT
 	itemcomprar.id_itemcomprar,
-	concat(categoria.categoria, \" - \", Proveedor.proveedor),
+	concat(categoria.categoria, \" - \", proveedor.proveedor),
 	itemcomprar.cantidad,
 	CONCAT(unidad.unidad,'(',item.factor_unidades,')'),
 	item.precio_fob,
 	(itemcomprar.cantidad * item.precio_fob),
 	item.codigo_proveedor
   FROM
-      categoria, Proveedor, itemcomprar, item, Unidad
+      categoria, proveedor, itemcomprar, item, unidad
   WHERE (
 	(item.id_item = itemcomprar.id_item) AND
 	(categoria.id_categoria = item.id_categoria) AND
-	(Proveedor.id_proveedor = item.id_proveedor) AND
-	(Unidad.id_unidad = item.id_unidad_compra) AND
-	(item.id_proveedor IN (SELECT id_proveedor FROM Proveedor, Pais WHERE Proveedor.id_pais = Pais.id_pais AND Pais.pais <> 'ARGENTINA') ) AND
+	(proveedor.id_proveedor = item.id_proveedor) AND
+	(unidad.id_unidad = item.id_unidad_compra) AND
+	(item.id_proveedor IN (SELECT id_proveedor FROM proveedor, pais WHERE proveedor.id_pais = pais.id_pais AND pais.pais <> 'ARGENTINA') ) AND
 	proveedor.id_proveedor = $id_proveedor 
 	AND itemcomprar.tentativo = true
   )
@@ -71,20 +71,20 @@ while ($row = $result->fetch(PDO::FETCH_NUM))
 //
 $query = "SELECT
 	itemcomprar.id_itemcomprar,
-	concat(categoria.categoria, \" - \", Proveedor.proveedor),
+	concat(categoria.categoria, \" - \", proveedor.proveedor),
 	itemcomprar.cantidad,
 	CONCAT(unidad.unidad,'(',item.factor_unidades,')'),
 	item.precio_ref,
 	(itemcomprar.cantidad * item.precio_ref),
 	item.codigo_proveedor
   FROM
-      categoria, Proveedor, itemcomprar, item, Unidad
+      categoria, proveedor, itemcomprar, item, unidad
   WHERE (
 	(item.id_item = itemcomprar.id_item) AND
 	(categoria.id_categoria = item.id_categoria) AND
-	(Proveedor.id_proveedor = item.id_proveedor) AND
-	(Unidad.id_unidad = item.id_unidad_compra) AND
-	(item.id_proveedor IN (SELECT id_proveedor FROM Proveedor, Pais WHERE Proveedor.id_pais = Pais.id_pais AND Pais.pais = 'ARGENTINA') ) AND
+	(proveedor.id_proveedor = item.id_proveedor) AND
+	(unidad.id_unidad = item.id_unidad_compra) AND
+	(item.id_proveedor IN (SELECT id_proveedor FROM proveedor, pais WHERE proveedor.id_pais = pais.id_pais AND pais.pais = 'ARGENTINA') ) AND
 	proveedor.id_proveedor = $id_proveedor
 	AND itemcomprar.tentativo = true
   )
@@ -113,13 +113,13 @@ $query = "SELECT
         sum((itemcomprar.cantidad * item.precio_fob)),
         sum((itemcomprar.cantidad * (item.precio_fob * (SELECT precio_dolar from dolarhoy where id_dolar=(SELECT max(id_dolar) FROM dolarhoy)))))
   FROM
-      categoria, Proveedor, itemcomprar, item, Unidad
+      categoria, proveedor, itemcomprar, item, unidad
   WHERE (
         (item.id_item = itemcomprar.id_item) AND
         (categoria.id_categoria = item.id_categoria) AND
-        (Proveedor.id_proveedor = item.id_proveedor) AND
-        (Unidad.id_unidad = categoria.id_unidad_visual) AND
-        (item.id_proveedor IN (SELECT id_proveedor FROM Proveedor, Pais WHERE Proveedor.id_pais = Pais.id_pais AND Pais.pais <> 'ARGENTINA') ) AND
+        (proveedor.id_proveedor = item.id_proveedor) AND
+        (unidad.id_unidad = categoria.id_unidad_visual) AND
+        (item.id_proveedor IN (SELECT id_proveedor FROM proveedor, pais WHERE proveedor.id_pais = pais.id_pais AND pais.pais <> 'ARGENTINA') ) AND
         proveedor.id_proveedor = $id_proveedor
   )";
 $result = $pdo->query($query);
@@ -134,13 +134,13 @@ $query = "SELECT
 		sum((itemcomprar.cantidad * (item.precio_ref / (SELECT precio_dolar from dolarhoy where id_dolar=(SELECT max(id_dolar) FROM dolarhoy))))),
         sum((itemcomprar.cantidad * item.precio_ref))
   FROM
-      categoria, Proveedor, itemcomprar, item, Unidad
+      categoria, proveedor, itemcomprar, item, unidad
   WHERE (
         (item.id_item = itemcomprar.id_item) AND
         (categoria.id_categoria = item.id_categoria) AND
-        (Proveedor.id_proveedor = item.id_proveedor) AND
-        (Unidad.id_unidad = categoria.id_unidad_visual) AND
-        (item.id_proveedor IN (SELECT id_proveedor FROM Proveedor, Pais WHERE Proveedor.id_pais = Pais.id_pais AND Pais.pais = 'ARGENTINA') ) AND
+        (proveedor.id_proveedor = item.id_proveedor) AND
+        (unidad.id_unidad = categoria.id_unidad_visual) AND
+        (item.id_proveedor IN (SELECT id_proveedor FROM proveedor, pais WHERE proveedor.id_pais = pais.id_pais AND pais.pais = 'ARGENTINA') ) AND
         proveedor.id_proveedor = $id_proveedor
   )";
 $result = $pdo->query($query);

@@ -271,7 +271,7 @@ function ingresarordenManual($id_item, $cantidad, $fecha) {
   $query = "SELECT coalesce(round(precio_fob, 2), 'null'), coalesce(round(precio_ref, 2), 'null'),
     case when pro.id_pais = 1 then 'AR$' when pro.id_pais > 1 then 'US$' end as moneda 
     FROM item i 
-    JOIN Proveedor pro on pro.id_proveedor = i.id_proveedor
+    JOIN proveedor pro on pro.id_proveedor = i.id_proveedor
     WHERE i.id_item = $id_item";
 
   $result = $pdo->query($query);

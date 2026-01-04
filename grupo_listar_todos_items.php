@@ -38,8 +38,8 @@ $query = "SELECT
   FROM
     item  
     JOIN categoria on item.id_categoria = categoria.id_categoria
-    JOIN unidad on unidad.id_unidad = categoria.id_unidad_visual
-    JOIN Proveedor on proveedor.id_proveedor = item.id_proveedor
+    JOIN unidad unidad on unidad.id_unidad = categoria.id_unidad_visual
+    JOIN proveedor on proveedor.id_proveedor = item.id_proveedor
     LEFT JOIN previsionitem pi on pi.id_item = item.id_item
     LEFT JOIN prevision p on p.id_prevision = pi.id_prevision
   WHERE

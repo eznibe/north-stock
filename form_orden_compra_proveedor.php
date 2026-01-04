@@ -238,8 +238,8 @@ function obtener_precio_dolar()
  */
 function obtener_tipo_proveedor($id_proveedor){
 	global $pdo;
-	$query = "SELECT pais FROM pais, Proveedor
-		  WHERE pais.id_pais = Proveedor.id_pais and
+	$query = "SELECT pais FROM pais pais, proveedor
+		  WHERE pais.id_pais = proveedor.id_pais and
 				proveedor.id_proveedor = $id_proveedor";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);

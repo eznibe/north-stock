@@ -27,7 +27,7 @@ $query = "SELECT
 		JOIN item i on i.id_item = pi.id_item
 		JOIN categoria c on c.id_categoria = i.id_categoria
 		JOIN unidad u on u.id_unidad = i.id_unidad_compra
-		JOIN Proveedor pro on pro.id_proveedor = i.id_proveedor
+		JOIN proveedor pro on pro.id_proveedor = i.id_proveedor
   WHERE 
 		pi.id_prevision_item = $id_prevision_item
 	";

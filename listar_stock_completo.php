@@ -72,7 +72,7 @@ $query = "SELECT
 		pais
   WHERE (
         (item.id_categoria = categoria.id_categoria) AND
-        (item.id_proveedor = Proveedor.id_proveedor) AND
+        (item.id_proveedor = proveedor.id_proveedor) AND
 		(unidad.id_unidad = item.id_unidad_compra) AND
 		(grupo.id_grupo = categoria.id_grupo) AND
 		(proveedor.id_pais = pais.id_pais)

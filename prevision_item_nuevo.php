@@ -79,7 +79,7 @@ function getitems($id_item) {
     i.stock_disponible,
     i.stock_transito
   FROM item i 
-  JOIN Proveedor pro on i.id_proveedor = pro.id_proveedor
+  JOIN proveedor pro on i.id_proveedor = pro.id_proveedor
   JOIN categoria c on i.id_categoria = c.id_categoria
   JOIN unidad u on u.id_unidad = c.id_unidad_visual
   WHERE 
@@ -105,7 +105,7 @@ function getitem($id_item) {
   FROM item i
   JOIN categoria c on c.id_categoria = i.id_categoria
   JOIN unidad u on u.id_unidad = c.id_unidad_visual 
-  JOIN Proveedor p on p.id_proveedor = i.id_proveedor
+  JOIN proveedor p on p.id_proveedor = i.id_proveedor
   WHERE i.id_item = $id_item";
 
   $result = $pdo->query($query);

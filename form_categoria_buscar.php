@@ -12,7 +12,7 @@ $focus = "forms[0].producto";
 $mensaje = "";
 $categoria = $_POST['categoria'];
 
-$query = "SELECT categoria.categoria, categoria.scan, categoria.stock_minimo, unidad.unidad FROM categoria, unidad WHERE ((unidad.id_unidad = categoria.id_unidad_visual) AND (categoria.categoria LIKE \"%$categoria%\")) ORDER BY categoria.categoria";
+$query = "SELECT categoria.categoria, categoria.scan, categoria.stock_minimo, unidad.unidad FROM categoria, unidad unidad WHERE ((unidad.id_unidad = categoria.id_unidad_visual) AND (categoria.categoria LIKE \"%$categoria%\")) ORDER BY categoria.categoria";
 $result = $pdo->query($query);
 
 $aux = "";

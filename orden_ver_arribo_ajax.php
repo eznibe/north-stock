@@ -94,7 +94,7 @@ function guardarDespacho() {
   })
 
   $.ajax({
-    url:'api/ordenes.php?guardarProveedorAR=true&id_orden='+$('#id_orden').val()+'&proveedor_AR='+$('#proveedor_AR').val(),
+    url:'api/ordenes.php?guardarproveedorAR=true&id_orden='+$('#id_orden').val()+'&proveedor_AR='+$('#proveedor_AR').val(),
     success: function(data, status){
       //console.log("Data: " + data + "\nStatus: " + status);
       $('#label_despacho').text('Guardado');
@@ -200,7 +200,7 @@ function despachoKeyPress() {
 <tr>
  <td>
    <div style="margin-bottom: 10px;">
-     <label class="ordenData">Proveedor AR:</label>
+     <label class="ordenData">proveedor AR:</label>
      <input type="text" value="<?php echo $var['proveedor_AR']; ?>" size="20" name="proveedor_AR" id="proveedor_AR" onkeypress="despachoKeyPress();">
      <button name="guardar" value="guardar" style="margin-left: 20px;" onclick="guardarDespacho();"><label id="label_nr_factura">Guardar</label></button>
    </div>

@@ -11,7 +11,7 @@ $focus = "forms[0].producto";
 $mensaje = "";
 $producto = $_POST['producto'];
 
-$query = "SELECT categoria.categoria, categoria.stock_minimo, SUM(item.stock_disponible), item.id_categoria, (SUM(item.stock_disponible)-categoria.stock_minimo), unidad.unidad FROM item, categoria, unidad WHERE ((item.id_categoria = categoria.id_categoria) AND (unidad.id_unidad = categoria.id_unidad_visual) AND (categoria.categoria LIKE \"%$producto%\")) GROUP BY item.id_categoria ORDER BY categoria.categoria";
+$query = "SELECT categoria.categoria, categoria.stock_minimo, SUM(item.stock_disponible), item.id_categoria, (SUM(item.stock_disponible)-categoria.stock_minimo), unidad.unidad FROM item, categoria, unidad unidad WHERE ((item.id_categoria = categoria.id_categoria) AND (unidad.id_unidad = categoria.id_unidad_visual) AND (categoria.categoria LIKE \"%$producto%\")) GROUP BY item.id_categoria ORDER BY categoria.categoria";
 $result = $pdo->query($query);
 
 $aux = "";

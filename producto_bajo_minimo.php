@@ -38,7 +38,7 @@ $query = "SELECT
   FROM
     item  
     JOIN categoria on item.id_categoria = categoria.id_categoria
-    JOIN unidad on unidad.id_unidad = categoria.id_unidad_visual
+    JOIN unidad unidad on unidad.id_unidad = categoria.id_unidad_visual
     JOIN grupo on categoria.id_grupo = grupo.id_grupo
     LEFT JOIN (
     	SELECT pi.id_item, sum(pi.cantidad) as cantidad
