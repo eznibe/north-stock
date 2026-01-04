@@ -43,6 +43,7 @@ function update_orden(ID_ORDEN_ITEM)
 {
  var url="orden_update_arribo.php?id_orden_item=" + ID_ORDEN_ITEM;
  window.open(url,"producto_detalle","toolbar=no, location=no, directories=no, status=yes, menubar=no, scrollbars=yes, resizable=yes, width=600, height=300");
+}
 
 function confirma()
 {
@@ -51,18 +52,22 @@ if (envio == true)
  {
   document.forms[0].submit();
  }
+}
 
 function showFeedback()
 {
 	document.getElementById('modifiedDescripcion').innerHTML = " (guardada)";
+}
 
 function toggleDescripcion() {
 	var container = document.getElementById('descripcionContainer');
 
 	container.style.display = (container.style.display=='none') ? 'inline-table' : 'none';
+}
 
 function descripcionKeyPress() {
 	document.getElementById('modifiedDescripcion').innerHTML = " (sin guardar)";
+}
 
 function guardarDespacho() {
   // var data = {despacho: $('#despacho').val()};
@@ -97,9 +102,11 @@ function guardarDespacho() {
       $('#label_despacho').text('Guardado');
     }
   })
+}
 
 function despachoKeyPress() {
 	$('#label_despacho').text('Guardar');
+}
 
 </script>
 <?php 	$ajax->drawJavaScript(); ?>

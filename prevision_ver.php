@@ -270,7 +270,7 @@ function get_prevision_id($id_prevision_item) {
   $query = "SELECT id_prevision FROM previsionitem WHERE id_prevision_item = $id_prevision_item";
   $result = $pdo->query($query);
   $row = $result->fetch(PDO::FETCH_NUM);
-  return $row['id_prevision'];
+  return $row[0];
 }
 
 /**

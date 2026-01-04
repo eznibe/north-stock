@@ -65,5 +65,5 @@ function getPrevision($id_prevision) {
   $query = "SELECT coalesce(p.numero_orden, concat('(', p.id_prevision, ')')) as prevision FROM prevision p WHERE id_prevision = $id_prevision";
   $result = $pdo->query($query);
   $row = $result->fetch(PDO::FETCH_NUM);
-  return $row["prevision"];
+  return $row[0];
 }
