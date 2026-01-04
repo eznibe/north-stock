@@ -507,7 +507,7 @@ function armar_select_fechas($dia_ini, $mes_ini, $ano_ini)
 				"</select>
 				/
 				<select name='ano_ini' id='ano_ini' class='obligatorio'>";
-				for ($i = 2010; $i <= 2025; $i++) {
+				for ($i = 2010; $i <= 2035; $i++) {
 				    $codigo = $codigo . ((!empty($ano_ini) && $ano_ini==$i) ? "<option value='".$i."' selected>" : "<option value='".$i."'>"). $i ."</option>";
 				}
 	$codigo = 	$codigo . "</select>";
@@ -566,7 +566,7 @@ function opciones_ano($anio = null, $conOpcionVacia = false, $iniciaVacio = fals
   if ($conOpcionVacia) {
     $anoopc = $anoopc . "<option value='0'>-</option>\n";
   }
-	for ($i = 2010; $i <= 2025 ; $i++) {
+	for ($i = 2010; $i <= 2035 ; $i++) {
 		if($i <> $anohoy)
 			$anoopc = $anoopc . "<option value='$i'>$i</option>\n";
 		else

@@ -26,7 +26,7 @@ function armar_listar_entre_fechas($transac, $dia_ini, $mes_ini, $ano_ini, $dia_
 				"</select>
 				/
 				<select name='ano_ini' id='ano_ini' class='obligatorio'>";
-				for ($i = 2010; $i <= 2025; $i++) {
+				for ($i = 2010; $i <= 2035; $i++) {
 				    $codigo = $codigo . ((!empty($ano_ini) && $ano_ini==$i) ? "<option value='".$i."' selected>" : "<option value='".$i."'>"). $i ."</option>";
 				}
 	$codigo = 	$codigo .
@@ -53,7 +53,7 @@ function armar_listar_entre_fechas($transac, $dia_ini, $mes_ini, $ano_ini, $dia_
 				"</select>
 				/
 				<select name='ano_fin' id='ano_fin' class='obligatorio'>";
-				for ($i = 2010; $i <= 2025; $i++) {
+				for ($i = 2010; $i <= 2035; $i++) {
 				    $codigo = $codigo . ((!empty($ano_fin) && $ano_fin==$i) ? "<option value='".$i."' selected>" : "<option value='".$i."'>"). $i ."</option>";
 				}
 	$codigo = 	$codigo .
@@ -116,7 +116,7 @@ function armar_listar_entre_fechas_por_periodo($transac, $tipo_periodo, $dia_ini
 			"</select>
 			/
 			<select name='ano_ini' id='ano_ini' class='obligatorio'>";
-			for ($i = 2010; $i <= 2025; $i++) {
+			for ($i = 2010; $i <= 2035; $i++) {
 				    $codigo = $codigo . ((!empty($ano_ini) && $ano_ini==$i) ? "<option value='".$i."' selected>" : "<option value='".$i."'>"). $i ."</option>";
 			}
 	$codigo = 	$codigo .
@@ -143,7 +143,7 @@ function armar_listar_entre_fechas_por_periodo($transac, $tipo_periodo, $dia_ini
 			"</select>
 			/
 			<select name='ano_fin' id='ano_fin' class='obligatorio'>";
-			for ($i = 2010; $i <= 2025; $i++) {
+			for ($i = 2010; $i <= 2035; $i++) {
 				    $codigo = $codigo . ((!empty($ano_fin) && $ano_fin==$i) ? "<option value='".$i."' selected>" : "<option value='".$i."'>"). $i ."</option>";
 			}
 	$codigo = 	$codigo .

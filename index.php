@@ -1,4 +1,5 @@
-	<html>
+<!DOCTYPE html>
+<html>
 <head>
   <title>North Sails - Sistema de Control de Stock</title>
   <link rel="stylesheet" type="text/css" href="north.css" />
