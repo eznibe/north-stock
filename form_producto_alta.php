@@ -6,7 +6,8 @@ include 'dbutils.php';
 check_session();
 
 db_connect();
-
+$pdo = get_db_connection();
+$pdo = get_db_connection();
 $unidades = get_units_opt(0);
 $unidad_descarga = "";
 
@@ -37,6 +38,7 @@ $focus = "forms[0].pcategoria";
 
 function insert_producto(&$mensaje, $categoria, $proveedor, $scan, $codigo_proveedor, $codigo_barras, $precio, $precio_nac, $precio_ref, $autoassign, $unidad, $factor_unidades)
 {
+ global $pdo;
  if ( ( ($categoria == "") or ($proveedor == 0) or ($unidad == 0) or ($factor_unidades == "") ) or ( ($scan) and ($codigo_barras == "") and (!($autoassign)) ) or ($precio == "") )
  {
   // Si falta alguno de los campos requeridos. Esto es:
@@ -120,6 +122,7 @@ function insert_producto(&$mensaje, $categoria, $proveedor, $scan, $codigo_prove
 
 function busca_proveedores(&$proveedores, &$mensaje, $proveedor)
 {
+ global $pdo;
  if ($proveedor == "")
  {
   $mensaje = "<em class=\"error\">Error: Debe ingresar parte del nombre del proveedor.</em>";
@@ -155,6 +158,7 @@ function busca_proveedores(&$proveedores, &$mensaje, $proveedor)
 
 function busca_categoria(&$categoria, &$mensaje, $pcategoria)
 {
+ global $pdo;
  if ($pcategoria == "")
  {
   $mensaje = "<em class=\"error\">Error: Debe ingresar parte del nombre del producto.</em>";
@@ -190,6 +194,7 @@ function busca_categoria(&$categoria, &$mensaje, $pcategoria)
 
 function get_name($tabla, $columna, $valor)
 {
+           global $pdo;
  $query = "SELECT $columna
            FROM $tabla
            WHERE id_$columna = $valor";
@@ -200,6 +205,7 @@ function get_name($tabla, $columna, $valor)
 
 function get_scan($valor)
 {
+           global $pdo;
  $query = "SELECT scan
            FROM categoria
            WHERE id_categoria = $valor";
@@ -211,6 +217,7 @@ function get_scan($valor)
 
 function porcentaje_impuesto_categoria($id_categoria)
 {
+ global $pdo;
 	$query = "SELECT porc_impuesto FROM categoria WHERE id_categoria=$id_categoria";
 	$result = $pdo->query($query);
  	$row = $result->fetch(PDO::FETCH_NUM);
@@ -219,6 +226,7 @@ function porcentaje_impuesto_categoria($id_categoria)
 
 function precio_dolar()
 {
+ global $pdo;
 	$query = "SELECT precio_dolar FROM dolarhoy WHERE id_dolar=(SELECT MAX(id_dolar) FROM dolarhoy)";
 	$result = $pdo->query($query);
  	$row = $result->fetch(PDO::FETCH_NUM);
@@ -227,7 +235,8 @@ function precio_dolar()
 
 function get_moneda_proveedor($id_proveedor)
 {
-	$query = "SELECT pais FROM pais pais, proveedor
+			  global $pdo;
+	$query = "SELECT pais FROM pais, proveedor
 			  WHERE pais.id_pais = proveedor.id_pais AND
 					proveedor.id_proveedor = $id_proveedor";
 	$result = $pdo->query($query);
@@ -242,7 +251,8 @@ function get_moneda_proveedor($id_proveedor)
  * a partir del id_proveedor pasado como parametro
  */
 function obtener_tipo_proveedor($id_proveedor){
-	$query = "SELECT pais FROM pais pais, proveedor
+		  global $pdo;
+	$query = "SELECT pais FROM pais, proveedor
 		  WHERE pais.id_pais = proveedor.id_pais and
 				proveedor.id_proveedor = $id_proveedor";
 	$result = $pdo->query($query);

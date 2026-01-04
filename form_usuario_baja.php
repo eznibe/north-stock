@@ -12,6 +12,7 @@ $mensaje = "";
 $focus = "forms[0].id_usuario";
 
 db_connect();
+$pdo = get_db_connection();
 
 function delete_usuario(&$mensaje, $id_usuario)
 {

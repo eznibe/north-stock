@@ -6,7 +6,8 @@ include 'dbutils.php';
 session_start();
 
 db_connect();
-
+$pdo = get_db_connection();
+$pdo = get_db_connection();
 $id_orden_item = $_GET['id_orden_item'];
 
 if(obtener_tipo_proveedor($id_orden_item) == "EXTRANJERO")
@@ -114,7 +115,8 @@ eval_html('orden_update.html', $var);
  * a partir del id_orden_item
  */
 function obtener_tipo_proveedor($id_orden_item){
-	$query = "SELECT pais FROM pais pais, proveedor, item, ordenitem
+ global $pdo;
+	$query = "SELECT pais FROM pais, proveedor, item, ordenitem
 		  WHERE pais.id_pais = proveedor.id_pais and
 				proveedor.id_proveedor = item.id_proveedor and
 				ordenitem.id_orden_item = $id_orden_item and

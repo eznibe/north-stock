@@ -8,7 +8,7 @@ check_session();
 $valid_user = $_SESSION['valid_user'];
 
 db_connect();
-
+$pdo = get_db_connection();
 if ( isset($_GET['id_prevision']) ) {
   $id_prevision = $_GET['id_prevision'];
 } 
@@ -42,6 +42,7 @@ else if ($formname == "prevision_item_nuevo") {
 showPrevisionDetailsScreen($id_prevision);
 
 function showPrevisionDetailsScreen($id_prevision) {
+  global $pdo;
   global $valid_user;
   $username = $valid_user;
   
@@ -185,6 +186,7 @@ function formEliminaritem($id_prevision, $id_prevision_item) {
  * como parametro
  */
 function update_prevision($id_prevision_item, $cantidad, $descargando_item, $revirtiendo_item) {
+global $pdo;
   global $valid_user;
 
 	$query = "SELECT id_prevision, id_item, cantidad FROM previsionitem WHERE id_prevision_item = $id_prevision_item";
@@ -248,6 +250,7 @@ function update_prevision($id_prevision_item, $cantidad, $descargando_item, $rev
 
 // si todos los items estam descargados, marcar prevision como descargada tambien
 function descargar_prevision_por_items_descargados($id_prevision) {
+  global $pdo;
   global $valid_user;
   $username = $valid_user;
   $fecha = date("Y-m-d");
@@ -263,6 +266,7 @@ function descargar_prevision_por_items_descargados($id_prevision) {
 }
 
 function get_prevision_id($id_prevision_item) {
+ global $pdo;
   $query = "SELECT id_prevision FROM previsionitem WHERE id_prevision_item = $id_prevision_item";
   $result = $pdo->query($query);
   $row = $result->fetch(PDO::FETCH_NUM);
@@ -274,6 +278,7 @@ function get_prevision_id($id_prevision_item) {
  */
 function agregar_prevision_item($id_prevision, $id_item, $cantidad, $precio, $moneda)
 {
+ global $pdo;
 	$insert = "INSERT INTO previsionitem (id_prevision, id_item, cantidad, moneda)
     VALUES ($id_prevision, $id_item, $cantidad, '$moneda')";
   $result = $pdo->query($insert);
@@ -284,6 +289,7 @@ function agregar_prevision_item($id_prevision, $id_item, $cantidad, $precio, $mo
 
 function obtener_precio_dolar_orden($id_prevision)
 {
+ global $pdo;
 	$query = "SELECT cotizacion_dolar FROM orden WHERE id_orden = $id_prevision";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);
@@ -292,6 +298,7 @@ function obtener_precio_dolar_orden($id_prevision)
 
 function obtener_fecha_orden($id_prevision)
 {
+ global $pdo;
 	$query = "SELECT fecha FROM orden WHERE id_orden = $id_prevision";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);

@@ -6,6 +6,7 @@ include 'dbutils.php';
 session_start();
 
 db_connect();
+$pdo = get_db_connection();
 
 $focus = "forms[0].producto";
 $mensaje = "";

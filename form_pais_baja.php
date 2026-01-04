@@ -12,6 +12,7 @@ $mensaje = "";
 $focus = "forms[0].id_pais";
 
 db_connect();
+$pdo = get_db_connection();
 
 function delete_pais(&$mensaje, $id_pais)
 {

@@ -6,7 +6,8 @@ include 'dbutils.php';
 // session_start();
 
 db_connect();
-
+$pdo = get_db_connection();
+$pdo = get_db_connection();
 $id_categoria = isset($_GET['id_categoria']) ? $_GET['id_categoria'] : "";
 
 // Todos los previsiones del item
@@ -26,6 +27,7 @@ eval_html('producto_ver_previsiones.html', $var);
 // Functions
 
 function getPrevisiones($id_categoria) {
+    global $pdo;
   $query = "SELECT 
     p.id_prevision, 
     coalesce(numero_orden, concat('(', p.id_prevision, ')')),

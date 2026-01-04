@@ -13,6 +13,7 @@ $estado = $_POST['estado'];
 $mensaje = "";
 
 db_connect();
+$pdo = get_db_connection();
 if ($estado == "confirma") 
 {
  $query = "update productos set stock_disponible = stock_disponible+$cantidad where id_producto=$producto";

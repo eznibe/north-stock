@@ -18,6 +18,7 @@ $mensaje = "";
 $focus = "forms[0].pais";
 
 db_connect();
+$pdo = get_db_connection();
 
 // Verifico en status de la orden. Si posee stock_transito (id_status == 1) modificarlo
 if (get_orden_status($id_orden) == 1)

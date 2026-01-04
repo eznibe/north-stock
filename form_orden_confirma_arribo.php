@@ -34,6 +34,7 @@ $mensaje = "";
 $focus = "forms[0].pais";
 
 db_connect();
+$pdo = get_db_connection();
 
 
 // update stock disponible de cada item de la orden

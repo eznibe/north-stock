@@ -6,6 +6,7 @@ include 'dbutils.php';
 check_session();
 
 db_connect();
+$pdo = get_db_connection();
 
 $id_categoria = $_GET['id_categoria'];
 

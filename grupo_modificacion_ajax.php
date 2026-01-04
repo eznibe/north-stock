@@ -8,6 +8,7 @@ include 'dbutils.php';
 session_start();
 
 db_connect();
+$pdo = get_db_connection();
 
 $mensaje = $_GET['mensaje'];
 $focus = "forms[0].id_grupo";
@@ -22,6 +23,7 @@ $var = array("mensaje" => $mensaje,
 
 
   	function updateGroupFields($id_grupo) {
+		global $pdo;
 
 		$query = "SELECT grupo, agrupacion_contable FROM grupo WHERE id_grupo = $id_grupo";
 		$result = $pdo->query($query);
@@ -40,9 +42,9 @@ $var = array("mensaje" => $mensaje,
 //		$tab->add( TabSetValue::getBehaviour("grupo", $grupo));
 
 		return $tab->getString();
-	}
+}
 
-	$ajax = new TinyAjax();
+$ajax = new TinyAjax();
 	$ajax->showLoading();
 	$ajax->exportFunction("updateGroupFields", array("id_grupo"));
 

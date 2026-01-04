@@ -8,6 +8,7 @@ include 'dbutils.php';
 check_session();
 
 db_connect();
+$pdo = get_db_connection();
 
 if ($_SESSION['user_level'] < 11) $imprimir = "";
 else {

@@ -15,6 +15,7 @@ $mail = addslashes(trim($_POST['mail']));
 
 
 db_connect();
+$pdo = get_db_connection();
 if (($proveedor != "") and ($id_pais != 0))
 {
  $query = "INSERT INTO 

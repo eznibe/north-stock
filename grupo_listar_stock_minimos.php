@@ -6,7 +6,8 @@ include 'dbutils.php';
 check_session();
 
 db_connect();
-
+$pdo = get_db_connection();
+$pdo = get_db_connection();
 $id_grupo = $_GET['id_grupo'];
 $periodo;
 
@@ -15,6 +16,7 @@ else $periodo = 6;
 
 function obtener_grupo($id_grupo)
 {
+ global $pdo;
 	$query = "SELECT grupo FROM grupo WHERE id_grupo = $id_grupo";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);
@@ -74,6 +76,7 @@ eval_html('producto_listar_stock_minimos.html', $var);
 // Function para armar cada table row del html
 function process_item($row, $periodo) {
 
+ global $pdo;
 // calcular mesy anio iniciales a partir del periodo dado
 $anio_actual = date("Y");
 $mes_actual = date("n");

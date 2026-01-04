@@ -6,7 +6,8 @@ include 'dbutils.php';
 session_start();
 
 db_connect();
-
+$pdo = get_db_connection();
+$pdo = get_db_connection();
 $id_item = $_POST['id_item'];
 $cantidad = $_POST['cantidad'];
 $formname = $_POST['formname'];
@@ -48,7 +49,8 @@ eval_html('window_close.html', $var);
  * a partir del id_proveedor pasado como parametro
  */
 function obtener_tipo_proveedor($id_proveedor){
-	$query = "SELECT pais FROM pais pais, proveedor
+		  global $pdo;
+	$query = "SELECT pais FROM pais, proveedor
 		  WHERE pais.id_pais = proveedor.id_pais and
 				proveedor.id_proveedor = $id_proveedor";
 	$result = $pdo->query($query);

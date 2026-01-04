@@ -8,9 +8,11 @@ require_once('dbutils.php');
 session_start();
 
 db_connect();
+$pdo = get_db_connection();
 
 
   function saveDescripcion($descripcion, $id_orden) {
+	global $pdo;
 
 	$query = "UPDATE orden SET descripcion = '$descripcion' WHERE id_orden = $id_orden";
 	$result = $pdo->query($query);
@@ -19,10 +21,10 @@ db_connect();
 	$tab->add( TabEval::getBehavior("showFeedback()"));
 
 	return $tab->getString();
-  }
+}
 
-	$ajax = new TinyAjax();
-	$ajax->showLoading();
+$ajax = new TinyAjax();
+$ajax->showLoading();
 	$ajax->setRequestUri('orden_ver_ajax.php');
 	$ajax->exportFunction("saveDescripcion", array("descripcion", "id_orden"));
 
@@ -42,7 +44,6 @@ function update_orden(ID_ORDEN_ITEM)
 {
  var url="orden_update.php?id_orden_item=" + ID_ORDEN_ITEM;
  window.open(url,"producto_detalle","toolbar=no, location=no, directories=no, status=yes, menubar=no, scrollbars=yes, resizable=yes, width=600, height=300");
-}
 
 function confirma()
 {
@@ -51,22 +52,18 @@ if (envio == true)
  {
   document.forms[0].submit();
  }
-}
 
 function showFeedback()
 {
 	document.getElementById('modifiedDescripcion').innerHTML = " (guardada)";
-}
 
 function toggleDescripcion() {
 	var container = document.getElementById('descripcionContainer');
 
 	container.style.display = (container.style.display=='none') ? 'inline-table' : 'none';
-}
 
 function descripcionKeyPress() {
 	document.getElementById('modifiedDescripcion').innerHTML = " (sin guardar)";
-}
 
 function guardarDespacho() {
   // var data = {despacho: $('#despacho').val()};
@@ -101,11 +98,9 @@ function guardarDespacho() {
       $('#label_despacho').text('Guardado');
     }
   })
-}
 
 function despachoKeyPress() {
 	$('#label_despacho').text('Guardar');
-}
 
 </script>
 <?php 	$ajax->drawJavaScript(); ?>

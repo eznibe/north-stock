@@ -15,6 +15,7 @@ $mensaje = "";
 $focus = "forms[0].pais";
 
 db_connect();
+$pdo = get_db_connection();
 
 
 // Elimino prevision y sus items

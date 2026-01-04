@@ -12,6 +12,7 @@ $mensaje = "";
 $focus = "forms[0].id_subproducto";
 
 db_connect();
+$pdo = get_db_connection();
 
 function delete_subproducto(&$mensaje, $id_subproducto)
 {

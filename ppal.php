@@ -7,6 +7,7 @@ $username = isset($_POST['username']) ? $_POST['username'] : "";
 $clave = isset($_POST['password']) ? $_POST['password'] : "";
 
 db_connect();
+$pdo = get_db_connection();
 
 $query = "SELECT 
 			categoria.categoria, 

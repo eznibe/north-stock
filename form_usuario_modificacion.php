@@ -18,9 +18,11 @@ $focus = "forms[0].id_tipo";
 $formname = $_POST['formname'];
 
 db_connect();
-
+$pdo = get_db_connection();
+$pdo = get_db_connection();
 function get_usuario_data(&$data, $id_usuario)
 {
+	global $pdo;
  $query = "SELECT
 	nombre,
 	username,
@@ -37,6 +39,7 @@ function get_usuario_data(&$data, $id_usuario)
 
 function update_usuario(&$mensaje, $id_usuario, $nombre, $username, $clave, $id_tipo)
 {
+ global $pdo;
  if ( ($nombre == "") or ($username == "") or ($clave == "") or ($id_tipo == 0) )
  {
   // Si falta alguno de los campos requeridos.
@@ -48,13 +51,13 @@ function update_usuario(&$mensaje, $id_usuario, $nombre, $username, $clave, $id_
  {
   // Si estan todos los campos requeridos
   //
-  $query = "UPDATE usuario SET
+  $query = "UPDATE Usuario SET
 	nombre = \"$nombre\",
 	username = \"$username\",
 	clave = \"$clave\",
 	id_tipousr = $id_tipo
   WHERE
-	usuario.id_usuario = $id_usuario";
+	Usuario.id_usuario = $id_usuario";
 
   if (!($result = $pdo->query($query)))
   {

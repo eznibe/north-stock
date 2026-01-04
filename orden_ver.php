@@ -6,6 +6,7 @@ include 'dbutils.php';
 session_start();
 
 db_connect();
+$pdo = get_db_connection();
 
 if ( isset($_GET['id_orden']) ) $id_orden = $_GET['id_orden'];
 else $id_orden = $_POST['id_orden'];
@@ -187,6 +188,7 @@ eval_html('orden_ver_ajax.php', $var);
 
 function orden_descripcion($id_orden)
 {
+	global $pdo;
 	$query = "SELECT descripcion FROM orden WHERE orden.id_orden = $id_orden";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);
@@ -195,6 +197,7 @@ function orden_descripcion($id_orden)
 
 function orden_despacho($id_orden)
 {
+	global $pdo;
 	$query = "SELECT despacho FROM orden WHERE orden.id_orden = $id_orden";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);
@@ -203,6 +206,7 @@ function orden_despacho($id_orden)
 
 function orden_nr_factura($id_orden)
 {
+	global $pdo;
 	$query = "SELECT nr_factura FROM orden WHERE orden.id_orden = $id_orden";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);
@@ -215,6 +219,7 @@ function orden_nr_factura($id_orden)
  */
 function update_orden($id_orden_item, $cantidad, $precio)
 {
+ global $pdo;
  if ( ($cantidad == 0) or ($cantidad == "") )
  {
   $query = "SELECT id_orden, id_item FROM ordenitem WHERE id_orden_item = $id_orden_item";
@@ -261,6 +266,7 @@ function update_orden($id_orden_item, $cantidad, $precio)
  * Devuelve si el proveedor es extranjero o nacional para saber como mostrar el listado
  */
 function obtener_tipo_proveedor($id_orden){
+	global $pdo;
 	$query = "SELECT pais.pais FROM pais pais, proveedor proveedor, item item, ordenitem ordenitem
 		  WHERE pais.id_pais = proveedor.id_pais and
 				proveedor.id_proveedor = item.id_proveedor and
@@ -279,6 +285,7 @@ function obtener_tipo_proveedor($id_orden){
  * a partir del id_orden_item
  */
 function obtener_tipo_proveedor_por_orden_item($id_orden_item){
+	global $pdo;
 	$query = "SELECT pais FROM pais pais, proveedor, item, ordenitem
 		  WHERE pais.id_pais = proveedor.id_pais and
 				proveedor.id_proveedor = item.id_proveedor and
@@ -293,6 +300,7 @@ function obtener_tipo_proveedor_por_orden_item($id_orden_item){
 
 function obtener_precio_dolar_orden($id_orden)
 {
+	global $pdo;
 	$query = "SELECT cotizacion_dolar FROM orden WHERE id_orden = $id_orden";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);
@@ -301,6 +309,7 @@ function obtener_precio_dolar_orden($id_orden)
 
 function obtener_fecha_orden($id_orden)
 {
+	global $pdo;
 	$query = "SELECT fecha FROM orden WHERE id_orden = $id_orden";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);
@@ -309,6 +318,7 @@ function obtener_fecha_orden($id_orden)
 
 function obtener_orden($id_orden)
 {
+	global $pdo;
 	$query = "SELECT * FROM orden WHERE id_orden = $id_orden";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);

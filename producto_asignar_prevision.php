@@ -6,7 +6,8 @@ include 'dbutils.php';
 check_session();
 
 db_connect();
-
+$pdo = get_db_connection();
+$pdo = get_db_connection();
 $username = $_SESSION['valid_user'];
 
 $id_prevision = $_POST['id_prevision'];
@@ -33,6 +34,7 @@ eval_html('producto_salida.html', $var);
 
 function asignar_a_prevision($id_item, &$id_prevision, $cantidad, $numero_orden) {
 
+    global $pdo;
   if ($id_prevision == "-1") {
     $numero_orden = isset($numero_orden) && $numero_orden <> "" ? "'$numero_orden'" : 'null';
 
@@ -59,6 +61,7 @@ function asignar_a_prevision($id_item, &$id_prevision, $cantidad, $numero_orden)
 
 function getPrevision($id_prevision) {
 
+ global $pdo;
   $query = "SELECT coalesce(p.numero_orden, concat('(', p.id_prevision, ')')) as prevision FROM prevision p WHERE id_prevision = $id_prevision";
   $result = $pdo->query($query);
   $row = $result->fetch(PDO::FETCH_NUM);

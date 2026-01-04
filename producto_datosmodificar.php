@@ -3,13 +3,15 @@
 	include_once 'dbutils.php';
 
 	db_connect();
-
+$pdo = get_db_connection();
+$pdo = get_db_connection();
 	function mostrar_precio_correcto($proveedor,$precio_fob,$precio_ref) {
 
+ global $pdo;
 		$query = "insert into auxiliar (precio) values (3.5)";
 		$result = $pdo->query($query);
 
-		$query = "SELECT proveedor, pais FROM proveedor, pais pais WHERE id_proveedor = $proveedor AND proveedor.id_pais = pais.id_pais";
+		$query = "SELECT proveedor, pais FROM proveedor, pais WHERE id_proveedor = $proveedor AND proveedor.id_pais = pais.id_pais";
 		$result = $pdo->query($query);
 		$row = $result->fetch(PDO::FETCH_NUM);
 

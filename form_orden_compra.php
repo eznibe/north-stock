@@ -11,6 +11,7 @@ $mensaje = "";
 $focus = "forms[0].pais";
 
 db_connect();
+$pdo = get_db_connection();
 
 $query = "SELECT
 	DISTINCT item.id_proveedor

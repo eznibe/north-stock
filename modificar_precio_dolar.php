@@ -3,7 +3,8 @@
 	include 'dbutils.php';
 
 	db_connect();
-
+$pdo = get_db_connection();
+$pdo = get_db_connection();
 	$precio_dolar = $_POST['precio'];
 	$fecha_mod    = $_POST['fecha_mod'];
 
@@ -29,6 +30,7 @@
 
 function modificar_precio_dolar($precio_dolar)
 {
+ global $pdo;
 	$query = "INSERT INTO dolarhoy (precio_dolar) VALUES ($precio_dolar)";
 	if (!($result = $pdo->query($query)))
 	   return FALSE;
@@ -42,6 +44,7 @@ function modificar_precio_dolar($precio_dolar)
  */
 function actualizar_precios_ref($precio_dolar)
 {
+ global $pdo;
 	$query = "UPDATE item SET precio_ref = precio_nac * $precio_dolar " .
 			 "WHERE precio_nac IS NOT NULL AND" .
 			 " precio_nac <> 0";

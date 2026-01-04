@@ -6,6 +6,7 @@ include 'dbutils.php';
 check_session();
 
 db_connect();
+$pdo = get_db_connection();
 
 if ($_SESSION['user_level'] < 11) $imprimir = "";
 else $imprimir = "<p class=\"imprimir\">
@@ -35,7 +36,7 @@ if($tipo_producto==1){
 	  FROM
       item  
       JOIN categoria on item.id_categoria = categoria.id_categoria
-      JOIN unidad unidad on unidad.id_unidad = categoria.id_unidad_visual
+      JOIN unidad on unidad.id_unidad = categoria.id_unidad_visual
       JOIN grupo on categoria.id_grupo = grupo.id_grupo
       LEFT JOIN (
     	SELECT pi.id_item, sum(pi.cantidad) as cantidad
@@ -75,10 +76,10 @@ else{
   FROM
     item  
     JOIN categoria on item.id_categoria = categoria.id_categoria
-    JOIN unidad unidad on unidad.id_unidad = categoria.id_unidad_visual
+    JOIN unidad on unidad.id_unidad = categoria.id_unidad_visual
     JOIN grupo on categoria.id_grupo = grupo.id_grupo
     JOIN proveedor on proveedor.id_proveedor = item.id_proveedor
-    JOIN pais pais on pais.id_pais = proveedor.id_pais
+    JOIN pais on pais.id_pais = proveedor.id_pais
     LEFT JOIN (
     	SELECT pi.id_item, sum(pi.cantidad) as cantidad
     	FROM prevision p
@@ -130,6 +131,7 @@ eval_html('producto_grupo_listar.html', $var);
  * Obtiene el id en la base de datos del pais con nombre Argentina
  */
 function obtener_id_pais_argentina(){
+		 	  global $pdo;
 	$query = "SELECT id_pais FROM pais
 		 	  WHERE pais.pais = 'ARGENTINA'";
 	$result = $pdo->query($query);
@@ -143,6 +145,7 @@ function obtener_id_pais_argentina(){
  */
 function obtener_grupo($id_grupo)
 {
+ global $pdo;
 	$query = "SELECT grupo FROM grupo WHERE id_grupo = $id_grupo";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);
@@ -154,6 +157,7 @@ function obtener_grupo($id_grupo)
 */
 function desglose_transito_por_tipo_envio($id_categoria) {
 
+	global $pdo;
 	$query = "SELECT count(*) FROM tipoenvio";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);

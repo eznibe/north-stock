@@ -16,6 +16,7 @@ $mensaje = "";
 $fecha = date("Y-m-d");
 
 db_connect();
+$pdo = get_db_connection();
 
 // Genera una unica orden de compra para el proveedor seleccionado
 $proveedor = $id_proveedor;

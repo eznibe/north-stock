@@ -7,7 +7,8 @@ check_session();
 $valid_user = $_SESSION['valid_user'];
 
 db_connect();
-
+$pdo = get_db_connection();
+$pdo = get_db_connection();
 $focus = "forms[0].pproducto";
 $focusId = "pproducto";
 $mensaje = "";
@@ -34,6 +35,7 @@ $fecha_select = armar_select_fechas($dia_ini, $mes_ini, $ano_ini);
 
 function busca_item(&$mensaje, &$items, $pitem, &$num_results)
 {
+	global $pdo;
  $query = "SELECT 
 	item.id_item, 
 	categoria.categoria, 
@@ -85,6 +87,7 @@ function busca_item(&$mensaje, &$items, $pitem, &$num_results)
  
 function busca_barras(&$mensaje, &$datos, $pitem)
 {
+        global $pdo;
  $query = "SELECT 
         item.id_item,
         categoria.categoria,
@@ -253,6 +256,7 @@ eval_html('producto_salida.html', $var);
 
 function ingresarordenManual($id_item, $cantidad, $fecha) {
 
+global $pdo;
   $cotiz_dolar = obtener_precio_dolar();
 
   $query = "INSERT INTO orden (fecha,	cotizacion_dolar,	id_status, descripcion) 
@@ -292,6 +296,7 @@ function ingresarordenManual($id_item, $cantidad, $fecha) {
 
 function obtener_precio_dolar()
 {
+ global $pdo;
 	$query = "SELECT precio_dolar from dolarhoy where id_dolar=(SELECT max(id_dolar) FROM dolarhoy)";
 
 	$result = $pdo->query($query);

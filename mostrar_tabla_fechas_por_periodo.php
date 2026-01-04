@@ -4,6 +4,8 @@ include_once 'main.php';
 include_once 'dbutils.php';
 
 db_connect();
+$pdo = get_db_connection();
+$pdo = get_db_connection();
 check_session();
 
 /**
@@ -17,6 +19,7 @@ function mostrar_tabla_fechas_por_periodo($tipo_periodo, $tipo, $opcion, $id_acc
 										  $transac, $tipo_rango, $opcion, $rango_periodo)
 {
 
+ global $pdo;
 	//echo "Datos entrada, fechaini: $fecha_ini, fechafin: $fecha_fin<br>";
 
 	if ($_SESSION['user_level'] < 11) $imprimir = "";
@@ -92,7 +95,7 @@ function mostrar_tabla_fechas_por_periodo($tipo_periodo, $tipo, $opcion, $id_acc
 	if($id_accion==1 || $id_accion==2) {
 		
 		$query = "SELECT log.id_item, CONCAT(categoria,' - ',proveedor), log.username, sum(cantidad), YEAR(fecha), MONTH(fecha), $selecciono
-				  FROM categoria, log, item, usuario usuario, proveedor, unidad unidad
+				  FROM categoria, log, item, usuario, proveedor, unidad
 				  WHERE 	log.id_item = item.id_item AND
 							item.id_categoria = categoria.id_categoria AND
 							usuario.username = log.username AND
@@ -265,7 +268,7 @@ function crearQueryTodosByPeriodo($query_fin, $fecha_ini, $fecha_fin, $groupByPe
 	
 	
  	$query = "(SELECT log.id_item as iditem, CONCAT(categoria,' - ',proveedor) as cate, log.username, sum(cantidad), YEAR(fecha), MONTH(fecha), $selecciono_1, fecha, id_accion as accion, log.fecha as fechaordenar
-			  FROM categoria, log, item, usuario usuario, proveedor, unidad unidad
+			  FROM categoria, log, item, usuario, proveedor, unidad
 			  WHERE 	log.id_item = item.id_item AND
 						item.id_categoria = categoria.id_categoria AND
 						usuario.username = log.username AND
@@ -281,7 +284,7 @@ function crearQueryTodosByPeriodo($query_fin, $fecha_ini, $fecha_fin, $groupByPe
  	$query .= " UNION ";
  	
  	$query .= "(SELECT log.id_item as iditem, CONCAT(categoria,' - ',proveedor) as cate, log.username, sum(cantidad), YEAR(fecha), MONTH(fecha), $selecciono_2, fecha, id_accion as accion, log.fecha as fechaordenar
-			   FROM categoria, log, item, usuario usuario, proveedor, unidad unidad
+			   FROM categoria, log, item, usuario, proveedor, unidad
 			   WHERE 	log.id_item = item.id_item AND
 						item.id_categoria = categoria.id_categoria AND
 						usuario.username = log.username AND
@@ -301,6 +304,7 @@ function crearQueryTodosByPeriodo($query_fin, $fecha_ini, $fecha_fin, $groupByPe
  
 function get_ano($fecha)
 {
+	global $pdo;
 	$query = "SELECT YEAR($fecha)";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);
@@ -309,6 +313,7 @@ function get_ano($fecha)
 
 function get_mes($fecha)
 {
+	global $pdo;
 	$query = "SELECT MONTH($fecha)";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);
@@ -317,6 +322,7 @@ function get_mes($fecha)
 
 function get_dia($fecha)
 {
+	global $pdo;
 	$query = "SELECT DAY($fecha)";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);

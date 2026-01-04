@@ -38,7 +38,7 @@ SELECT i.id_item, i.codigo_barras, c.categoria, g.grupo, IF(p.id_pais = 1, "NAC"
 	if(aereo2.pendiente is null, 0, aereo2.pendiente) as en_transito_aereo2,
 	if(maritimo.pendiente is null, 0, maritimo.pendiente) as en_transito_maritimo,
 	if(desconocido.pendiente is null, 0, desconocido.pendiente) as en_transito_desconocido
-FROM item i join categoria c on c.id_categoria = i.id_categoria join grupo g on g.id_grupo = c.id_grupo join Proveedor p on p.id_proveedor = i.id_proveedor join unidad u on u.id_unidad = i.id_unidad_compra
+FROM item i join categoria c on c.id_categoria = i.id_categoria join grupo g on g.id_grupo = c.id_grupo join proveedor p on p.id_proveedor = i.id_proveedor join unidad u on u.id_unidad = i.id_unidad_compra
 	left join logprecios lp on lp.id_item = i.id_item
 	LEFT JOIN itemcomprar on (itemcomprar.id_item = i.id_item and itemcomprar.tentativo = false)  
 	LEFT JOIN v_en_prevision_por_item en_prevision on en_prevision.id_item = i.id_item

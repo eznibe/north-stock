@@ -6,6 +6,7 @@ include_once 'dbutils.php';
 session_start();
 
 db_connect();
+$pdo = get_db_connection();
 
 $mensaje = "";
 

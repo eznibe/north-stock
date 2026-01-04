@@ -8,7 +8,8 @@ check_session();
 $username = $_SESSION['valid_user'];
 
 db_connect();
-
+$pdo = get_db_connection();
+$pdo = get_db_connection();
 $id_prevision = isset($_GET['id_prevision']) ? $_GET['id_prevision'] : "";
 $id_item = isset($_GET['id_item']) ? $_GET['id_item'] : "";
 $cantidad = isset($_GET['cantidad']) ? $_GET['cantidad'] : "";
@@ -55,6 +56,7 @@ eval_html('prevision_item_nuevo.html', $var);
 // Functions
 
 function getPrevisiones() {
+    global $pdo;
   $query = "SELECT 
     id_prevision, coalesce(numero_orden, concat('(', id_prevision, ')'))
   FROM prevision p
@@ -72,6 +74,7 @@ function getPrevisiones() {
 }
 
 function getitems($id_item) {
+ global $pdo;
   $query = "SELECT i.id_item, concat(c.categoria, ' - ', pro.proveedor), 
     round(coalesce(i.precio_fob, i.precio_ref), 2) as precio,
     case when pro.id_pais = 1 then 'AR$' when pro.id_pais > 1 then 'US$' end as moneda,
@@ -97,6 +100,7 @@ function getitems($id_item) {
 }
 
 function getitem($id_item) {
+    global $pdo;
   $query = "SELECT i.id_item, 
     stock_disponible,
     stock_transito,

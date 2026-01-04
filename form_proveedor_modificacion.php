@@ -21,9 +21,11 @@ $focus = "forms[0].proveedor";
 $formname = $_POST['formname'];
 
 db_connect();
-
+$pdo = get_db_connection();
+$pdo = get_db_connection();
 function get_prov_data(&$data, $id_proveedor)
 {
+	global $pdo;
  $query = "SELECT
 	proveedor,
 	direccion,
@@ -44,6 +46,7 @@ function get_prov_data(&$data, $id_proveedor)
 
 function update_proveedor(&$mensaje, $id_proveedor, $proveedor, $direccion, $id_pais, $telefono, $fax, $contacto, $mail)
 {
+ global $pdo;
  if ( ($proveedor == "") or ($id_pais == 0) )
  {
   // Si falta alguno de los campos requeridos.

@@ -6,6 +6,7 @@ include 'dbutils.php';
 session_start();
 
 db_connect();
+$pdo = get_db_connection();
 
 if ( isset($_GET['id_proveedor']) ) $id_proveedor = $_GET['id_proveedor'];
 else $id_proveedor = $_POST['id_proveedor'];

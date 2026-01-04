@@ -6,6 +6,7 @@ include 'dbutils.php';
 session_start();
 
 db_connect();
+$pdo = get_db_connection();
 
 $id_proveedor = $_GET['id_proveedor'];
 $id_itemcomprar = $_GET['id_itemcomprar'];

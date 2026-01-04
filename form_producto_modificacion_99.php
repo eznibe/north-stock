@@ -26,9 +26,11 @@ $focus = "forms[0].proveedor";
 $formname = $_POST['formname'];
 
 db_connect();
-
+$pdo = get_db_connection();
+$pdo = get_db_connection();
 function get_item_data(&$data, $id_item)
 {
+	global $pdo;
  $query = "SELECT
 	categoria.categoria,
 	proveedor.proveedor,
@@ -56,6 +58,7 @@ function get_item_data(&$data, $id_item)
 
 function item_scan_oblig($id_item)
 {
+	global $pdo;
  $query = "SELECT
 	categoria.scan
   FROM
@@ -73,6 +76,7 @@ function item_scan_oblig($id_item)
 
 function log_modificacion_item($id_item, $precio_fob, $precio_nac, $precio_ref, $stock_anterior, $stock_nuevo)
 {
+	global $pdo;
  $query = "INSERT INTO logprecios
 	(id_item, precio_fob, precio_nac, precio_ref, stock_anterior, stock_disponible)
   VALUES
@@ -83,6 +87,7 @@ function log_modificacion_item($id_item, $precio_fob, $precio_nac, $precio_ref, 
 
 function update_item(&$mensaje, $id_item, $codigo_proveedor, $codigo_barras, $stock_disponible, $stock_transito, $precio_fob, $precio_nac, $precio_ref, $id_proveedor, $agrupacion)
 {
+ global $pdo;
  if ( (item_scan_oblig($id_item)) and ($codigo_barras == "") )
  {
   // Si falta alguno de los campos requeridos.
@@ -154,6 +159,7 @@ function update_item(&$mensaje, $id_item, $codigo_proveedor, $codigo_barras, $st
 
 function porcentaje_impuesto_categoria($id_categoria)
 {
+ global $pdo;
 	$query = "SELECT porc_impuesto FROM categoria WHERE id_categoria=$id_categoria";
 	$result = $pdo->query($query);
  	$row = $result->fetch(PDO::FETCH_NUM);
@@ -162,6 +168,7 @@ function porcentaje_impuesto_categoria($id_categoria)
 
 function precio_dolar()
 {
+ global $pdo;
 	$query = "SELECT precio_dolar FROM dolarhoy WHERE id_dolar=(SELECT MAX(id_dolar) FROM dolarhoy)";
 	$result = $pdo->query($query);
  	$row = $result->fetch(PDO::FETCH_NUM);
@@ -170,6 +177,7 @@ function precio_dolar()
 
 function obtener_categoria($id_item)
 {
+ global $pdo;
 	$query = "SELECT id_categoria FROM item WHERE id_item=$id_item";
 	$result = $pdo->query($query);
  	$row = $result->fetch(PDO::FETCH_NUM);
@@ -178,6 +186,7 @@ function obtener_categoria($id_item)
 
 function obtener_proveedores($provname)
 {
+ global $pdo;
 	$query = "SELECT id_proveedor, proveedor FROM proveedor ORDER BY proveedor";
 	$result = $pdo->query($query);
 
@@ -192,6 +201,7 @@ function obtener_proveedores($provname)
 
 function obtener_id_proveedor($provname)
 {
+global $pdo;
 	$query = "SELECT id_proveedor FROM proveedor " .
 			"WHERE proveedor = '$provname'";
 	$result = $pdo->query($query);
@@ -204,7 +214,8 @@ function obtener_id_proveedor($provname)
  * a partir del id_proveedor pasado como parametro
  */
 function obtener_tipo_proveedor($id_item){
-	$query = "SELECT pais FROM pais pais, proveedor, item
+global $pdo;
+	$query = "SELECT pais FROM pais, proveedor, item
 		  WHERE pais.id_pais = proveedor.id_pais AND
 		  		item.id_proveedor = proveedor.id_proveedor AND
 				item.id_item = $id_item";

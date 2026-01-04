@@ -36,6 +36,7 @@ $focus = "forms[0].pais";
 $fecha = date("Y-m-d");
 
 db_connect();
+$pdo = get_db_connection();
 
 $cotiz_dolar = obtener_precio_dolar();
 

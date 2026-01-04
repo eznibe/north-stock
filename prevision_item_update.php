@@ -7,6 +7,7 @@ check_session();
 $username = $_SESSION['valid_user'];
 
 db_connect();
+$pdo = get_db_connection();
 
 $id_prevision_item = $_GET['id_prevision_item'];
 

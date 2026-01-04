@@ -6,6 +6,7 @@ include 'dbutils.php';
 session_start();
 
 db_connect();
+$pdo = get_db_connection();
 $query = "SELECT id_pais, pais FROM pais";
 $result = $pdo->query($query);
 

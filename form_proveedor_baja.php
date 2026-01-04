@@ -12,6 +12,7 @@ $mensaje = "";
 $focus = "forms[0].id_proveedor";
 
 db_connect();
+$pdo = get_db_connection();
 
 function delete_proveedor(&$mensaje, $id_proveedor)
 {

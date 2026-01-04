@@ -39,6 +39,7 @@ function eval_html($filename, $var) {
 
 function get_units_opt($id_unidad)
 {
+ global $pdo;
  $unidades = "";
  $query = "SELECT unidad.id_unidad, unidad.unidad
            FROM unidad";
@@ -55,6 +56,7 @@ function get_units_opt($id_unidad)
 
 function get_group_opt($id_grupo)
 {
+ global $pdo;
  $query = "SELECT id_grupo, grupo FROM grupo ORDER BY grupo";
  $pdo = get_db_connection();
  $result = $pdo->query($query);
@@ -70,6 +72,7 @@ function get_group_opt($id_grupo)
 
 function get_pais_opt($id_pais)
 {
+ global $pdo;
  $query = "SELECT id_pais, pais FROM pais ORDER BY pais";
  $pdo = get_db_connection();
  $result = $pdo->query($query);
@@ -85,6 +88,7 @@ function get_pais_opt($id_pais)
 
 function get_categoria_opt($id_categoria)
 {
+ global $pdo;
  $query = "SELECT id_categoria, categoria FROM categoria ORDER BY categoria";
  $pdo = get_db_connection();
  $result = $pdo->query($query);
@@ -100,6 +104,7 @@ function get_categoria_opt($id_categoria)
 
 function get_subproducto_opt($id_item)
 {
+ global $pdo;
  $query = "SELECT
 	item.id_item, concat(categoria.categoria, \" - \", proveedor.proveedor)
 	FROM
@@ -135,6 +140,7 @@ function get_scan_opt($scan)
 
 function get_proveedor_opt($id_proveedor)
 {
+ global $pdo;
  $query = "SELECT
 	proveedor.id_proveedor, proveedor.proveedor
   FROM
@@ -154,7 +160,8 @@ function get_proveedor_opt($id_proveedor)
 
 function get_tipousr_opt($id_tipo)
 {
- $query = "SELECT id_tipousr, tipousr FROM tipousr tipousr ORDER BY tipousr";
+ global $pdo;
+ $query = "SELECT id_tipousr, tipousr FROM tipousr ORDER BY tipousr";
  $pdo = get_db_connection();
  $result = $pdo->query($query);
  $tipousr = "";
@@ -169,6 +176,7 @@ function get_tipousr_opt($id_tipo)
 
 function get_usuario_opt($id_usuario)
 {
+ global $pdo;
  $query = "SELECT id_usuario, username FROM usuario ORDER BY username";
  $pdo = get_db_connection();
  $result = $pdo->query($query);
@@ -184,6 +192,7 @@ function get_usuario_opt($id_usuario)
 
 function log_trans($username, $id_accion, $id_item, $cantidad, $fecha, $id_orden='NULL', $id_prevision='NULL')
 {
+ global $pdo;
  // id_accion: 1 ingreso 2 egreso (manual y desde descarga prevision) 3 update 4 confirma orden 5 elimina orden 6 orden arribada completa 7 orden creada 8 elimina item de orden 9 compra confirmada
  // id_accion: 21 agrego item - 23 update prevision item - 24 descarga item - 25 elimina prevision - 26 prevision descargada - 27 prevision revertida - 28 elimina item de prevision - 29 item revertido
  $query = "INSERT INTO log
@@ -200,6 +209,7 @@ function log_trans($username, $id_accion, $id_item, $cantidad, $fecha, $id_orden
 
 function get_group($id_grupo)
 {
+ global $pdo;
  $query = "SELECT grupo FROM grupo WHERE id_grupo = $id_grupo";
  $pdo = get_db_connection();
  $result = $pdo->query($query);
@@ -209,6 +219,7 @@ function get_group($id_grupo)
 
 function get_groups()
 {
+ global $pdo;
  $query = "SELECT * FROM grupo ORDER BY grupo";
  $pdo = get_db_connection();
  $result = $pdo->query($query);
@@ -217,6 +228,7 @@ function get_groups()
 
 function get_proveedor($id_proveedor)
 {
+ global $pdo;
  $query = "SELECT proveedor FROM proveedor WHERE id_proveedor = $id_proveedor";
  $pdo = get_db_connection();
  $result = $pdo->query($query);
@@ -226,6 +238,7 @@ function get_proveedor($id_proveedor)
 
 function get_categoria($id_categoria)
 {
+ global $pdo;
  $query = "SELECT categoria FROM categoria WHERE id_categoria = $id_categoria";
  $pdo = get_db_connection();
  $result = $pdo->query($query);
@@ -235,6 +248,7 @@ function get_categoria($id_categoria)
 
 function get_usuario($id_usuario, $tipo)
 {
+ global $pdo;
  //$tipo: 1: retorna username
  //	      2: retorna nombre de usuario
  if($tipo==1) $query = "SELECT username FROM usuario WHERE id_usuario = $id_usuario";
@@ -247,6 +261,7 @@ function get_usuario($id_usuario, $tipo)
 
 function get_item($id_item)
 {
+ global $pdo;
  $query = "SELECT
 	CONCAT(categoria.categoria, \" - \", proveedor.proveedor)
   FROM
@@ -266,6 +281,7 @@ function get_item($id_item)
 
 function get_unidad_descarga($id_categoria)
 {
+ global $pdo;
  $query = "SELECT unidad.unidad
         FROM unidad, categoria
         WHERE
@@ -282,6 +298,7 @@ function get_unidad_descarga($id_categoria)
  */
 function get_unidad_compra($id_item)
 {
+ global $pdo;
  $query = "SELECT unidad.unidad
   		   FROM unidad, item
     	   WHERE
@@ -295,6 +312,7 @@ function get_unidad_compra($id_item)
 
 function get_stock_transito($id_item)
 {
+ global $pdo;
  $query = "SELECT item.stock_transito
         FROM item
         WHERE item.id_item = $id_item";
@@ -306,6 +324,7 @@ function get_stock_transito($id_item)
 
 function set_stock_transito($id_item, $stock)
 {
+ global $pdo;
  $query = "UPDATE item
         SET
 		stock_transito = $stock
@@ -317,6 +336,7 @@ function set_stock_transito($id_item, $stock)
 
 function log_stock_transito_negativo($username, $id_item,  $id_orden, $stock_transito_actual, $stock_transito_nuevo, $cantidad_pendiente, $cantidad_user, $tipo_accion)
 {
+ global $pdo;
  $query = "INSERT INTO DG_transito_negativo
 		   (username, id_item, id_orden, stock_transito_actual, stock_transito_nuevo, cantidad_pendiente, cantidad_user, tipo_accion)
   		   VALUES
@@ -335,6 +355,7 @@ function log_stock_transito_negativo($username, $id_item,  $id_orden, $stock_tra
  */
 function get_factor_unidades($id_item)
 {
+ global $pdo;
  $query = "SELECT item.factor_unidades
         FROM item
         WHERE item.id_item = $id_item";
@@ -346,6 +367,7 @@ function get_factor_unidades($id_item)
 
 function get_cantidad_comprar($id_orden_item)
 {
+ global $pdo;
  $query = "SELECT ordenitem.cantidad
         FROM ordenitem
         WHERE ordenitem.id_orden_item = $id_orden_item";
@@ -357,6 +379,7 @@ function get_cantidad_comprar($id_orden_item)
 
 function get_ordenitem_id_item($id_orden_item)
 {
+ global $pdo;
  $query = "SELECT ordenitem.id_item
         FROM ordenitem
         WHERE
@@ -369,6 +392,7 @@ function get_ordenitem_id_item($id_orden_item)
 
 function get_orden_status($id_orden)
 {
+ global $pdo;
  $query = "SELECT orden.id_status
         FROM orden
         WHERE orden.id_orden = $id_orden";
@@ -407,6 +431,7 @@ function get_ordenes_a_confirmar($id_proveedor)
 
 function get_agrupacion_contable($id_categoria)
 {
+ global $pdo;
  $query = "SELECT g.agrupacion_contable FROM grupo g join categoria c on c.id_grupo = g.id_grupo
 		   WHERE c.id_categoria = $id_categoria";
  $pdo = get_db_connection();
@@ -417,6 +442,7 @@ function get_agrupacion_contable($id_categoria)
 
 function get_item_agrupacion_contable($id_item)
 {
+ global $pdo;
  $query = "SELECT i.agrupacion_contable FROM item i
 		   WHERE i.id_item = $id_item";
  $pdo = get_db_connection();
@@ -427,6 +453,7 @@ function get_item_agrupacion_contable($id_item)
 
 function get_tipos_de_envio() {
 
+ global $pdo;
  $query = "SELECT * FROM tipoenvio ORDER BY tipo_envio, id_tipo_envio";
  $pdo = get_db_connection();
  $result = $pdo->query($query);
@@ -435,6 +462,7 @@ function get_tipos_de_envio() {
 }
 
 function es_proveedor_nacional($id_proveedor, $pais) {
+ global $pdo;
 	$query = "SELECT pais FROM pais, proveedor
 		  WHERE pais.id_pais = proveedor.id_pais AND proveedor.id_proveedor = $id_proveedor";
 	$pdo = get_db_connection();

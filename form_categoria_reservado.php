@@ -6,6 +6,7 @@ include 'dbutils.php';
 session_start();
 
 db_connect();
+$pdo = get_db_connection();
 
 $id_categoria = $_POST['id_categoria'];
 $reservado = $_POST['reservado'];

@@ -6,11 +6,13 @@ include 'dbutils.php';
 check_session();
 
 db_connect();
-
+$pdo = get_db_connection();
+$pdo = get_db_connection();
 $id_grupo = $_GET['id_grupo'];
 
 function obtener_grupo($id_grupo)
 {
+ global $pdo;
 	$query = "SELECT grupo FROM grupo WHERE id_grupo = $id_grupo";
 	$result = $pdo->query($query);
 	$row = $result->fetch(PDO::FETCH_NUM);
@@ -38,7 +40,7 @@ $query = "SELECT
   FROM
     item  
     JOIN categoria on item.id_categoria = categoria.id_categoria
-    JOIN unidad unidad on unidad.id_unidad = categoria.id_unidad_visual
+    JOIN unidad on unidad.id_unidad = categoria.id_unidad_visual
     JOIN proveedor on proveedor.id_proveedor = item.id_proveedor
     LEFT JOIN previsionitem pi on pi.id_item = item.id_item
     LEFT JOIN prevision p on p.id_prevision = pi.id_prevision
