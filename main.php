@@ -337,7 +337,7 @@ function set_stock_transito($id_item, $stock)
 function log_stock_transito_negativo($username, $id_item,  $id_orden, $stock_transito_actual, $stock_transito_nuevo, $cantidad_pendiente, $cantidad_user, $tipo_accion)
 {
  global $pdo;
- $query = "INSERT INTO DG_transito_negativo
+ $query = "INSERT INTO dg_transito_negativo
 		   (username, id_item, id_orden, stock_transito_actual, stock_transito_nuevo, cantidad_pendiente, cantidad_user, tipo_accion)
   		   VALUES
 		   (\"$username\", $id_item, $id_orden, $stock_transito_actual, $stock_transito_nuevo, $cantidad_pendiente, $cantidad_user, \"$tipo_accion\")";

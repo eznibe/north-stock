@@ -20,7 +20,7 @@ else if(isset($_GET['actualizarInflacion'])) {
 exit(json_encode($value));
 
 function obtenerInflacion($anio, $mes) {
-
+  global $pdo;
   $obj->success = true;
 
   $query = "SELECT valor FROM inflacion WHERE anio = $anio and mes = $mes";
@@ -38,7 +38,7 @@ function obtenerInflacion($anio, $mes) {
 }
 
 function actualizarInflacion($anio, $mes, $valor, $isNew) {
-
+  global $pdo;
   $obj->success = true;
 
   if (isset($isNew)) {

@@ -6,6 +6,7 @@ require_once('../dbutils.php');
 session_start();
 
 db_connect();
+$pdo = get_db_connection();
 
 
 if(isset($_GET['search_categoria'])) {
@@ -16,6 +17,7 @@ if(isset($_GET['search_categoria'])) {
 exit(json_encode($value));
 
 function search_items_categoria($search_categoria) {
+  global $pdo;
 
   $obj = new stdClass();
   $obj->success = true;
@@ -45,7 +47,7 @@ function search_items_categoria($search_categoria) {
     $obj->success = false;
   } else {
     $obj->items = array(); 
-    while ($row = $result->fetch(PDO::FETCH_NUM)) {
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
       array_push($obj->items, $row);
     }
   }

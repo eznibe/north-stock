@@ -16,7 +16,7 @@ check_session();
  * 				$id_accion: compras o consumos (1 o 2)
  */
 function mostrar_tabla_fechas_por_periodo($tipo_periodo, $tipo, $opcion, $id_accion, $fecha_ini, $fecha_fin,
-										  $transac, $tipo_rango, $opcion, $rango_periodo)
+										  $transac, $tipo_rango, $opcion2, $rango_periodo)
 {
 
  global $pdo;

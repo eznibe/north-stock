@@ -6,6 +6,7 @@ include '../dbutils.php';
 check_session();
 
 db_connect();
+$pdo = get_db_connection();
 
 // create file from sql query
 

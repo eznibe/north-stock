@@ -54,7 +54,7 @@ try {
         echo "usuario o clave invalidos.";
     }
 } catch (PDOException $e) {
-    echo "Error en la autenticación.";
+    echo "Error en la autenticación: " . $e->getMessage();
     error_log("Login error: " . $e->getMessage());
 }
 

@@ -16,6 +16,7 @@ $pdo = get_db_connection();
 
 function delete_subproducto(&$mensaje, $id_subproducto)
 {
+  global $pdo;
  if ($id_subproducto == 0)
  {
   // Si falta alguno de los campos requeridos. 
