@@ -17,6 +17,7 @@ $pdo = get_db_connection();
 
 function modify_pais(&$mensaje, $id_pais, $pais)
 {
+ global $pdo;
  if ( ($id_pais == 0) OR ($pais == "") )
  {
   // Si falta alguno de los campos requeridos. 

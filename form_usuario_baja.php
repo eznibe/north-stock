@@ -16,6 +16,7 @@ $pdo = get_db_connection();
 
 function delete_usuario(&$mensaje, $id_usuario)
 {
+ global $pdo;
  if ($id_usuario == 0)
  {
   // Si falta alguno de los campos requeridos. 

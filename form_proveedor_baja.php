@@ -16,6 +16,7 @@ $pdo = get_db_connection();
 
 function delete_proveedor(&$mensaje, $id_proveedor)
 {
+ global $pdo;
  if ($id_proveedor == 0)
  {
   // Si falta alguno de los campos requeridos. 

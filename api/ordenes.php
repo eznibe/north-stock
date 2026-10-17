@@ -25,7 +25,10 @@ else if(isset($_GET['guardarproveedorAR'])) {
 exit(json_encode($value));
 
 function guardarDespacho($id_orden, $despacho) {
+  global $pdo;
+  $pdo = get_db_connection();
 
+  $obj = new stdClass();
   $obj->success = true;
 
   $query = "UPDATE orden SET despacho = '$despacho' WHERE id_orden = $id_orden";
@@ -37,7 +40,10 @@ function guardarDespacho($id_orden, $despacho) {
 }
 
 function guardarNrFactura($id_orden, $nr_factura) {
+  global $pdo;
+  $pdo = get_db_connection();
 
+  $obj = new stdClass();
   $obj->success = true;
 
   $query = "UPDATE orden SET nr_factura = '$nr_factura' WHERE id_orden = $id_orden";
@@ -49,7 +55,10 @@ function guardarNrFactura($id_orden, $nr_factura) {
 }
 
 function guardarFacturaAR($id_orden, $factura_AR) {
+  global $pdo;
+  $pdo = get_db_connection();
 
+  $obj = new stdClass();
   $obj->success = true;
 
   $query = "UPDATE orden SET factura_AR = '$factura_AR' WHERE id_orden = $id_orden";
@@ -61,7 +70,10 @@ function guardarFacturaAR($id_orden, $factura_AR) {
 }
 
 function guardarproveedorAR($id_orden, $proveedor_AR) {
+  global $pdo;
+  $pdo = get_db_connection();
 
+  $obj = new stdClass();
   $obj->success = true;
 
   $query = "UPDATE orden SET proveedor_AR = '$proveedor_AR' WHERE id_orden = $id_orden";

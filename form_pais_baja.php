@@ -16,6 +16,7 @@ $pdo = get_db_connection();
 
 function delete_pais(&$mensaje, $id_pais)
 {
+ global $pdo;
  if ($id_pais == 0)
  {
   // Si falta alguno de los campos requeridos. 

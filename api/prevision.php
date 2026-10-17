@@ -31,6 +31,8 @@ function allitems() {
 }
 
 function guardarPrevision($id_prevision, $numero_orden, $cliente, $fecha_entrega = null, $descripcion = null) {
+  global $pdo;
+  $pdo = get_db_connection();
 
   $obj = new stdClass();
   $obj->success = true;

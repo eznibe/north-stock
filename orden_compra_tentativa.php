@@ -180,6 +180,7 @@ eval_html('orden_compra_tentativa.html', $var);
 
 function update_cantidad($id_itemcomprar, $cantidad)
 {
+ global $pdo;
  if ( ($cantidad == 0) or ($cantidad == "") )
  {
   $query = "DELETE FROM itemcomprar WHERE id_itemcomprar = $id_itemcomprar";
