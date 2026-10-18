@@ -162,7 +162,7 @@ for ($i = 0; $i < count($tipos_envio); $i++) {
 			AND ordenitem.id_orden = $last_id[0]
 		)";
 		$result_1 = $pdo->query($query_1);
-		$row_1 = fetch(PDO::FETCH_NUM)($result_1);
+		$row_1 = $result_1->fetch(PDO::FETCH_NUM);
 		$pedido = $pedido . "\n\n\nPedido para $row_1[1] $row_1[5] orden No $last_id[0]\n\n";
 	
 		if($row_1[2]=="")
@@ -170,7 +170,7 @@ for ($i = 0; $i < count($tipos_envio); $i++) {
 	
 		$pedido = $pedido . str_pad($row_1[2],30) . str_pad($row_1[6],40) . str_pad($row_1[3],10) . "$row_1[4]\n"; 
 	
-		while ($row_1 = fetch(PDO::FETCH_NUM)($result_1))
+		while ($row_1 = $result_1->fetch(PDO::FETCH_NUM))
 		{
 			if($row_1[2]=="")
 				$row_1[2] = obtener_descripcion_categoria($row_1[0]);
@@ -217,7 +217,7 @@ function obtener_descripcion_categoria($id_item)
   					   item.id_categoria = categoria.id_categoria)";
 
 	$result_2 = $pdo->query($query_2);
-	$row_2 = fetch(PDO::FETCH_NUM)($result_2);
+	$row_2 = $result_2->fetch(PDO::FETCH_NUM);
 	//Devuelvo la descripcion de la categoria
 	return $row_2[0];
 }

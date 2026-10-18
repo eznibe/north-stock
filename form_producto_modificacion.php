@@ -223,8 +223,8 @@ global $pdo;
  */
 function obtener_tipo_proveedor($id_item){
 global $pdo;
-	$query = "SELECT pais FROM Pais, proveedor, item
-		  WHERE Pais.id_pais = proveedor.id_pais AND
+	$query = "SELECT pais FROM pais, proveedor, item
+		  WHERE pais.id_pais = proveedor.id_pais AND
 		  		item.id_proveedor = proveedor.id_proveedor AND
 				item.id_item = $id_item";
 	$result = $pdo->query($query);

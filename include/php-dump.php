@@ -283,7 +283,7 @@
 		
 			$rows = $input->rowCount();
 			
-			$row = fetch(PDO::FETCH_ASSOC)($input);
+			$row = $input->fetch(PDO::FETCH_ASSOC);
 			
 			$colspan = count($row);
 				
